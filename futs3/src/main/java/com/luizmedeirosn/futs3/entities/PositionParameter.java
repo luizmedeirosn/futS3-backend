@@ -1,5 +1,7 @@
 package com.luizmedeirosn.futs3.entities;
 
+import java.io.Serializable;
+
 import org.hibernate.annotations.Check;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -13,7 +15,9 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "tb_position_parameter")
-public class PositionParameter {
+public class PositionParameter implements Serializable {
+
+    private static final long serialVersionUID = 1L;
     
     @EmbeddedId
     private PositionParameterPK id = new PositionParameterPK();
