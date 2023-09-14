@@ -6,8 +6,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "tb_player")
@@ -21,15 +22,16 @@ public class Player implements Serializable {
     
     private String name;
     
-    @Transient
-    private Long positionId;
+    @ManyToOne
+    @JoinColumn(name = "position_id")
+    private Position position;
 
     public Player() {
     }
 
-    public Player(String name, Long positionId) {
+    public Player(String name, Position position) {
         this.name = name;
-        this.positionId = positionId;
+        this.position = position;
     }
 
         public Long getId() {
@@ -48,12 +50,12 @@ public class Player implements Serializable {
         this.name = name;
     }
 
-    public Long getPositionId() {
-        return positionId;
+    public Position getPosition() {
+        return position;
     }
 
-    public void setPositionId(Long positionId) {
-        this.positionId = positionId;
+    public void setPositionId(Position position) {
+        this.position = position;
     }
 
     @Override
