@@ -41,6 +41,9 @@ public class Position implements Serializable {
     @ManyToMany(mappedBy = "positions")
     private Set<GameMode> gameModes = new HashSet<>();
 
+    @OneToMany(mappedBy = "id.position")
+    private Set<PositionParameter> positionParameters = new HashSet<>();
+
     public Position(){
     }
 
@@ -79,6 +82,10 @@ public class Position implements Serializable {
 
     public Set<GameMode> getGameModes() {
         return gameModes;
+    }
+
+        public Set<PositionParameter> getPositionParameters() {
+        return positionParameters;
     }
 
     @Override
