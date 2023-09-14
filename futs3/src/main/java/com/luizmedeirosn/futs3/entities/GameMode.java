@@ -1,6 +1,8 @@
 package com.luizmedeirosn.futs3.entities;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.Column;
@@ -8,6 +10,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -26,6 +31,14 @@ public class GameMode implements Serializable {
 
     @Column(columnDefinition = "TEXT")
     private String description;
+
+    @ManyToMany
+    @JoinTable(
+        name = "tb_gamemode_position",
+        joinColumns = @JoinColumn(name = "gamemod_id"),
+        inverseJoinColumns = @JoinColumn(name = "position_id")
+    )
+    private Set<Position> positions = new HashSet<>();
 
     public GameMode() {
     }
@@ -57,6 +70,10 @@ public class GameMode implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Set<Position> getPositions() {
+        return positions;
     }
 
     @Override

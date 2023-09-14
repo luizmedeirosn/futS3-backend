@@ -4,12 +4,15 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -29,9 +32,14 @@ public class Position implements Serializable {
     
     @Column(columnDefinition = "TEXT")
     private String description;
-
+    
+    @JsonIgnore
     @OneToMany(mappedBy = "position")
     Set<Player> players = new HashSet<>();
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "positions")
+    private Set<GameMode> gameModes = new HashSet<>();
 
     public Position(){
     }
@@ -63,6 +71,14 @@ public class Position implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Set<Player> getPlayers() {
+        return players;
+    }
+
+    public Set<GameMode> getGameModes() {
+        return gameModes;
     }
 
     @Override
