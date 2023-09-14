@@ -23,7 +23,7 @@ public class Player implements Serializable {
     private Long id;
     
     @Nonnull
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
     
     @ManyToOne
