@@ -35,12 +35,8 @@ public class Parameter implements Serializable {
     @OneToMany(mappedBy = "id.parameter")
     private Set<PositionParameter> positionParameters = new HashSet<>();
 
-    @JsonIgnore
-    public Set<Position> getPositions() {
-        Set<Position> set = new HashSet<>();
-        positionParameters.forEach(x -> set.add(x.getPosition()));
-        return set;
-    }
+    @OneToMany(mappedBy = "id.parameter")
+    private Set<PlayerParameter> playerParameters = new HashSet<>();
 
     public Parameter() {
     }
@@ -72,6 +68,20 @@ public class Parameter implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @JsonIgnore
+    public Set<Position> getPositions() {
+        Set<Position> set = new HashSet<>();
+        positionParameters.forEach(x -> set.add(x.getPosition()));
+        return set;
+    }
+
+    @JsonIgnore
+    public Set<Player> getPlayers() {
+        Set<Player> set = new HashSet<>();
+        playerParameters.forEach(x -> set.add(x.getPlayer()));
+        return set;
     }
 
     @Override

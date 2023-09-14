@@ -1,6 +1,8 @@
 package com.luizmedeirosn.futs3.entities;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.Column;
@@ -10,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -29,6 +32,9 @@ public class Player implements Serializable {
     @ManyToOne
     @JoinColumn(name = "position_id")
     private Position position;
+
+    @OneToMany(mappedBy = "id.player")
+    private Set<PlayerParameter> playerParameters = new HashSet<>();
 
     public Player() {
     }
@@ -60,6 +66,10 @@ public class Player implements Serializable {
 
     public void setPositionId(Position position) {
         this.position = position;
+    }
+
+    public Set<PlayerParameter> getPlayerParameters() {
+        return playerParameters;
     }
 
     @Override
