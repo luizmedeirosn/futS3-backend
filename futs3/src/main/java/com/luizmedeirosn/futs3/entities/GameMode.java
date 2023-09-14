@@ -2,6 +2,7 @@ package com.luizmedeirosn.futs3.entities;
 
 import java.io.Serializable;
 
+import jakarta.annotation.Nonnull;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,8 +19,9 @@ public class GameMode implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @Column(name = "formation_name")
+
+    @Nonnull
+    @Column(name = "formation_name", nullable = false)
     private String formationName;
 
     @Column(columnDefinition = "TEXT")
