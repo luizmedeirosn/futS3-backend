@@ -7,7 +7,7 @@ import org.hibernate.annotations.Check;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.luizmedeirosn.futs3.entities.pks.PositionParameterPK;
 
-import io.micrometer.common.lang.Nullable;
+import jakarta.annotation.Nonnull;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -22,7 +22,7 @@ public class PositionParameter implements Serializable {
     @EmbeddedId
     private PositionParameterPK id = new PositionParameterPK();
 
-    @Nullable
+    @Nonnull
     @Column(nullable = false)
     @Check(constraints = "weight > 0 AND weight <= 100")
     private Integer weight;

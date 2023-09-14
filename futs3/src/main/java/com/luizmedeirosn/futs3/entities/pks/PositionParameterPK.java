@@ -10,7 +10,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Embeddable
-public class PositionParameterPK  implements Serializable {
+public class PositionParameterPK implements Serializable {
     
     private static final long serialVersionUID = 1L;
     
