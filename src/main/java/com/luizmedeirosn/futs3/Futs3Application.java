@@ -11,6 +11,7 @@ public class Futs3Application {
 	public static void main(String[] args) {
 		ClearTerminal.run();
 		SpringApplication.run(Futs3Application.class, args);
+		System.out.println("\nDone!\n");
 	}
 
 }
