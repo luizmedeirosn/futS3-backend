@@ -44,7 +44,7 @@ public class Player implements Serializable {
         this.position = position;
     }
 
-        public Long getId() {
+    public Long getId() {
         return id;
     }
 

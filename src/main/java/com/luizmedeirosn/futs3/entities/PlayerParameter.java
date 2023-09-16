@@ -19,14 +19,12 @@ public class PlayerParameter implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @EmbeddedId
-    private PlayerParameterPK id;
+    private PlayerParameterPK id = new PlayerParameterPK();
 
     @Nonnull
     @Column(nullable = false)
     @Check(constraints = "score > 0 AND score <= 100")
     private Integer score;
-
-
 
     public PlayerParameter() {
     }
