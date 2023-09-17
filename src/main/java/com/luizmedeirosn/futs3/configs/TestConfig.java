@@ -115,7 +115,7 @@ public class TestConfig implements CommandLineRunner {
 
         parameterRepository.saveAll (
             Arrays.asList (
-                prmt1, prmt2, prmt3 ,prmt4, prmt5, prmt6, prmt7, prmt8, prmt9, prmt10, prmt11, prmt12, prmt13, prmt14, prmt15, prmt16, prmt17, prmt18, prmt19, prmt21, prmt20, prmt21, prmt16, prmt17, prmt18, prmt19, prmt20, prmt21, prmt21, prmt22, prmt23, prmt24, prmt25
+                prmt1, prmt2, prmt3 ,prmt4, prmt5, prmt6, prmt7, prmt8, prmt9, prmt10, prmt11, prmt12, prmt13, prmt14, prmt15, prmt16, prmt17, prmt18, prmt19, prmt20, prmt21, prmt22, prmt23, prmt24, prmt25
             )
         );
 
