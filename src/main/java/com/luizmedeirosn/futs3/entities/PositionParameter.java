@@ -36,6 +36,7 @@ public class PositionParameter implements Serializable {
         this.weight = weight;
     }
 
+    @JsonIgnore
     public Position getPosition() {
         return id.getPosition();
     }
@@ -44,7 +45,6 @@ public class PositionParameter implements Serializable {
         id.setPosition(position);
     }
 
-    @JsonIgnore
     public Parameter getParameter() {
         return id.getParameter();
     }

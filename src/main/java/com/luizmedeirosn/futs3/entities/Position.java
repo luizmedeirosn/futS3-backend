@@ -33,11 +33,9 @@ public class Position implements Serializable {
     @Column(columnDefinition = "TEXT")
     private String description;
     
-    @JsonIgnore
     @OneToMany(mappedBy = "position")
     Set<Player> players = new HashSet<>();
 
-    @JsonIgnore
     @ManyToMany(mappedBy = "positions")
     private Set<GameMode> gameModes = new HashSet<>();
 
@@ -76,15 +74,25 @@ public class Position implements Serializable {
         this.description = description;
     }
 
+    @JsonIgnore
     public Set<Player> getPlayers() {
         return players;
     }
 
+    @JsonIgnore
     public Set<GameMode> getGameModes() {
         return gameModes;
     }
 
-        public Set<PositionParameter> getPositionParameters() {
+    public void addPositionParameter(PositionParameter positionParameter) {
+        if (positionParameter == null) {
+            throw new IllegalArgumentException("PositionParameter object is null");
+        } else {
+            positionParameters.add(positionParameter);
+        }
+    }
+
+    public Set<PositionParameter> getPositionParameters() {
         return positionParameters;
     }
 

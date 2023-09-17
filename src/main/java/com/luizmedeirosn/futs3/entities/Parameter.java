@@ -76,7 +76,7 @@ public class Parameter implements Serializable {
         positionParameters.forEach(x -> set.add(x.getPosition()));
         return set;
     }
-
+    
     @JsonIgnore
     public Set<Player> getPlayers() {
         Set<Player> set = new HashSet<>();

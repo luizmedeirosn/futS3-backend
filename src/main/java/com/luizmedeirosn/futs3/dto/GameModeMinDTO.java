@@ -1,12 +1,19 @@
 package com.luizmedeirosn.futs3.dto;
 
+import java.io.Serializable;
+
 import com.luizmedeirosn.futs3.entities.GameMode;
 
-public class GameModeMinDTO {
+public class GameModeMinDTO implements Serializable {
+    
+    private static final long serialVersionUID = 1L;
     
     private String formationName;
     private String description;
     
+    public GameModeMinDTO() {
+    }
+
     public GameModeMinDTO(GameMode obj) {
         formationName = obj.getFormationName();
         description = obj.getDescription();
