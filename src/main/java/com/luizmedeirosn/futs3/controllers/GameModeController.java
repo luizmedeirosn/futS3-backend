@@ -54,7 +54,7 @@ public class GameModeController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<GameMode> update(@PathVariable Long id, @RequestBody GameModeMinDTO obj) {
+    public ResponseEntity<GameMode> updateById(@PathVariable Long id, @RequestBody GameModeMinDTO obj) {
         GameMode entity = service.update(id, obj);
         ResponseEntity<GameMode> response = ResponseEntity.ok().body(entity);
         return response;
