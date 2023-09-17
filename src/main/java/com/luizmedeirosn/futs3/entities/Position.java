@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.luizmedeirosn.futs3.dto.PositionMinDTO;
 
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.Column;
@@ -94,6 +95,11 @@ public class Position implements Serializable {
 
     public Set<PositionParameter> getPositionParameters() {
         return positionParameters;
+    }
+
+    public void updateData(PositionMinDTO obj) {
+        name = obj.getName();
+        description = obj.getDescription();
     }
 
     @Override
