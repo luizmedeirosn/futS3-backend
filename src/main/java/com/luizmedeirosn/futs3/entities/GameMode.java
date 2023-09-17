@@ -78,9 +78,9 @@ public class GameMode implements Serializable {
         return positions;
     }
 
-    public void updateData(GameModeMinDTO other) {
-        formationName = other.getFormationName();
-        description = other.getDescription();
+    public void updateData(GameModeMinDTO obj) {
+        formationName = obj.getFormationName();
+        description = obj.getDescription();
     }
 
     @Override
