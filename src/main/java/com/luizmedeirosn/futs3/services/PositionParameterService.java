@@ -12,8 +12,8 @@ public class PositionParameterService {
     @Autowired
     PositionParameterRepository repository;
 
-    public PositionParameter save(PositionParameter posparam) {
-        posparam = repository.save(posparam);
-        return posparam;
+    public PositionParameter save(PositionParameter posParam) {
+        posParam = repository.save(posParam);
+        return posParam;
     }
 }
