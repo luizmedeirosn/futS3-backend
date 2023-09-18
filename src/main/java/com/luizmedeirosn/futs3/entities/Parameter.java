@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.luizmedeirosn.futs3.dto.ParameterMinDTO;
 
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.Column;
@@ -17,7 +18,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "tb_parameter")
-public class Parameter implements Serializable {
+public class Parameter implements Serializable, Comparable<Parameter> {
     
     private static final long serialVersionUID = 1L;
     
@@ -82,6 +83,16 @@ public class Parameter implements Serializable {
         Set<Player> set = new HashSet<>();
         playerParameters.forEach(x -> set.add(x.getPlayer()));
         return set;
+    }
+
+    public void updateData(ParameterMinDTO obj) {
+        name = obj.getName();
+        description = obj.getDescription();
+    }
+
+    @Override
+    public int compareTo(Parameter other) {
+        return name.compareTo(other.getName());
     }
 
     @Override
