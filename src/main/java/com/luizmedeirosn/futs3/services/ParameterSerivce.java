@@ -1,5 +1,6 @@
 package com.luizmedeirosn.futs3.services;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.luizmedeirosn.futs3.dto.ParameterMinDTO;
 import com.luizmedeirosn.futs3.entities.Parameter;
+import com.luizmedeirosn.futs3.projections.ParameterProjection;
 import com.luizmedeirosn.futs3.repositories.ParameterRepository;
 
 @Service
@@ -25,6 +27,11 @@ public class ParameterSerivce {
     public Parameter findById(Long id) {
         Optional<Parameter> entity = repository.findById(id);
         return entity.get();
+    }
+
+    public List<ParameterProjection> findByPlayerId(Long id) {
+        List<ParameterProjection> parametersByPlayer = repository.findByPlayerId(id);
+        return parametersByPlayer;
     }
 
     public Parameter save(Parameter entity) {
