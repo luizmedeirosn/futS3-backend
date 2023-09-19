@@ -66,7 +66,7 @@ public class Player implements Serializable {
         return position;
     }
 
-    public void setPositionId(Position position) {
+    public void setPosition(Position position) {
         this.position = position;
     }
 
