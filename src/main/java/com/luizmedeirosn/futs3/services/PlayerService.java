@@ -1,6 +1,9 @@
 package com.luizmedeirosn.futs3.services;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +25,13 @@ public class PlayerService {
         Optional<Player> playerOptional = playerRepository.findById(id);
         PlayerDTO playerDTO = new PlayerDTO( playerOptional.get(), parameterSerivce.findByPlayerId(id) );
         return playerDTO;
+    }
+
+    public Set<PlayerDTO> findAllWithParameters() {
+        List<Player> playerList = playerRepository.findAll();
+        Set<PlayerDTO> playersDTO = new TreeSet<>();
+        playerList.forEach( obj -> playersDTO.add(findByIdWithParameters(obj.getId())) );
+        return playersDTO;
     }
 
     public void deleteById(Long id) {

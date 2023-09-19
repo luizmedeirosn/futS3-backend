@@ -1,5 +1,7 @@
 package com.luizmedeirosn.futs3.controllers;
 
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +19,13 @@ public class PlayerController {
     @Autowired
     private PlayerService playerService;
     
+    @GetMapping("/parameters")
+    public ResponseEntity<Set<PlayerDTO>> findAllWithParameters() {
+        Set<PlayerDTO> playersDTO = playerService.findAllWithParameters();
+        ResponseEntity<Set<PlayerDTO>> response = ResponseEntity.ok().body(playersDTO);
+        return response;
+    }
+
     @GetMapping("/{id}/parameters")
     public ResponseEntity<PlayerDTO> findByIdWithParameters(@PathVariable Long id) {
         PlayerDTO playerDTO = playerService.findByIdWithParameters(id);
