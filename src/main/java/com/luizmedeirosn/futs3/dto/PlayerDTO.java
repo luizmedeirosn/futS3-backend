@@ -1,5 +1,6 @@
 package com.luizmedeirosn.futs3.dto;
 
+import java.io.Serializable;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -8,7 +9,9 @@ import com.luizmedeirosn.futs3.entities.Player;
 import com.luizmedeirosn.futs3.projections.ParameterProjection;
 
 @JsonPropertyOrder( { "id", "name", "position", "parameters" } )
-public class PlayerDTO implements Comparable<PlayerDTO>{
+public class PlayerDTO implements Serializable, Comparable<PlayerDTO> {
+    
+    private static final long serialVersionUID = 1L;
     
     private Long id;
     private String name;
