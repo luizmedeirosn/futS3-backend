@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.luizmedeirosn.futs3.dto.PlayerDTO;
+import com.luizmedeirosn.futs3.dto.min.PlayerMinDTO;
 import com.luizmedeirosn.futs3.entities.Player;
 import com.luizmedeirosn.futs3.repositories.PlayerRepository;
 
@@ -34,7 +35,14 @@ public class PlayerService {
         return playersDTO;
     }
 
+    public Set<PlayerMinDTO> findAll() {
+        Set<PlayerMinDTO> playerMinDTOs = new TreeSet<>();
+        playerRepository.findAll().forEach( obj -> playerMinDTOs.add( new PlayerMinDTO(obj)) );
+        return playerMinDTOs;
+    }
+
     public void deleteById(Long id) {
         playerRepository.deleteById(id);
     }
+
 }

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.luizmedeirosn.futs3.dto.PlayerDTO;
+import com.luizmedeirosn.futs3.dto.min.PlayerMinDTO;
 import com.luizmedeirosn.futs3.services.PlayerService;
 
 @RestController
@@ -31,6 +32,13 @@ public class PlayerController {
     public ResponseEntity<PlayerDTO> findByIdWithParameters(@PathVariable Long id) {
         PlayerDTO playerDTO = playerService.findByIdWithParameters(id);
         ResponseEntity<PlayerDTO> response = ResponseEntity.ok().body(playerDTO);
+        return response;
+    }
+
+    @GetMapping
+    public ResponseEntity<Set<PlayerMinDTO>> findAll() {
+        Set<PlayerMinDTO> playersMinDtos = playerService.findAll();
+        ResponseEntity<Set<PlayerMinDTO>> response = ResponseEntity.ok().body(playersMinDtos);
         return response;
     }
 
