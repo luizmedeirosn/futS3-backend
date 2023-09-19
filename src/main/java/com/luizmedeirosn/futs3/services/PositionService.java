@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.luizmedeirosn.futs3.dto.PositionDTO;
-import com.luizmedeirosn.futs3.dto.PositionMinDTO;
+import com.luizmedeirosn.futs3.dto.min.PositionMinDTO;
 import com.luizmedeirosn.futs3.entities.Position;
 import com.luizmedeirosn.futs3.repositories.PositionRepository;
 

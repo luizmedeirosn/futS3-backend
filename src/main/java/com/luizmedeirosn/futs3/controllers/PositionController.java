@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.luizmedeirosn.futs3.dto.PositionDTO;
-import com.luizmedeirosn.futs3.dto.PositionMinDTO;
+import com.luizmedeirosn.futs3.dto.min.PositionMinDTO;
 import com.luizmedeirosn.futs3.services.PositionService;
 
 @RestController

@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.luizmedeirosn.futs3.dto.PositionMinDTO;
+import com.luizmedeirosn.futs3.dto.min.PositionMinDTO;
 
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.Column;

@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.luizmedeirosn.futs3.dto.GameModeMinDTO;
+import com.luizmedeirosn.futs3.dto.min.GameModeMinDTO;
 
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.Column;

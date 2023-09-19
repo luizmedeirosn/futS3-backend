@@ -1,4 +1,4 @@
-package com.luizmedeirosn.futs3.dto;
+package com.luizmedeirosn.futs3.dto.min;
 
 import java.io.Serializable;
 

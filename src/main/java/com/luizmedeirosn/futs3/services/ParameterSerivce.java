@@ -8,7 +8,7 @@ import java.util.TreeSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.luizmedeirosn.futs3.dto.ParameterMinDTO;
+import com.luizmedeirosn.futs3.dto.min.ParameterMinDTO;
 import com.luizmedeirosn.futs3.entities.Parameter;
 import com.luizmedeirosn.futs3.projections.ParameterProjection;
 import com.luizmedeirosn.futs3.repositories.ParameterRepository;
