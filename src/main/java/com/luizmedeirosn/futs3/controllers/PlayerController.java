@@ -42,6 +42,13 @@ public class PlayerController {
         return response;
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<PlayerMinDTO> findById(@PathVariable Long id) {
+        PlayerMinDTO playerMinDTO = playerService.findById(id);
+        ResponseEntity<PlayerMinDTO> response = ResponseEntity.ok().body(playerMinDTO);
+        return response;
+    }
+
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         playerService.deleteById(id);

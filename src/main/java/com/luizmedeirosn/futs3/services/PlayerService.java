@@ -41,6 +41,12 @@ public class PlayerService {
         return playerMinDTOs;
     }
 
+    public PlayerMinDTO findById(Long id) {
+        Optional<Player> playerOptional = playerRepository.findById(id);
+        PlayerMinDTO playerMinDTO = new PlayerMinDTO(playerOptional.get());
+        return playerMinDTO;
+    }
+
     public void deleteById(Long id) {
         playerRepository.deleteById(id);
     }
