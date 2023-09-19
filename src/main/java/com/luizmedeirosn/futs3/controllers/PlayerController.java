@@ -4,6 +4,7 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +31,13 @@ public class PlayerController {
     public ResponseEntity<PlayerDTO> findByIdWithParameters(@PathVariable Long id) {
         PlayerDTO playerDTO = playerService.findByIdWithParameters(id);
         ResponseEntity<PlayerDTO> response = ResponseEntity.ok().body(playerDTO);
+        return response;
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+        playerService.deleteById(id);
+        ResponseEntity<Void> response = ResponseEntity.noContent().build();
         return response;
     }
 
