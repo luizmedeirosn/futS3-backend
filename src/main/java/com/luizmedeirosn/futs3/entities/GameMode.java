@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.luizmedeirosn.futs3.dto.min.GameModeMinDTO;
+import com.luizmedeirosn.futs3.dto.input.update.UpdateGameModeDTO;
 
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.Column;
@@ -78,7 +78,7 @@ public class GameMode implements Serializable {
         return positions;
     }
 
-    public void updateData(GameModeMinDTO obj) {
+    public void updateData(UpdateGameModeDTO obj) {
         formationName = obj.getFormationName();
         description = obj.getDescription();
     }

@@ -1,15 +1,15 @@
-package com.luizmedeirosn.futs3.dto.min;
+package com.luizmedeirosn.futs3.dto.input.update;
 
 import java.io.Serializable;
 
-public class GameModeMinDTO implements Serializable {
+public class UpdateGameModeDTO implements Serializable {
     
     private static final long serialVersionUID = 1L;
     
     private String formationName;
     private String description;
     
-    public GameModeMinDTO() {
+    public UpdateGameModeDTO() {
     }
 
     public String getFormationName() {

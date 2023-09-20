@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.luizmedeirosn.futs3.dto.PositionDTO;
-import com.luizmedeirosn.futs3.dto.min.PositionMinDTO;
+import com.luizmedeirosn.futs3.dto.input.update.UpdatePositionDTO;
+import com.luizmedeirosn.futs3.dto.output.PositionDTO;
 import com.luizmedeirosn.futs3.services.PositionService;
 
 @RestController
@@ -54,7 +54,7 @@ public class PositionController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<PositionDTO> updateById(@PathVariable Long id, @RequestBody PositionMinDTO obj) {
+    public ResponseEntity<PositionDTO> updateById(@PathVariable Long id, @RequestBody UpdatePositionDTO obj) {
         PositionDTO entity = service.update(id, obj);
         ResponseEntity<PositionDTO> response = ResponseEntity.ok().body(entity);
         return response;

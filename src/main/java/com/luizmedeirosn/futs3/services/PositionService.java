@@ -7,8 +7,8 @@ import java.util.TreeSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.luizmedeirosn.futs3.dto.PositionDTO;
-import com.luizmedeirosn.futs3.dto.min.PositionMinDTO;
+import com.luizmedeirosn.futs3.dto.input.update.UpdatePositionDTO;
+import com.luizmedeirosn.futs3.dto.output.PositionDTO;
 import com.luizmedeirosn.futs3.entities.Position;
 import com.luizmedeirosn.futs3.repositories.PositionRepository;
 
@@ -36,7 +36,7 @@ public class PositionService {
         return positionDTO;
     }
 
-    public PositionDTO update(Long id, PositionMinDTO obj) {
+    public PositionDTO update(Long id, UpdatePositionDTO obj) {
         Position entity = repository.getReferenceById(id);
         entity.updateData(obj);
         entity = repository.save(entity);

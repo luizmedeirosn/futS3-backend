@@ -8,7 +8,7 @@ import java.util.TreeSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.luizmedeirosn.futs3.dto.min.ParameterMinDTO;
+import com.luizmedeirosn.futs3.dto.input.update.UpdateParameterDTO;
 import com.luizmedeirosn.futs3.entities.Parameter;
 import com.luizmedeirosn.futs3.projections.ParameterProjection;
 import com.luizmedeirosn.futs3.repositories.ParameterRepository;
@@ -39,7 +39,7 @@ public class ParameterSerivce {
         return entity;
     }
 
-    public Parameter update(Long id, ParameterMinDTO obj) {
+    public Parameter update(Long id, UpdateParameterDTO obj) {
         Parameter entity = repository.getReferenceById(id);
         entity.updateData(obj);
         entity = repository.save(entity);

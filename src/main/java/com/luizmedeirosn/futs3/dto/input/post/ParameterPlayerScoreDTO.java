@@ -1,4 +1,4 @@
-package com.luizmedeirosn.futs3.dto.input;
+package com.luizmedeirosn.futs3.dto.input.post;
 
 import java.io.Serializable;
 

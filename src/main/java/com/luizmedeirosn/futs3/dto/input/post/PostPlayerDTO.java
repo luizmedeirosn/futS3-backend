@@ -1,9 +1,9 @@
-package com.luizmedeirosn.futs3.dto.input;
+package com.luizmedeirosn.futs3.dto.input.post;
 
 import java.io.Serializable;
 import java.util.List;
 
-public class PlayerInputDTO implements Serializable {
+public class PostPlayerDTO implements Serializable {
     
     private static final long serialVersionUID = 1L;
     
@@ -11,10 +11,10 @@ public class PlayerInputDTO implements Serializable {
     private Long positionId;
     private List<ParameterPlayerScoreDTO> parameters;
     
-    public PlayerInputDTO() {
+    public PostPlayerDTO() {
     }
 
-    public PlayerInputDTO(String name, Long positionId, List<ParameterPlayerScoreDTO> parameters) {
+    public PostPlayerDTO(String name, Long positionId, List<ParameterPlayerScoreDTO> parameters) {
         this.name = name;
         this.positionId = positionId;
         this.parameters = parameters;

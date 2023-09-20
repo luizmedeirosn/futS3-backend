@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.luizmedeirosn.futs3.dto.min.ParameterMinDTO;
+import com.luizmedeirosn.futs3.dto.input.update.UpdateParameterDTO;
 import com.luizmedeirosn.futs3.entities.Parameter;
 import com.luizmedeirosn.futs3.services.ParameterSerivce;
 
@@ -54,7 +54,7 @@ public class ParameterController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Parameter> updateById(@PathVariable Long id, @RequestBody ParameterMinDTO obj) {
+    public ResponseEntity<Parameter> updateById(@PathVariable Long id, @RequestBody UpdateParameterDTO obj) {
         Parameter entity = service.update(id, obj);
         ResponseEntity<Parameter> response = ResponseEntity.ok().body(entity);
         return response;

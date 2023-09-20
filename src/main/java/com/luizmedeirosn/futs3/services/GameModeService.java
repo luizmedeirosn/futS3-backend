@@ -7,7 +7,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.luizmedeirosn.futs3.dto.min.GameModeMinDTO;
+import com.luizmedeirosn.futs3.dto.input.update.UpdateGameModeDTO;
 import com.luizmedeirosn.futs3.entities.GameMode;
 import com.luizmedeirosn.futs3.entities.Position;
 import com.luizmedeirosn.futs3.entities.PositionParameter;
@@ -44,7 +44,7 @@ public class GameModeService {
         return entity;
     }
 
-    public GameMode update(Long id, GameModeMinDTO obj) {
+    public GameMode update(Long id, UpdateGameModeDTO obj) {
         GameMode entity = repository.getReferenceById(id);
         entity.updateData(obj);
         entity = repository.save(entity);

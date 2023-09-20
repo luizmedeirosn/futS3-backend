@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.luizmedeirosn.futs3.dto.PlayerDTO;
-import com.luizmedeirosn.futs3.dto.input.PlayerInputDTO;
-import com.luizmedeirosn.futs3.dto.min.PlayerMinDTO;
+import com.luizmedeirosn.futs3.dto.input.post.PostPlayerDTO;
+import com.luizmedeirosn.futs3.dto.output.PlayerDTO;
+import com.luizmedeirosn.futs3.dto.output.PlayerMinDTO;
 import com.luizmedeirosn.futs3.services.PlayerService;
 
 @RestController
@@ -55,7 +55,7 @@ public class PlayerController {
     }
 
     @PostMapping
-    public ResponseEntity<PlayerDTO> save(@RequestBody PlayerInputDTO playerInputDTO) {
+    public ResponseEntity<PlayerDTO> save(@RequestBody PostPlayerDTO playerInputDTO) {
         PlayerDTO playerDTO = playerService.save(playerInputDTO);
         URI uri = 
             ServletUriComponentsBuilder

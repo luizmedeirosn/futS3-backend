@@ -1,15 +1,15 @@
-package com.luizmedeirosn.futs3.dto.min;
+package com.luizmedeirosn.futs3.dto.input.update;
 
 import java.io.Serializable;
 
-public class ParameterMinDTO implements Serializable {
+public class UpdatePositionDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private String name;
     private String description;
     
-    public ParameterMinDTO() {
+    public UpdatePositionDTO() {
     }
 
     public String getName() {

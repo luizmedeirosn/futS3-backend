@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.luizmedeirosn.futs3.dto.min.ParameterMinDTO;
+import com.luizmedeirosn.futs3.dto.input.update.UpdateParameterDTO;
 
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.Column;
@@ -85,7 +85,7 @@ public class Parameter implements Serializable, Comparable<Parameter> {
         return set;
     }
 
-    public void updateData(ParameterMinDTO obj) {
+    public void updateData(UpdateParameterDTO obj) {
         name = obj.getName();
         description = obj.getDescription();
     }

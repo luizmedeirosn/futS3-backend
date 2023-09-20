@@ -1,4 +1,4 @@
-package com.luizmedeirosn.futs3.dto;
+package com.luizmedeirosn.futs3.dto.output;
 
 import java.io.Serializable;
 import java.util.List;

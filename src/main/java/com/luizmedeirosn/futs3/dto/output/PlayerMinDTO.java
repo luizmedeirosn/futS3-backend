@@ -1,10 +1,9 @@
-package com.luizmedeirosn.futs3.dto.min;
+package com.luizmedeirosn.futs3.dto.output;
 
 import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.luizmedeirosn.futs3.dto.PositionDTO;
 import com.luizmedeirosn.futs3.entities.Player;
 
 @JsonPropertyOrder( { "id", "name", "position" } )

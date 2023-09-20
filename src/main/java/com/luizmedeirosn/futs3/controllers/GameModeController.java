@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.luizmedeirosn.futs3.dto.min.GameModeMinDTO;
+import com.luizmedeirosn.futs3.dto.input.update.UpdateGameModeDTO;
 import com.luizmedeirosn.futs3.entities.GameMode;
 import com.luizmedeirosn.futs3.services.GameModeService;
 
@@ -54,7 +54,7 @@ public class GameModeController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<GameMode> updateById(@PathVariable Long id, @RequestBody GameModeMinDTO obj) {
+    public ResponseEntity<GameMode> updateById(@PathVariable Long id, @RequestBody UpdateGameModeDTO obj) {
         GameMode entity = service.update(id, obj);
         ResponseEntity<GameMode> response = ResponseEntity.ok().body(entity);
         return response;

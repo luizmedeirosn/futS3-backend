@@ -8,9 +8,9 @@ import java.util.TreeSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.luizmedeirosn.futs3.dto.PlayerDTO;
-import com.luizmedeirosn.futs3.dto.input.PlayerInputDTO;
-import com.luizmedeirosn.futs3.dto.min.PlayerMinDTO;
+import com.luizmedeirosn.futs3.dto.input.post.PostPlayerDTO;
+import com.luizmedeirosn.futs3.dto.output.PlayerDTO;
+import com.luizmedeirosn.futs3.dto.output.PlayerMinDTO;
 import com.luizmedeirosn.futs3.entities.Parameter;
 import com.luizmedeirosn.futs3.entities.Player;
 import com.luizmedeirosn.futs3.entities.PlayerParameter;
@@ -58,7 +58,7 @@ public class PlayerService {
         return playerMinDTO;
     }
 
-    public PlayerDTO save(PlayerInputDTO playerInputDTO) {
+    public PlayerDTO save(PostPlayerDTO playerInputDTO) {
         Player newPlayer = new Player();
         newPlayer.setName(playerInputDTO.getName());
         newPlayer.setPosition( positionRepository.findById(playerInputDTO.getPositionId()).get() );
