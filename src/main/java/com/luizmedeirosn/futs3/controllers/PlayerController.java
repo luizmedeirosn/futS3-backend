@@ -9,12 +9,14 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.luizmedeirosn.futs3.dto.input.post.PostPlayerDTO;
+import com.luizmedeirosn.futs3.dto.input.update.UpdatePlayerDTO;
 import com.luizmedeirosn.futs3.dto.output.PlayerDTO;
 import com.luizmedeirosn.futs3.dto.output.PlayerMinDTO;
 import com.luizmedeirosn.futs3.services.PlayerService;
@@ -55,8 +57,8 @@ public class PlayerController {
     }
 
     @PostMapping
-    public ResponseEntity<PlayerDTO> save(@RequestBody PostPlayerDTO playerInputDTO) {
-        PlayerDTO playerDTO = playerService.save(playerInputDTO);
+    public ResponseEntity<PlayerDTO> save(@RequestBody PostPlayerDTO postPlayerDTO) {
+        PlayerDTO playerDTO = playerService.save(postPlayerDTO);
         URI uri = 
             ServletUriComponentsBuilder
             .fromCurrentRequest()
@@ -64,6 +66,13 @@ public class PlayerController {
             .buildAndExpand(playerDTO.getId())
             .toUri();
         ResponseEntity<PlayerDTO> response = ResponseEntity.created(uri).body(playerDTO);
+        return response;
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<PlayerMinDTO> update(@PathVariable Long id, @RequestBody UpdatePlayerDTO updatePlayerDTO) {
+        PlayerMinDTO playerMinDTO = playerService.update(id, updatePlayerDTO);
+        ResponseEntity<PlayerMinDTO> response = ResponseEntity.ok().body(playerMinDTO);
         return response;
     }
 

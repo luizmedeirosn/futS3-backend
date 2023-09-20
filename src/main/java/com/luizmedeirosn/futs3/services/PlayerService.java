@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.luizmedeirosn.futs3.dto.input.post.PostPlayerDTO;
+import com.luizmedeirosn.futs3.dto.input.update.UpdatePlayerDTO;
 import com.luizmedeirosn.futs3.dto.output.PlayerDTO;
 import com.luizmedeirosn.futs3.dto.output.PlayerMinDTO;
 import com.luizmedeirosn.futs3.entities.Parameter;
@@ -72,9 +73,16 @@ public class PlayerService {
                 playerParameterRepository.save(playerParameter);
             }
         );
-
         PlayerDTO playerDTO = new PlayerDTO( newPlayer, parameterSerivce.findByPlayerId(newPlayer.getId()) );
         return playerDTO;
+    }
+
+    public PlayerMinDTO update(Long id, UpdatePlayerDTO updatePlayerDTO) {
+        Player player = playerRepository.getReferenceById(id);
+        player.updateData( updatePlayerDTO.getName(), positionRepository.findById(updatePlayerDTO.getPositionId()).get() );
+        player = playerRepository.save(player);
+        PlayerMinDTO playerMinDTO = new PlayerMinDTO(player);
+        return playerMinDTO;
     }
 
     public void deleteById(Long id) {

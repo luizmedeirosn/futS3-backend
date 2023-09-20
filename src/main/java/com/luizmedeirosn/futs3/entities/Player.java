@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.luizmedeirosn.futs3.dto.output.PlayerMinDTO;
-
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -74,8 +72,9 @@ public class Player implements Serializable {
         return playerParameters;
     }
 
-    public void updateData(PlayerMinDTO playerMinDTO) {
-        name = playerMinDTO.getName();
+    public void updateData(String name, Position position) {
+        this.name = name;
+        this.position = position;
     }
     
     @Override
