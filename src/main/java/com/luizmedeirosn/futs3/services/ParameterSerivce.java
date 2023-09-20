@@ -8,7 +8,9 @@ import java.util.TreeSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.luizmedeirosn.futs3.dto.input.post.PostParameterDTO;
 import com.luizmedeirosn.futs3.dto.input.update.UpdateParameterDTO;
+import com.luizmedeirosn.futs3.dto.output.ParameterDTO;
 import com.luizmedeirosn.futs3.entities.Parameter;
 import com.luizmedeirosn.futs3.projections.ParameterProjection;
 import com.luizmedeirosn.futs3.repositories.ParameterRepository;
@@ -19,14 +21,18 @@ public class ParameterSerivce {
     @Autowired
     private ParameterRepository repository;
 
-    public Set<Parameter> findAll() {
-        Set<Parameter> set = new TreeSet<>(repository.findAll());
-        return set;
+    public Set<ParameterDTO> findAll() {
+        Set<ParameterDTO> parametersDTO = new TreeSet<>();
+        repository.findAll().forEach(
+            obj -> parametersDTO.add(new ParameterDTO(obj) )
+        );
+        return parametersDTO;
     }
 
-    public Parameter findById(Long id) {
-        Optional<Parameter> entity = repository.findById(id);
-        return entity.get();
+    public ParameterDTO findById(Long id) {
+        Optional<Parameter> optionalParameter = repository.findById(id);
+        ParameterDTO parameterDTO = new ParameterDTO(optionalParameter.get());
+        return parameterDTO;
     }
 
     public List<ParameterProjection> findByPlayerId(Long id) {
@@ -34,19 +40,25 @@ public class ParameterSerivce {
         return parametersByPlayer;
     }
 
-    public Parameter save(Parameter entity) {
-        entity = repository.save(entity);
-        return entity;
+    public ParameterDTO save(PostParameterDTO parameterInputDTO) {
+        Parameter parameter = new Parameter();
+        parameter.setName(parameterInputDTO.getName());
+        parameter.setDescription(parameterInputDTO.getDescription());
+        parameter = repository.save(parameter);
+        ParameterDTO parameterDTO = new ParameterDTO(parameter);
+        return parameterDTO;
     }
 
-    public Parameter update(Long id, UpdateParameterDTO obj) {
-        Parameter entity = repository.getReferenceById(id);
-        entity.updateData(obj);
-        entity = repository.save(entity);
-        return entity;
+    public ParameterDTO update(Long id, UpdateParameterDTO updateParameterDTO) {
+        Parameter parameter = repository.getReferenceById(id);
+        parameter.updateData(updateParameterDTO);
+        parameter = repository.save(parameter);
+        ParameterDTO parameterDTO = new ParameterDTO(parameter);
+        return parameterDTO;
     }
 
     public void deleteById(Long id) {
         repository.deleteById(id);
     }
+
 }

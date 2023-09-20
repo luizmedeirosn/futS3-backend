@@ -15,8 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.luizmedeirosn.futs3.dto.input.post.PostParameterDTO;
 import com.luizmedeirosn.futs3.dto.input.update.UpdateParameterDTO;
-import com.luizmedeirosn.futs3.entities.Parameter;
+import com.luizmedeirosn.futs3.dto.output.ParameterDTO;
 import com.luizmedeirosn.futs3.services.ParameterSerivce;
 
 @RestController
@@ -24,46 +25,46 @@ import com.luizmedeirosn.futs3.services.ParameterSerivce;
 public class ParameterController {
     
     @Autowired
-    private ParameterSerivce service;
+    private ParameterSerivce parameterSerivce;
 
     @GetMapping
-    public ResponseEntity<Set<Parameter>> findAll() {
-        Set<Parameter> set = service.findAll();
-        ResponseEntity<Set<Parameter>> response = ResponseEntity.ok().body(set);
+    public ResponseEntity<Set<ParameterDTO>> findAll() {
+        Set<ParameterDTO> set = parameterSerivce.findAll();
+        ResponseEntity<Set<ParameterDTO>> response = ResponseEntity.ok().body(set);
         return response;
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Parameter> findById(@PathVariable Long id) {
-        Parameter entity = service.findById(id);
-        ResponseEntity<Parameter> response = ResponseEntity.ok().body(entity);
+    public ResponseEntity<ParameterDTO> findById(@PathVariable Long id) {
+        ParameterDTO parameterDTO = parameterSerivce.findById(id);
+        ResponseEntity<ParameterDTO> response = ResponseEntity.ok().body(parameterDTO);
         return response;
     }
 
     @PostMapping
-    public ResponseEntity<Parameter> save(@RequestBody Parameter entity) {
-        entity = service.save(entity);
+    public ResponseEntity<ParameterDTO> save(@RequestBody PostParameterDTO postParameterDTO) {
+        ParameterDTO parameterDTO = parameterSerivce.save(postParameterDTO);
         URI uri = 
             ServletUriComponentsBuilder
             .fromCurrentRequest()
             .path("/{id}")
-            .buildAndExpand(entity.getId())
+            .buildAndExpand(parameterDTO.getId())
             .toUri();
-        ResponseEntity<Parameter> response = ResponseEntity.created(uri).body(entity);
+        ResponseEntity<ParameterDTO> response = ResponseEntity.created(uri).body(parameterDTO);
         return response;
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Parameter> updateById(@PathVariable Long id, @RequestBody UpdateParameterDTO obj) {
-        Parameter entity = service.update(id, obj);
-        ResponseEntity<Parameter> response = ResponseEntity.ok().body(entity);
+    public ResponseEntity<ParameterDTO> updateById(@PathVariable Long id, @RequestBody UpdateParameterDTO updateParameterDTO) {
+        ParameterDTO parameterDTO = parameterSerivce.update(id, updateParameterDTO);
+        ResponseEntity<ParameterDTO> response = ResponseEntity.ok().body(parameterDTO);
         return response;
     }
 
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
-        service.deleteById(id);
+        parameterSerivce.deleteById(id);
         ResponseEntity<Void> response = ResponseEntity.noContent().build();
         return response;
     }

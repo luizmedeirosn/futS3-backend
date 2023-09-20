@@ -85,9 +85,9 @@ public class Parameter implements Serializable, Comparable<Parameter> {
         return set;
     }
 
-    public void updateData(UpdateParameterDTO obj) {
-        name = obj.getName();
-        description = obj.getDescription();
+    public void updateData(UpdateParameterDTO updateParameterDTO) {
+        name = updateParameterDTO.getName();
+        description = updateParameterDTO.getDescription();
     }
 
     @Override

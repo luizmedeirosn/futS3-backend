@@ -15,6 +15,7 @@ import com.luizmedeirosn.futs3.dto.output.PlayerMinDTO;
 import com.luizmedeirosn.futs3.entities.Parameter;
 import com.luizmedeirosn.futs3.entities.Player;
 import com.luizmedeirosn.futs3.entities.PlayerParameter;
+import com.luizmedeirosn.futs3.repositories.ParameterRepository;
 import com.luizmedeirosn.futs3.repositories.PlayerParameterRepository;
 import com.luizmedeirosn.futs3.repositories.PlayerRepository;
 import com.luizmedeirosn.futs3.repositories.PositionRepository;
@@ -24,19 +25,19 @@ public class PlayerService {
 
     @Autowired
     private PlayerRepository playerRepository;
-
+    
     @Autowired
-    private PositionRepository positionRepository;
+    private ParameterRepository parameterRepository;
 
     @Autowired
     private PlayerParameterRepository playerParameterRepository;
 
     @Autowired
-    private ParameterSerivce parameterSerivce;
+    private PositionRepository positionRepository;
 
     public PlayerDTO findByIdWithParameters(Long id) {
         Optional<Player> playerOptional = playerRepository.findById(id);
-        PlayerDTO playerDTO = new PlayerDTO( playerOptional.get(), parameterSerivce.findByPlayerId(id) );
+        PlayerDTO playerDTO = new PlayerDTO( playerOptional.get(), parameterRepository.findByPlayerId(id) );
         return playerDTO;
     }
 
@@ -67,13 +68,13 @@ public class PlayerService {
 
         playerInputDTO.getParameters().forEach (
             parameterScore -> {
-                Parameter parameter = parameterSerivce.findById(parameterScore.getId());
+                Parameter parameter = parameterRepository.findById(parameterScore.getId()).get();
                 PlayerParameter playerParameter = 
                     new PlayerParameter( newPlayer, parameter, parameterScore.getPlayerScore() );
                 playerParameterRepository.save(playerParameter);
             }
         );
-        PlayerDTO playerDTO = new PlayerDTO( newPlayer, parameterSerivce.findByPlayerId(newPlayer.getId()) );
+        PlayerDTO playerDTO = new PlayerDTO( newPlayer, parameterRepository.findByPlayerId(newPlayer.getId()) );
         return playerDTO;
     }
 
