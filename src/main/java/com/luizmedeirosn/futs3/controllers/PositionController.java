@@ -29,8 +29,8 @@ public class PositionController {
 
     @GetMapping
     public ResponseEntity<Set<PositionDTO>> findAll() {
-        Set<PositionDTO> set = service.findAll();
-        ResponseEntity<Set<PositionDTO>> response = ResponseEntity.ok().body(set);
+        Set<PositionDTO> positionDTOs = service.findAll();
+        ResponseEntity<Set<PositionDTO>> response = ResponseEntity.ok().body(positionDTOs);
         return response;
     }
 
