@@ -7,6 +7,7 @@ import java.util.TreeSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.luizmedeirosn.futs3.dto.input.post.PostPositionDTO;
 import com.luizmedeirosn.futs3.dto.input.update.UpdatePositionDTO;
 import com.luizmedeirosn.futs3.dto.output.PositionDTO;
 import com.luizmedeirosn.futs3.entities.Position;
@@ -16,35 +17,35 @@ import com.luizmedeirosn.futs3.repositories.PositionRepository;
 public class PositionService {
 
     @Autowired
-    private PositionRepository repository;
+    private PositionRepository positionRepository;
 
     public Set<PositionDTO> findAll() {
-        Set<PositionDTO> set = new TreeSet<>();
-        repository.findAll().forEach( x -> set.add( new PositionDTO(x)) );
-        return set;
+        Set<PositionDTO> positionDTOs = new TreeSet<>();
+        positionRepository.findAll().forEach( obj -> positionDTOs.add( new PositionDTO(obj)) );
+        return positionDTOs;
     }
 
     public PositionDTO findById(Long id) {
-        Optional<Position> entity = repository.findById(id);
-        PositionDTO positionDTO = new PositionDTO(entity.get());
+        Optional<Position> optionalPosition = positionRepository.findById(id);
+        PositionDTO positionDTO = new PositionDTO(optionalPosition.get());
         return positionDTO;
     }
 
-    public PositionDTO save(PositionDTO positionDTO) {
-        Position entity = repository.save(new Position(positionDTO.getName(), positionDTO.getDescription()));
-        positionDTO = new PositionDTO(entity);
+    public PositionDTO save(PostPositionDTO postPositionDTO) {
+        Position position = positionRepository.save(new Position(postPositionDTO.getName(), postPositionDTO.getDescription()));
+        PositionDTO positionDTO = new PositionDTO(position);
         return positionDTO;
     }
 
-    public PositionDTO update(Long id, UpdatePositionDTO obj) {
-        Position entity = repository.getReferenceById(id);
-        entity.updateData(obj);
-        entity = repository.save(entity);
-        PositionDTO entityDTO = new PositionDTO(entity);
-        return entityDTO;
+    public PositionDTO update(Long id, UpdatePositionDTO updatePositionDTO) {
+        Position position = positionRepository.getReferenceById(id);
+        position.updateData(updatePositionDTO);
+        position = positionRepository.save(position);
+        PositionDTO positionDTO = new PositionDTO(position);
+        return positionDTO;
     }
 
     public void deleteById(Long id) {
-        repository.deleteById(id);
+        positionRepository.deleteById(id);
     }
 }
