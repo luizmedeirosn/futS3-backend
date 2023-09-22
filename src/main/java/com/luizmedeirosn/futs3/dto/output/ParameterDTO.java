@@ -2,8 +2,10 @@ package com.luizmedeirosn.futs3.dto.output;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.luizmedeirosn.futs3.entities.Parameter;
 
+@JsonPropertyOrder( { "id", "name", "position" } )
 public class ParameterDTO implements Serializable, Comparable<ParameterDTO> {
 
     private static final long serialVersionUID = 1L;
