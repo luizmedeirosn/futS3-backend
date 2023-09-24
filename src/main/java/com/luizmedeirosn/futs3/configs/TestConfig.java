@@ -83,7 +83,7 @@ public class TestConfig implements CommandLineRunner {
             )
         );
 
-        gm1.getPositions().add(pos14);
+        gm1.getPositions().addAll(Arrays.asList(pos5, pos11, pos14));
         gameModeRepository.save(gm1);
 
         Parameter prmt1 = new Parameter(    "DEFESA DE FALTA",                  null );
@@ -169,11 +169,23 @@ public class TestConfig implements CommandLineRunner {
             )
         );
 
-        PositionParameter pp1 = new PositionParameter(  pos14, prmt15, 25 );
-        PositionParameter pp2 = new PositionParameter(  pos14, prmt21, 25 );
-        PositionParameter pp3 = new PositionParameter(  pos14, prmt25, 50 );
+        PositionParameter pp1 = new PositionParameter(  pos5, prmt14, 25 );
+        PositionParameter pp2 = new PositionParameter(  pos5, prmt15, 25 );
+        PositionParameter pp3 = new PositionParameter(  pos5, prmt16, 25 );
+        PositionParameter pp4 = new PositionParameter(  pos5, prmt21, 25 );
 
-        positionParameterRepository.saveAll( Arrays.asList(pp1, pp2, pp3) );
+        PositionParameter pp5 = new PositionParameter(  pos11, prmt17, 20 );
+        PositionParameter pp6 = new PositionParameter(  pos11, prmt19, 20 );
+        PositionParameter pp7 = new PositionParameter(  pos11, prmt20, 30 );
+        PositionParameter pp8 = new PositionParameter(  pos11, prmt21, 30 );
+
+        PositionParameter pp9 = new PositionParameter(  pos14, prmt15, 10 );
+        PositionParameter pp10 = new PositionParameter(  pos14, prmt21, 40 );
+        PositionParameter pp11 = new PositionParameter(  pos14, prmt25, 50 );
+
+        
+
+        positionParameterRepository.saveAll( Arrays.asList(pp1, pp2, pp3, pp4, pp5, pp6, pp7, pp8, pp9, pp10, pp11) );
 
         /* ESTATÍSTICA DOS ATACANTES */
         PlayerParameter pylp1 = new PlayerParameter( player23, prmt15, 30 );
