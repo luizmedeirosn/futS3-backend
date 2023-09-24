@@ -19,24 +19,24 @@ import com.luizmedeirosn.futs3.repositories.ParameterRepository;
 public class ParameterSerivce {
 
     @Autowired
-    private ParameterRepository repository;
+    private ParameterRepository parameterRepository;
 
     public Set<ParameterDTO> findAll() {
         Set<ParameterDTO> parametersDTO = new TreeSet<>();
-        repository.findAll().forEach(
+        parameterRepository.findAll().forEach(
             obj -> parametersDTO.add(new ParameterDTO(obj) )
         );
         return parametersDTO;
     }
 
     public ParameterDTO findById(Long id) {
-        Optional<Parameter> optionalParameter = repository.findById(id);
+        Optional<Parameter> optionalParameter = parameterRepository.findById(id);
         ParameterDTO parameterDTO = new ParameterDTO(optionalParameter.get());
         return parameterDTO;
     }
 
     public List<ParameterProjection> findByPlayerId(Long id) {
-        List<ParameterProjection> parametersByPlayer = repository.findByPlayerId(id);
+        List<ParameterProjection> parametersByPlayer = parameterRepository.findByPlayerId(id);
         return parametersByPlayer;
     }
 
@@ -44,21 +44,21 @@ public class ParameterSerivce {
         Parameter parameter = new Parameter();
         parameter.setName(parameterInputDTO.getName());
         parameter.setDescription(parameterInputDTO.getDescription());
-        parameter = repository.save(parameter);
+        parameter = parameterRepository.save(parameter);
         ParameterDTO parameterDTO = new ParameterDTO(parameter);
         return parameterDTO;
     }
 
     public ParameterDTO update(Long id, UpdateParameterDTO updateParameterDTO) {
-        Parameter parameter = repository.getReferenceById(id);
+        Parameter parameter = parameterRepository.getReferenceById(id);
         parameter.updateData(updateParameterDTO);
-        parameter = repository.save(parameter);
+        parameter = parameterRepository.save(parameter);
         ParameterDTO parameterDTO = new ParameterDTO(parameter);
         return parameterDTO;
     }
 
     public void deleteById(Long id) {
-        repository.deleteById(id);
+        parameterRepository.deleteById(id);
     }
 
 }

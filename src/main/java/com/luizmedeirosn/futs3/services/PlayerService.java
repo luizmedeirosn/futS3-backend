@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import com.luizmedeirosn.futs3.dto.input.post.PostPlayerDTO;
 import com.luizmedeirosn.futs3.dto.input.update.UpdatePlayerDTO;
 import com.luizmedeirosn.futs3.dto.output.PlayerDTO;
-import com.luizmedeirosn.futs3.dto.output.PlayerMinDTO;
+import com.luizmedeirosn.futs3.dto.output.min.PlayerMinDTO;
 import com.luizmedeirosn.futs3.entities.Parameter;
 import com.luizmedeirosn.futs3.entities.Player;
 import com.luizmedeirosn.futs3.entities.PlayerParameter;
