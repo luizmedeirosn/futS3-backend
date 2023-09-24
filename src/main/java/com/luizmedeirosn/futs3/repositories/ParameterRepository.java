@@ -17,7 +17,7 @@ public interface ParameterRepository extends JpaRepository<Parameter, Long> {
                     PARAM.id, 
                     PARAM.name, 
                     PLAY_PARAM.score AS playerScore, 
-                    PARAM.description, 
+                    PARAM.description 
                 FROM 
                 tb_player_parameter AS PLAY_PARAM 
                     INNER JOIN tb_player AS PLAY 
