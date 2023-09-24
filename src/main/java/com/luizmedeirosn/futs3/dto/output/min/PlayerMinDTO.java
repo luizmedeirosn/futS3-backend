@@ -41,7 +41,7 @@ public class PlayerMinDTO implements Serializable, Comparable<PlayerMinDTO>{
 
     @Override
     public int compareTo(PlayerMinDTO other) {
-        return name.compareTo(other.getName());
+        return name.toLowerCase().compareTo(other.getName().toLowerCase());
     }
     
 }

@@ -49,7 +49,7 @@ public class PlayerDTO implements Serializable, Comparable<PlayerDTO> {
 
     @Override
     public int compareTo(PlayerDTO other) {
-        return name.compareTo(other.getName());
+        return name.toLowerCase().compareTo(other.getName().toLowerCase());
     }
     
 }
