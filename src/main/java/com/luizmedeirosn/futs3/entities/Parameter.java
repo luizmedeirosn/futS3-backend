@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.luizmedeirosn.futs3.dto.input.update.UpdateParameterDTO;
 
 import jakarta.annotation.Nonnull;
@@ -71,14 +70,12 @@ public class Parameter implements Serializable, Comparable<Parameter> {
         this.description = description;
     }
 
-    @JsonIgnore
     public Set<Position> getPositions() {
         Set<Position> set = new HashSet<>();
         positionParameters.forEach(x -> set.add(x.getPosition()));
         return set;
     }
     
-    @JsonIgnore
     public Set<Player> getPlayers() {
         Set<Player> set = new HashSet<>();
         playerParameters.forEach(x -> set.add(x.getPlayer()));

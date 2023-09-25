@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import org.hibernate.annotations.Check;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.luizmedeirosn.futs3.entities.pks.PositionParameterPK;
 
 import jakarta.annotation.Nonnull;
@@ -36,7 +35,6 @@ public class PositionParameter implements Serializable {
         this.weight = weight;
     }
 
-    @JsonIgnore
     public Position getPosition() {
         return id.getPosition();
     }

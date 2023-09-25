@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.luizmedeirosn.futs3.dto.input.update.UpdatePositionDTO;
 
 import jakarta.annotation.Nonnull;
@@ -75,12 +74,10 @@ public class Position implements Serializable {
         this.description = description;
     }
 
-    @JsonIgnore
     public Set<Player> getPlayers() {
         return players;
     }
 
-    @JsonIgnore
     public Set<GameMode> getGameModes() {
         return gameModes;
     }
