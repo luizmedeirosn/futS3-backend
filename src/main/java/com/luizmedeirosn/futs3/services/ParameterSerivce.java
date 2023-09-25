@@ -12,7 +12,7 @@ import com.luizmedeirosn.futs3.dto.input.post.PostParameterDTO;
 import com.luizmedeirosn.futs3.dto.input.update.UpdateParameterDTO;
 import com.luizmedeirosn.futs3.dto.output.ParameterDTO;
 import com.luizmedeirosn.futs3.entities.Parameter;
-import com.luizmedeirosn.futs3.projections.ParameterProjection;
+import com.luizmedeirosn.futs3.projections.PlayerParameterProjection;
 import com.luizmedeirosn.futs3.repositories.ParameterRepository;
 
 @Service
@@ -35,8 +35,8 @@ public class ParameterSerivce {
         return parameterDTO;
     }
 
-    public List<ParameterProjection> findByPlayerId(Long id) {
-        List<ParameterProjection> parametersByPlayer = parameterRepository.findByPlayerId(id);
+    public List<PlayerParameterProjection> findByPlayerId(Long id) {
+        List<PlayerParameterProjection> parametersByPlayer = parameterRepository.findByPlayerId(id);
         return parametersByPlayer;
     }
 

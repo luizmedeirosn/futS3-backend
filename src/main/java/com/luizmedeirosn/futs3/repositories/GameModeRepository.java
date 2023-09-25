@@ -41,7 +41,7 @@ public interface GameModeRepository extends JpaRepository<GameMode, Long> {
                     ON posparam.position_id = gamemodepos.position_id
                 INNER JOIN tb_parameter AS param
                     ON posparam.parameter_id = param.id;
-            """
+        """
     ) List<AllGameModesProjection> findAllFull();
 
     @Query (
@@ -70,7 +70,7 @@ public interface GameModeRepository extends JpaRepository<GameMode, Long> {
                         ON posparam.position_id = gamemodepos.position_id
                     INNER JOIN tb_parameter AS param
                         ON posparam.parameter_id = param.id;
-            """
+        """
     ) List<GameModeProjection> findFullById(Long gameModeId);
 
 }

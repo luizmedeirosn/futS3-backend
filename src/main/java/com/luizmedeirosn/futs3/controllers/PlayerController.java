@@ -2,7 +2,6 @@ package com.luizmedeirosn.futs3.controllers;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +19,7 @@ import com.luizmedeirosn.futs3.dto.input.post.PostPlayerDTO;
 import com.luizmedeirosn.futs3.dto.input.update.UpdatePlayerDTO;
 import com.luizmedeirosn.futs3.dto.output.PlayerDTO;
 import com.luizmedeirosn.futs3.dto.output.min.PlayerMinDTO;
+import com.luizmedeirosn.futs3.projections.AllPlayersParametersProjection;
 import com.luizmedeirosn.futs3.projections.PlayerProjection;
 import com.luizmedeirosn.futs3.services.PlayerService;
 
@@ -29,32 +29,28 @@ public class PlayerController {
     
     @Autowired
     private PlayerService playerService;
-    
-    @GetMapping("/parameters")
-    public ResponseEntity<Set<PlayerDTO>> findAllWithParameters() {
-        Set<PlayerDTO> playersDTO = playerService.findAllWithParameters();
-        ResponseEntity<Set<PlayerDTO>> response = ResponseEntity.ok().body(playersDTO);
-        return response;
-    }
-
-    @GetMapping("/{id}/parameters")
-    public ResponseEntity<PlayerDTO> findByIdWithParameters(@PathVariable Long id) {
-        PlayerDTO playerDTO = playerService.findByIdWithParameters(id);
-        ResponseEntity<PlayerDTO> response = ResponseEntity.ok().body(playerDTO);
-        return response;
-    }
 
     @GetMapping
     public ResponseEntity<List<PlayerProjection>> findAll() {
-        List<PlayerProjection> playersProjections = playerService.findAll();
-        ResponseEntity<List<PlayerProjection>> response = ResponseEntity.ok().body(playersProjections);
-        return response;
+        return ResponseEntity.ok().body(playerService.findAll());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<PlayerMinDTO> findById(@PathVariable Long id) {
         PlayerMinDTO playerMinDTO = playerService.findById(id);
         ResponseEntity<PlayerMinDTO> response = ResponseEntity.ok().body(playerMinDTO);
+        return response;
+    }
+
+    @GetMapping("/parameters")
+    public ResponseEntity<List<AllPlayersParametersProjection>> findAllWithParameters() {
+        return ResponseEntity.ok().body(playerService.findAllWithParameters());
+    }
+
+    @GetMapping("/{id}/parameters")
+    public ResponseEntity<PlayerDTO> findByIdWithParameters(@PathVariable Long id) {
+        PlayerDTO playerDTO = playerService.findByIdWithParameters(id);
+        ResponseEntity<PlayerDTO> response = ResponseEntity.ok().body(playerDTO);
         return response;
     }
 

@@ -21,8 +21,9 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
             FROM 
                 tb_player AS play
                 INNER JOIN tb_position AS pos
-                    ON play.position_id = pos.id;
-            """
+                    ON play.position_id = pos.id
+            ORDER BY pos.id;
+        """
     ) List<PlayerProjection> findAllOptimized();
 
 }

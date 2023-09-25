@@ -2,8 +2,6 @@ package com.luizmedeirosn.futs3.services;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.TreeSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +13,7 @@ import com.luizmedeirosn.futs3.dto.output.min.PlayerMinDTO;
 import com.luizmedeirosn.futs3.entities.Parameter;
 import com.luizmedeirosn.futs3.entities.Player;
 import com.luizmedeirosn.futs3.entities.PlayerParameter;
+import com.luizmedeirosn.futs3.projections.AllPlayersParametersProjection;
 import com.luizmedeirosn.futs3.projections.PlayerProjection;
 import com.luizmedeirosn.futs3.repositories.ParameterRepository;
 import com.luizmedeirosn.futs3.repositories.PlayerParameterRepository;
@@ -53,11 +52,8 @@ public class PlayerService {
         return playerDTO;
     }
 
-    public Set<PlayerDTO> findAllWithParameters() {
-        List<Player> playerList = playerRepository.findAll();
-        Set<PlayerDTO> playersDTO = new TreeSet<>();
-        playerList.forEach( obj -> playersDTO.add(findByIdWithParameters(obj.getId())) );
-        return playersDTO;
+    public List<AllPlayersParametersProjection> findAllWithParameters() {
+        return playerParameterRepository.findAllPlayersParameters();
     }
 
     public PlayerDTO save(PostPlayerDTO playerInputDTO) {

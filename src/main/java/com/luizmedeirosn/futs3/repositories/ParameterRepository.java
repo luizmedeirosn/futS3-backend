@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.luizmedeirosn.futs3.entities.Parameter;
-import com.luizmedeirosn.futs3.projections.ParameterProjection;
+import com.luizmedeirosn.futs3.projections.PlayerParameterProjection;
 
 public interface ParameterRepository extends JpaRepository<Parameter, Long> {
 
@@ -16,8 +16,7 @@ public interface ParameterRepository extends JpaRepository<Parameter, Long> {
             SELECT 
                 param.id, 
                 param.name, 
-                playparam.score AS playerScore, 
-                param.description 
+                playparam.score AS playerScore
             FROM 
                 tb_player_parameter AS playparam 
                 INNER JOIN tb_player AS play 
@@ -27,5 +26,5 @@ public interface ParameterRepository extends JpaRepository<Parameter, Long> {
             WHERE play.id = :playerId 
             ORDER BY param.name;
         """
-    ) List<ParameterProjection> findByPlayerId(Long playerId);
+    ) List<PlayerParameterProjection> findByPlayerId(Long playerId);
 }
