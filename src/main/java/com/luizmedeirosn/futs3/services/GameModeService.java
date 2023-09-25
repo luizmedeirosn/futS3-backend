@@ -7,19 +7,29 @@ import java.util.TreeSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.luizmedeirosn.futs3.dto.input.post.PostGameModeDTO;
 import com.luizmedeirosn.futs3.dto.input.update.UpdateGameModeDTO;
+import com.luizmedeirosn.futs3.dto.output.GameModeDTO;
 import com.luizmedeirosn.futs3.dto.output.min.GameModeMinDTO;
 import com.luizmedeirosn.futs3.entities.GameMode;
 import com.luizmedeirosn.futs3.entities.Position;
 import com.luizmedeirosn.futs3.entities.PositionParameter;
 import com.luizmedeirosn.futs3.repositories.GameModeRepository;
+import com.luizmedeirosn.futs3.repositories.ParameterRepository;
 import com.luizmedeirosn.futs3.repositories.PositionParameterRepository;
+import com.luizmedeirosn.futs3.repositories.PositionRepository;
 
 @Service
 public class GameModeService {
 
     @Autowired
     private GameModeRepository gameModeRepository;
+
+    @Autowired
+    private PositionRepository positionRepository;
+
+    @Autowired
+    private ParameterRepository parameterRepository;
 
     @Autowired
     PositionParameterRepository positionParameterRepository;
@@ -36,23 +46,46 @@ public class GameModeService {
         return gameModeMinDTO;
     }
 
-    public GameMode save(GameMode entity) {
-        Set<Position> set = entity.getPositions();
-        for (Position position : set) {
-            for (PositionParameter posparam : position.getPositionParameters()) {
-                posparam.setPosition(position);
-                positionParameterRepository.save(posparam);
-            }
-        }
-        entity = gameModeRepository.save(entity);
-        return entity;
+    public GameModeDTO findCompleteGameModeById(Long id) {
+        GameModeDTO gameModeDTO
+        = new GameModeDTO (
+            gameModeRepository.findById(id).get(), gameModeRepository.findCompleteGameModeById(id)
+        );
+        return gameModeDTO;
     }
 
-    public GameMode update(Long id, UpdateGameModeDTO obj) {
-        GameMode entity = gameModeRepository.getReferenceById(id);
-        entity.updateData(obj);
-        entity = gameModeRepository.save(entity);
-        return entity;
+    public GameModeDTO save(PostGameModeDTO postGameModeDTO) {
+        GameMode newGameMode = new GameMode();
+        newGameMode.setFormationName(postGameModeDTO.getFormationName());
+        newGameMode.setDescription(postGameModeDTO.getDescription());
+        
+        Set<Position> positions = newGameMode.getPositions();
+        postGameModeDTO
+            .getPositionsParameters()
+            .forEach (
+                positionParameters -> {
+                    Position pos = positionRepository.findById( positionParameters.getPositionId() ).get();
+                    positions.add(pos);
+                    positionParameters
+                        .getParameters()
+                        .forEach (
+                            parameterWeight -> positionParameterRepository.save ( 
+                                new PositionParameter( pos, parameterRepository.findById(parameterWeight.getParameterId()).get(), parameterWeight.getWeight() )
+                            )
+                        );
+                }
+            );
+        gameModeRepository.save(newGameMode);
+        GameModeDTO gameModeDTO = findCompleteGameModeById(newGameMode.getId());
+        return gameModeDTO;
+    }
+
+    public GameModeMinDTO update(Long id, UpdateGameModeDTO updateGameModeDTO) {
+        GameMode gameMode = gameModeRepository.getReferenceById(id);
+        gameMode.updateData(updateGameModeDTO);
+        gameMode = gameModeRepository.save(gameMode);
+        GameModeMinDTO gameModeMinDTO = new GameModeMinDTO(gameMode);
+        return gameModeMinDTO;
     }
 
     public void deleteById(Long id) {

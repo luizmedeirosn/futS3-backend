@@ -28,7 +28,7 @@ public class GameMode implements Serializable {
     private Long id;
 
     @Nonnull
-    @Column(name = "formation_name", nullable = false)
+    @Column(name = "formation_name", nullable = false, unique = true)
     private String formationName;
 
     @Column(columnDefinition = "TEXT")
@@ -78,9 +78,9 @@ public class GameMode implements Serializable {
         return positions;
     }
 
-    public void updateData(UpdateGameModeDTO obj) {
-        formationName = obj.getFormationName();
-        description = obj.getDescription();
+    public void updateData(UpdateGameModeDTO updateGameModeDTO) {
+        formationName = updateGameModeDTO.getFormationName();
+        description = updateGameModeDTO.getDescription();
     }
 
     @Override
