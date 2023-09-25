@@ -42,6 +42,13 @@ public class GameModeController {
         return response;
     }
 
+    @GetMapping(value = "/{id}/full")
+    public ResponseEntity<GameModeDTO> findFullById(@PathVariable Long id) {
+        GameModeDTO gameModeDTO = gameModeService.findFullById(id);
+        ResponseEntity<GameModeDTO> response = ResponseEntity.ok().body(gameModeDTO);
+        return response;
+    }
+
     @PostMapping
     public ResponseEntity<GameModeDTO> save(@RequestBody PostGameModeDTO postGameModeDTO) {
         GameModeDTO gameModeDTO = gameModeService.save(postGameModeDTO);
