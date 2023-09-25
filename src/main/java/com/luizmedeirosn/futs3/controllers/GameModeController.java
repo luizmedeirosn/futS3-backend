@@ -1,6 +1,7 @@
 package com.luizmedeirosn.futs3.controllers;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import com.luizmedeirosn.futs3.dto.input.post.PostGameModeDTO;
 import com.luizmedeirosn.futs3.dto.input.update.UpdateGameModeDTO;
 import com.luizmedeirosn.futs3.dto.output.GameModeDTO;
 import com.luizmedeirosn.futs3.dto.output.min.GameModeMinDTO;
+import com.luizmedeirosn.futs3.projections.AllGameModesProjection;
 import com.luizmedeirosn.futs3.services.GameModeService;
 
 @RestController
@@ -39,6 +41,13 @@ public class GameModeController {
     public ResponseEntity<GameModeMinDTO> findById(@PathVariable Long id) {
         GameModeMinDTO gameModeMinDTO = gameModeService.findById(id);
         ResponseEntity<GameModeMinDTO> response = ResponseEntity.ok().body(gameModeMinDTO);
+        return response;
+    }
+
+    @GetMapping(value = "/full")
+    public ResponseEntity<List<AllGameModesProjection>> findAllFull() {
+        List<AllGameModesProjection> fullGameModes = gameModeService.findAllFull();
+        ResponseEntity<List<AllGameModesProjection>> response = ResponseEntity.ok().body(fullGameModes);
         return response;
     }
 

@@ -1,5 +1,6 @@
 package com.luizmedeirosn.futs3.services;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
@@ -14,6 +15,7 @@ import com.luizmedeirosn.futs3.dto.output.min.GameModeMinDTO;
 import com.luizmedeirosn.futs3.entities.GameMode;
 import com.luizmedeirosn.futs3.entities.Position;
 import com.luizmedeirosn.futs3.entities.PositionParameter;
+import com.luizmedeirosn.futs3.projections.AllGameModesProjection;
 import com.luizmedeirosn.futs3.repositories.GameModeRepository;
 import com.luizmedeirosn.futs3.repositories.ParameterRepository;
 import com.luizmedeirosn.futs3.repositories.PositionParameterRepository;
@@ -46,10 +48,15 @@ public class GameModeService {
         return gameModeMinDTO;
     }
 
-    public GameModeDTO findCompleteGameModeById(Long id) {
+    public List<AllGameModesProjection> findAllFull() {
+        List<AllGameModesProjection> fullGameModes = gameModeRepository.findAllFull();
+        return fullGameModes;
+    }
+
+    public GameModeDTO findFullById(Long id) {
         GameModeDTO gameModeDTO
         = new GameModeDTO (
-            gameModeRepository.findById(id).get(), gameModeRepository.findCompleteGameModeById(id)
+            gameModeRepository.findById(id).get(), gameModeRepository.findFullById(id)
         );
         return gameModeDTO;
     }
@@ -76,7 +83,7 @@ public class GameModeService {
                 }
             );
         gameModeRepository.save(newGameMode);
-        GameModeDTO gameModeDTO = findCompleteGameModeById(newGameMode.getId());
+        GameModeDTO gameModeDTO = findFullById(newGameMode.getId());
         return gameModeDTO;
     }
 
