@@ -1,35 +1,39 @@
 package com.luizmedeirosn.futs3.services;
 
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.luizmedeirosn.futs3.dto.input.update.UpdateGameModeDTO;
+import com.luizmedeirosn.futs3.dto.output.min.GameModeMinDTO;
 import com.luizmedeirosn.futs3.entities.GameMode;
 import com.luizmedeirosn.futs3.entities.Position;
 import com.luizmedeirosn.futs3.entities.PositionParameter;
 import com.luizmedeirosn.futs3.repositories.GameModeRepository;
+import com.luizmedeirosn.futs3.repositories.PositionParameterRepository;
 
 @Service
 public class GameModeService {
 
     @Autowired
-    private GameModeRepository repository;
+    private GameModeRepository gameModeRepository;
 
     @Autowired
-    PositionParameterService positionParameterService;
+    PositionParameterRepository positionParameterRepository;
 
-    public Set<GameMode> findAll() {
-        Set<GameMode> set = new HashSet<>(repository.findAll());
-        return set;
+    public Set<GameModeMinDTO> findAll() {
+        Set<GameModeMinDTO> gameModeMinDTOs = new TreeSet<>();
+        gameModeRepository.findAll().forEach( obj -> gameModeMinDTOs.add(new GameModeMinDTO(obj)) );
+        return gameModeMinDTOs;
     }
 
-    public GameMode findById(Long id) {
-        Optional<GameMode> entity = repository.findById(id);
-        return entity.get();
+    public GameModeMinDTO findById(Long id) {
+        Optional<GameMode> gameModeOptional = gameModeRepository.findById(id);
+        GameModeMinDTO gameModeMinDTO = new GameModeMinDTO(gameModeOptional.get());
+        return gameModeMinDTO;
     }
 
     public GameMode save(GameMode entity) {
@@ -37,21 +41,21 @@ public class GameModeService {
         for (Position position : set) {
             for (PositionParameter posparam : position.getPositionParameters()) {
                 posparam.setPosition(position);
-                positionParameterService.save(posparam);
+                positionParameterRepository.save(posparam);
             }
         }
-        entity = repository.save(entity);
+        entity = gameModeRepository.save(entity);
         return entity;
     }
 
     public GameMode update(Long id, UpdateGameModeDTO obj) {
-        GameMode entity = repository.getReferenceById(id);
+        GameMode entity = gameModeRepository.getReferenceById(id);
         entity.updateData(obj);
-        entity = repository.save(entity);
+        entity = gameModeRepository.save(entity);
         return entity;
     }
 
     public void deleteById(Long id) {
-        repository.deleteById(id);
+        gameModeRepository.deleteById(id);
     }
 }

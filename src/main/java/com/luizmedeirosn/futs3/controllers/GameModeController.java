@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.luizmedeirosn.futs3.dto.input.update.UpdateGameModeDTO;
+import com.luizmedeirosn.futs3.dto.output.min.GameModeMinDTO;
 import com.luizmedeirosn.futs3.entities.GameMode;
 import com.luizmedeirosn.futs3.services.GameModeService;
 
@@ -24,25 +25,25 @@ import com.luizmedeirosn.futs3.services.GameModeService;
 public class GameModeController {
     
     @Autowired
-    private GameModeService service;
+    private GameModeService gameModeService;
 
     @GetMapping
-    public ResponseEntity<Set<GameMode>> findAll() {
-        Set<GameMode> set = service.findAll();
-        ResponseEntity<Set<GameMode>> response = ResponseEntity.ok().body(set);
+    public ResponseEntity<Set<GameModeMinDTO>> findAll() {
+        Set<GameModeMinDTO> gameModeMinDTOs = gameModeService.findAll();
+        ResponseEntity<Set<GameModeMinDTO>> response = ResponseEntity.ok().body(gameModeMinDTOs);
         return response;
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<GameMode> findById(@PathVariable Long id) {
-        GameMode entity = service.findById(id);
-        ResponseEntity<GameMode> response = ResponseEntity.ok().body(entity);
+    public ResponseEntity<GameModeMinDTO> findById(@PathVariable Long id) {
+        GameModeMinDTO gameModeMinDTO = gameModeService.findById(id);
+        ResponseEntity<GameModeMinDTO> response = ResponseEntity.ok().body(gameModeMinDTO);
         return response;
     }
 
     @PostMapping
     public ResponseEntity<GameMode> save(@RequestBody GameMode entity) {
-        entity = service.save(entity);
+        entity = gameModeService.save(entity);
         URI uri = 
             ServletUriComponentsBuilder
             .fromCurrentRequest()
@@ -55,7 +56,7 @@ public class GameModeController {
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<GameMode> updateById(@PathVariable Long id, @RequestBody UpdateGameModeDTO obj) {
-        GameMode entity = service.update(id, obj);
+        GameMode entity = gameModeService.update(id, obj);
         ResponseEntity<GameMode> response = ResponseEntity.ok().body(entity);
         return response;
     }
@@ -63,7 +64,7 @@ public class GameModeController {
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
-        service.deleteById(id);
+        gameModeService.deleteById(id);
         ResponseEntity<Void> response = ResponseEntity.noContent().build();
         return response;
     }
