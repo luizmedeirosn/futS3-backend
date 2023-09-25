@@ -13,19 +13,19 @@ public interface ParameterRepository extends JpaRepository<Parameter, Long> {
         @Query ( 
         nativeQuery = true,
         value = """
-                SELECT 
-                    PARAM.id, 
-                    PARAM.name, 
-                    PLAY_PARAM.score AS playerScore, 
-                    PARAM.description 
-                FROM 
-                tb_player_parameter AS PLAY_PARAM 
-                    INNER JOIN tb_player AS PLAY 
-                        ON PLAY_PARAM.player_id = PLAY.id 
-                    INNER JOIN tb_parameter AS PARAM 
-                        ON PLAY_PARAM.parameter_id = PARAM.id 
-                WHERE PLAY.id = :playerId 
-                ORDER BY PARAM.name;
-                """
+            SELECT 
+                param.id, 
+                param.name, 
+                playparam.score AS playerScore, 
+                param.description 
+            FROM 
+                tb_player_parameter AS playparam 
+                INNER JOIN tb_player AS play 
+                    ON playparam.player_id = play.id 
+                INNER JOIN tb_parameter AS param 
+                    ON playparam.parameter_id = param.id 
+            WHERE play.id = :playerId 
+            ORDER BY param.name;
+        """
     ) List<ParameterProjection> findByPlayerId(Long playerId);
 }

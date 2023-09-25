@@ -15,6 +15,7 @@ import com.luizmedeirosn.futs3.dto.output.min.PlayerMinDTO;
 import com.luizmedeirosn.futs3.entities.Parameter;
 import com.luizmedeirosn.futs3.entities.Player;
 import com.luizmedeirosn.futs3.entities.PlayerParameter;
+import com.luizmedeirosn.futs3.projections.PlayerProjection;
 import com.luizmedeirosn.futs3.repositories.ParameterRepository;
 import com.luizmedeirosn.futs3.repositories.PlayerParameterRepository;
 import com.luizmedeirosn.futs3.repositories.PlayerRepository;
@@ -35,6 +36,17 @@ public class PlayerService {
     @Autowired
     private PositionRepository positionRepository;
 
+    public List<PlayerProjection> findAll() {
+        return playerRepository.findAllOptimized();
+    }
+
+    public PlayerMinDTO findById(Long id) {
+        Optional<Player> playerOptional = playerRepository.findById(id);
+        PlayerMinDTO playerMinDTO = new PlayerMinDTO(playerOptional.get());
+        return playerMinDTO;
+    }
+
+
     public PlayerDTO findByIdWithParameters(Long id) {
         Optional<Player> playerOptional = playerRepository.findById(id);
         PlayerDTO playerDTO = new PlayerDTO( playerOptional.get(), parameterRepository.findByPlayerId(id) );
@@ -46,18 +58,6 @@ public class PlayerService {
         Set<PlayerDTO> playersDTO = new TreeSet<>();
         playerList.forEach( obj -> playersDTO.add(findByIdWithParameters(obj.getId())) );
         return playersDTO;
-    }
-
-    public Set<PlayerMinDTO> findAll() {
-        Set<PlayerMinDTO> playerMinDTOs = new TreeSet<>();
-        playerRepository.findAll().forEach( obj -> playerMinDTOs.add( new PlayerMinDTO(obj)) );
-        return playerMinDTOs;
-    }
-
-    public PlayerMinDTO findById(Long id) {
-        Optional<Player> playerOptional = playerRepository.findById(id);
-        PlayerMinDTO playerMinDTO = new PlayerMinDTO(playerOptional.get());
-        return playerMinDTO;
     }
 
     public PlayerDTO save(PostPlayerDTO playerInputDTO) {

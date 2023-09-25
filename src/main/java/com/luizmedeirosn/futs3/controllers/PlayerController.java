@@ -1,6 +1,7 @@
 package com.luizmedeirosn.futs3.controllers;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import com.luizmedeirosn.futs3.dto.input.post.PostPlayerDTO;
 import com.luizmedeirosn.futs3.dto.input.update.UpdatePlayerDTO;
 import com.luizmedeirosn.futs3.dto.output.PlayerDTO;
 import com.luizmedeirosn.futs3.dto.output.min.PlayerMinDTO;
+import com.luizmedeirosn.futs3.projections.PlayerProjection;
 import com.luizmedeirosn.futs3.services.PlayerService;
 
 @RestController
@@ -43,9 +45,9 @@ public class PlayerController {
     }
 
     @GetMapping
-    public ResponseEntity<Set<PlayerMinDTO>> findAll() {
-        Set<PlayerMinDTO> playersMinDtos = playerService.findAll();
-        ResponseEntity<Set<PlayerMinDTO>> response = ResponseEntity.ok().body(playersMinDtos);
+    public ResponseEntity<List<PlayerProjection>> findAll() {
+        List<PlayerProjection> playersProjections = playerService.findAll();
+        ResponseEntity<List<PlayerProjection>> response = ResponseEntity.ok().body(playersProjections);
         return response;
     }
 
