@@ -9,7 +9,7 @@ import com.luizmedeirosn.futs3.entities.Player;
 import com.luizmedeirosn.futs3.projections.PlayerParameterProjection;
 
 @JsonPropertyOrder( { "id", "name", "position", "parameters" } )
-public class PlayerDTO implements Serializable, Comparable<PlayerDTO> {
+public class PlayerDTO implements Serializable {
     
     private static final long serialVersionUID = 1L;
     
@@ -45,11 +45,6 @@ public class PlayerDTO implements Serializable, Comparable<PlayerDTO> {
 
     public List<PlayerParameterProjection> getParameters() {
         return parameters;
-    }
-
-    @Override
-    public int compareTo(PlayerDTO other) {
-        return name.toLowerCase().compareTo(other.getName().toLowerCase());
     }
     
 }

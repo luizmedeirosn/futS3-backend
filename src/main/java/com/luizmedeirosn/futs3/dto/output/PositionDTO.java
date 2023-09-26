@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.luizmedeirosn.futs3.entities.Position;
 
 @JsonPropertyOrder( { "id", "name", "position" } )
-public class PositionDTO implements Serializable, Comparable<PositionDTO> {
+public class PositionDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -33,11 +33,6 @@ public class PositionDTO implements Serializable, Comparable<PositionDTO> {
 
     public String getDescription() {
         return description;
-    }
-
-    @Override
-    public int compareTo(PositionDTO other) {
-        return id.compareTo(other.getId());
     }
     
 }

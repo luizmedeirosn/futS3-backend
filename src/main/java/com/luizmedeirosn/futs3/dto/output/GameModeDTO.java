@@ -8,7 +8,7 @@ import com.luizmedeirosn.futs3.entities.GameMode;
 import com.luizmedeirosn.futs3.projections.GameModeProjection;
 
 @JsonPropertyOrder( { "id", "formationName", "description", "fields" } )
-public class GameModeDTO implements Serializable, Comparable<GameModeDTO> {
+public class GameModeDTO implements Serializable {
     
     private static final long serialVersionUID = 1L;
     
@@ -41,11 +41,6 @@ public class GameModeDTO implements Serializable, Comparable<GameModeDTO> {
 
     public List<GameModeProjection> getFields() {
         return fields;
-    }
-
-    @Override
-    public int compareTo(GameModeDTO other) {
-        return id.compareTo(other.getId());
     }
 
 }

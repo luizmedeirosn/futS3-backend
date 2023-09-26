@@ -8,7 +8,7 @@ import com.luizmedeirosn.futs3.dto.output.PositionDTO;
 import com.luizmedeirosn.futs3.entities.Player;
 
 @JsonPropertyOrder( { "id", "name", "position" } )
-public class PlayerMinDTO implements Serializable, Comparable<PlayerMinDTO>{
+public class PlayerMinDTO implements Serializable {
     
     private static final long serialVersionUID = 1L;
 
@@ -37,11 +37,6 @@ public class PlayerMinDTO implements Serializable, Comparable<PlayerMinDTO>{
 
     public PositionDTO getPositionDTO() {
         return positionDTO;
-    }
-
-    @Override
-    public int compareTo(PlayerMinDTO other) {
-        return name.toLowerCase().compareTo(other.getName().toLowerCase());
     }
     
 }

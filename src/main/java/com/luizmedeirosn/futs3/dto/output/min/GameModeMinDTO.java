@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import com.luizmedeirosn.futs3.entities.GameMode;
 
-public class GameModeMinDTO implements Serializable, Comparable<GameModeMinDTO>{
+public class GameModeMinDTO implements Serializable {
     
     private static final long serialVersionUID = 1L;
         
@@ -31,11 +31,6 @@ public class GameModeMinDTO implements Serializable, Comparable<GameModeMinDTO>{
 
     public String getDescription() {
         return description;
-    }
-
-    @Override
-    public int compareTo(GameModeMinDTO other) {
-        return id.compareTo(other.getId());
     }
 
 }
