@@ -27,4 +27,5 @@ public interface ParameterRepository extends JpaRepository<Parameter, Long> {
             ORDER BY param.name;
         """
     ) List<PlayerParameterProjection> findByPlayerId(Long playerId);
+    
 }

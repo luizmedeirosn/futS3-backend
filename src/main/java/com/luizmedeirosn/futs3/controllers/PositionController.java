@@ -1,7 +1,7 @@
 package com.luizmedeirosn.futs3.controllers;
 
 import java.net.URI;
-import java.util.Set;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,47 +25,39 @@ import com.luizmedeirosn.futs3.services.PositionService;
 public class PositionController {
     
     @Autowired
-    private PositionService service;
+    private PositionService positionService;
 
     @GetMapping
-    public ResponseEntity<Set<PositionDTO>> findAll() {
-        Set<PositionDTO> positionDTOs = service.findAll();
-        ResponseEntity<Set<PositionDTO>> response = ResponseEntity.ok().body(positionDTOs);
-        return response;
+    public ResponseEntity<List<PositionDTO>> findAll() {
+        return ResponseEntity.ok().body(positionService.findAll());
     }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<PositionDTO> findById(@PathVariable Long id) {
-        PositionDTO positionDTO = service.findById(id);
-        ResponseEntity<PositionDTO> response = ResponseEntity.ok().body(positionDTO);
-        return response;
+        return ResponseEntity.ok().body(positionService.findById(id));
     }
 
     @PostMapping
     public ResponseEntity<PositionDTO> save(@RequestBody PostPositionDTO postPositionDTO) {
-        PositionDTO positionDTO = service.save(postPositionDTO);
+        PositionDTO positionDTO = positionService.save(postPositionDTO);
         URI uri = 
             ServletUriComponentsBuilder
             .fromCurrentRequest()
             .path("/{id}")
             .buildAndExpand(positionDTO.getId())
             .toUri();
-        ResponseEntity<PositionDTO> response = ResponseEntity.created(uri).body(positionDTO);
-        return response;
+        return ResponseEntity.created(uri).body(positionDTO);
     }
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<PositionDTO> updateById(@PathVariable Long id, @RequestBody UpdatePositionDTO updatePositionDTO) {
-        PositionDTO positionDTO = service.update(id, updatePositionDTO);
-        ResponseEntity<PositionDTO> response = ResponseEntity.ok().body(positionDTO);
-        return response;
+        return ResponseEntity.ok().body(positionService.update(id, updatePositionDTO));
     }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
-        service.deleteById(id);
-        ResponseEntity<Void> response = ResponseEntity.noContent().build();
-        return response;
+        positionService.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

@@ -37,9 +37,7 @@ public class PlayerController {
 
     @GetMapping("/{id}")
     public ResponseEntity<PlayerMinDTO> findById(@PathVariable Long id) {
-        PlayerMinDTO playerMinDTO = playerService.findById(id);
-        ResponseEntity<PlayerMinDTO> response = ResponseEntity.ok().body(playerMinDTO);
-        return response;
+        return ResponseEntity.ok().body(playerService.findById(id));
     }
 
     @GetMapping("/parameters")
@@ -49,9 +47,7 @@ public class PlayerController {
 
     @GetMapping("/{id}/parameters")
     public ResponseEntity<PlayerDTO> findByIdWithParameters(@PathVariable Long id) {
-        PlayerDTO playerDTO = playerService.findByIdWithParameters(id);
-        ResponseEntity<PlayerDTO> response = ResponseEntity.ok().body(playerDTO);
-        return response;
+        return ResponseEntity.ok().body(playerService.findByIdWithParameters(id));
     }
 
     @PostMapping
@@ -63,23 +59,19 @@ public class PlayerController {
             .path("/{id}")
             .buildAndExpand(playerDTO.getId())
             .toUri();
-        ResponseEntity<PlayerDTO> response = ResponseEntity.created(uri).body(playerDTO);
-        return response;
+        return ResponseEntity.created(uri).body(playerDTO);
     }
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<PlayerMinDTO> update(@PathVariable Long id, @RequestBody UpdatePlayerDTO updatePlayerDTO) {
-        PlayerMinDTO playerMinDTO = playerService.update(id, updatePlayerDTO);
-        ResponseEntity<PlayerMinDTO> response = ResponseEntity.ok().body(playerMinDTO);
-        return response;
+        return ResponseEntity.ok().body(playerService.update(id, updatePlayerDTO));
     }
 
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         playerService.deleteById(id);
-        ResponseEntity<Void> response = ResponseEntity.noContent().build();
-        return response;
+        return ResponseEntity.noContent().build();
     }
 
 }

@@ -1,10 +1,9 @@
 package com.luizmedeirosn.futs3.services;
 
-import java.util.Optional;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.luizmedeirosn.futs3.dto.input.post.PostPositionDTO;
@@ -19,33 +18,32 @@ public class PositionService {
     @Autowired
     private PositionRepository positionRepository;
 
-    public Set<PositionDTO> findAll() {
-        Set<PositionDTO> positionDTOs = new TreeSet<>();
-        positionRepository.findAll().forEach( obj -> positionDTOs.add( new PositionDTO(obj)) );
-        return positionDTOs;
+    public List<PositionDTO> findAll() {
+        return positionRepository
+            .findAll(Sort.by("id"))
+            .stream()
+            .map( x -> new PositionDTO(x) )
+            .toList();
     }
 
     public PositionDTO findById(Long id) {
-        Optional<Position> optionalPosition = positionRepository.findById(id);
-        PositionDTO positionDTO = new PositionDTO(optionalPosition.get());
-        return positionDTO;
+        return new PositionDTO(positionRepository.findById(id).get());
     }
 
     public PositionDTO save(PostPositionDTO postPositionDTO) {
         Position position = positionRepository.save(new Position(postPositionDTO.getName(), postPositionDTO.getDescription()));
-        PositionDTO positionDTO = new PositionDTO(position);
-        return positionDTO;
+        return new PositionDTO(position);
     }
 
     public PositionDTO update(Long id, UpdatePositionDTO updatePositionDTO) {
         Position position = positionRepository.getReferenceById(id);
         position.updateData(updatePositionDTO);
         position = positionRepository.save(position);
-        PositionDTO positionDTO = new PositionDTO(position);
-        return positionDTO;
+        return new PositionDTO(position);
     }
 
     public void deleteById(Long id) {
         positionRepository.deleteById(id);
     }
+    
 }

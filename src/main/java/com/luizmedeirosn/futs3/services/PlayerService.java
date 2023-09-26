@@ -1,7 +1,6 @@
 package com.luizmedeirosn.futs3.services;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,16 +39,12 @@ public class PlayerService {
     }
 
     public PlayerMinDTO findById(Long id) {
-        Optional<Player> playerOptional = playerRepository.findById(id);
-        PlayerMinDTO playerMinDTO = new PlayerMinDTO(playerOptional.get());
-        return playerMinDTO;
+        return new PlayerMinDTO( playerRepository.findById(id).get());
     }
 
 
     public PlayerDTO findByIdWithParameters(Long id) {
-        Optional<Player> playerOptional = playerRepository.findById(id);
-        PlayerDTO playerDTO = new PlayerDTO( playerOptional.get(), parameterRepository.findByPlayerId(id) );
-        return playerDTO;
+        return new PlayerDTO( playerRepository.findById(id).get(), parameterRepository.findByPlayerId(id) );
     }
 
     public List<AllPlayersParametersProjection> findAllWithParameters() {
@@ -70,16 +65,14 @@ public class PlayerService {
                 playerParameterRepository.save(playerParameter);
             }
         );
-        PlayerDTO playerDTO = new PlayerDTO( newPlayer, parameterRepository.findByPlayerId(newPlayer.getId()) );
-        return playerDTO;
+        return new PlayerDTO( newPlayer, parameterRepository.findByPlayerId(newPlayer.getId()) );
     }
 
     public PlayerMinDTO update(Long id, UpdatePlayerDTO updatePlayerDTO) {
         Player player = playerRepository.getReferenceById(id);
         player.updateData( updatePlayerDTO.getName(), positionRepository.findById(updatePlayerDTO.getPositionId()).get() );
         player = playerRepository.save(player);
-        PlayerMinDTO playerMinDTO = new PlayerMinDTO(player);
-        return playerMinDTO;
+        return new PlayerMinDTO(player);
     }
 
     public void deleteById(Long id) {

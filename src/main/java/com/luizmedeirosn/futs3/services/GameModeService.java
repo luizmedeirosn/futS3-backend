@@ -1,11 +1,10 @@
 package com.luizmedeirosn.futs3.services;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
-import java.util.TreeSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.luizmedeirosn.futs3.dto.input.post.PostGameModeDTO;
@@ -36,16 +35,16 @@ public class GameModeService {
     @Autowired
     PositionParameterRepository positionParameterRepository;
 
-    public Set<GameModeMinDTO> findAll() {
-        Set<GameModeMinDTO> gameModeMinDTOs = new TreeSet<>();
-        gameModeRepository.findAll().forEach( obj -> gameModeMinDTOs.add(new GameModeMinDTO(obj)) );
-        return gameModeMinDTOs;
+    public List<GameModeMinDTO> findAll() {
+        return gameModeRepository
+            .findAll(Sort.by("id"))
+            .stream()
+            .map( x -> new GameModeMinDTO(x) )
+            .toList();
     }
 
     public GameModeMinDTO findById(Long id) {
-        Optional<GameMode> gameModeOptional = gameModeRepository.findById(id);
-        GameModeMinDTO gameModeMinDTO = new GameModeMinDTO(gameModeOptional.get());
-        return gameModeMinDTO;
+        return new GameModeMinDTO(gameModeRepository.findById(id).get());
     }
 
     public List<AllGameModesProjection> findAllFull() {
@@ -54,11 +53,7 @@ public class GameModeService {
     }
 
     public GameModeDTO findFullById(Long id) {
-        GameModeDTO gameModeDTO
-        = new GameModeDTO (
-            gameModeRepository.findById(id).get(), gameModeRepository.findFullById(id)
-        );
-        return gameModeDTO;
+        return new GameModeDTO( gameModeRepository.findById(id).get(), gameModeRepository.findFullById(id) );
     }
 
     public GameModeDTO save(PostGameModeDTO postGameModeDTO) {
@@ -91,11 +86,11 @@ public class GameModeService {
         GameMode gameMode = gameModeRepository.getReferenceById(id);
         gameMode.updateData(updateGameModeDTO);
         gameMode = gameModeRepository.save(gameMode);
-        GameModeMinDTO gameModeMinDTO = new GameModeMinDTO(gameMode);
-        return gameModeMinDTO;
+        return new GameModeMinDTO(gameMode);
     }
 
     public void deleteById(Long id) {
         gameModeRepository.deleteById(id);
     }
+    
 }

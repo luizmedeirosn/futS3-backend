@@ -1,11 +1,9 @@
 package com.luizmedeirosn.futs3.services;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.TreeSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.luizmedeirosn.futs3.dto.input.post.PostParameterDTO;
@@ -21,23 +19,20 @@ public class ParameterSerivce {
     @Autowired
     private ParameterRepository parameterRepository;
 
-    public Set<ParameterDTO> findAll() {
-        Set<ParameterDTO> parametersDTO = new TreeSet<>();
-        parameterRepository.findAll().forEach(
-            obj -> parametersDTO.add(new ParameterDTO(obj) )
-        );
-        return parametersDTO;
+    public List<ParameterDTO> findAll() {
+        return parameterRepository
+            .findAll(Sort.by("name"))
+            .stream()
+            .map( x -> new ParameterDTO(x) )
+            .toList();
     }
 
     public ParameterDTO findById(Long id) {
-        Optional<Parameter> optionalParameter = parameterRepository.findById(id);
-        ParameterDTO parameterDTO = new ParameterDTO(optionalParameter.get());
-        return parameterDTO;
+        return new ParameterDTO(parameterRepository.findById(id).get());
     }
 
     public List<PlayerParameterProjection> findByPlayerId(Long id) {
-        List<PlayerParameterProjection> parametersByPlayer = parameterRepository.findByPlayerId(id);
-        return parametersByPlayer;
+        return parameterRepository.findByPlayerId(id);
     }
 
     public ParameterDTO save(PostParameterDTO parameterInputDTO) {
@@ -45,16 +40,14 @@ public class ParameterSerivce {
         parameter.setName(parameterInputDTO.getName());
         parameter.setDescription(parameterInputDTO.getDescription());
         parameter = parameterRepository.save(parameter);
-        ParameterDTO parameterDTO = new ParameterDTO(parameter);
-        return parameterDTO;
+        return new ParameterDTO(parameter);
     }
 
     public ParameterDTO update(Long id, UpdateParameterDTO updateParameterDTO) {
         Parameter parameter = parameterRepository.getReferenceById(id);
         parameter.updateData(updateParameterDTO);
         parameter = parameterRepository.save(parameter);
-        ParameterDTO parameterDTO = new ParameterDTO(parameter);
-        return parameterDTO;
+        return new ParameterDTO(parameter);
     }
 
     public void deleteById(Long id) {

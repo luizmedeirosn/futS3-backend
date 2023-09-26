@@ -1,7 +1,7 @@
 package com.luizmedeirosn.futs3.controllers;
 
 import java.net.URI;
-import java.util.Set;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -28,17 +28,13 @@ public class ParameterController {
     private ParameterSerivce parameterSerivce;
 
     @GetMapping
-    public ResponseEntity<Set<ParameterDTO>> findAll() {
-        Set<ParameterDTO> set = parameterSerivce.findAll();
-        ResponseEntity<Set<ParameterDTO>> response = ResponseEntity.ok().body(set);
-        return response;
+    public ResponseEntity<List<ParameterDTO>> findAll() {
+        return ResponseEntity.ok().body(parameterSerivce.findAll());
     }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<ParameterDTO> findById(@PathVariable Long id) {
-        ParameterDTO parameterDTO = parameterSerivce.findById(id);
-        ResponseEntity<ParameterDTO> response = ResponseEntity.ok().body(parameterDTO);
-        return response;
+        return  ResponseEntity.ok().body(parameterSerivce.findById(id));
     }
 
     @PostMapping
@@ -50,23 +46,19 @@ public class ParameterController {
             .path("/{id}")
             .buildAndExpand(parameterDTO.getId())
             .toUri();
-        ResponseEntity<ParameterDTO> response = ResponseEntity.created(uri).body(parameterDTO);
-        return response;
+        return ResponseEntity.created(uri).body(parameterDTO);
     }
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<ParameterDTO> updateById(@PathVariable Long id, @RequestBody UpdateParameterDTO updateParameterDTO) {
-        ParameterDTO parameterDTO = parameterSerivce.update(id, updateParameterDTO);
-        ResponseEntity<ParameterDTO> response = ResponseEntity.ok().body(parameterDTO);
-        return response;
+        return ResponseEntity.ok().body(parameterSerivce.update(id, updateParameterDTO));
     }
 
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         parameterSerivce.deleteById(id);
-        ResponseEntity<Void> response = ResponseEntity.noContent().build();
-        return response;
+        return ResponseEntity.noContent().build();
     }
 
 }
