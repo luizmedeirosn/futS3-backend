@@ -1,8 +1,11 @@
 package com.luizmedeirosn.futs3.services;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +15,8 @@ import com.luizmedeirosn.futs3.dto.output.ParameterDTO;
 import com.luizmedeirosn.futs3.entities.Parameter;
 import com.luizmedeirosn.futs3.projections.PlayerParameterProjection;
 import com.luizmedeirosn.futs3.repositories.ParameterRepository;
+import com.luizmedeirosn.futs3.services.exceptions.DatabaseException;
+import com.luizmedeirosn.futs3.services.exceptions.EntityNotFoundException;
 
 @Service
 public class ParameterSerivce {
@@ -28,29 +33,61 @@ public class ParameterSerivce {
     }
 
     public ParameterDTO findById(Long id) {
-        return new ParameterDTO(parameterRepository.findById(id).get());
+        try {
+            return new ParameterDTO(parameterRepository.findById(id).get());
+
+        } catch (NoSuchElementException e) {
+            throw new EntityNotFoundException("Parameter ID not found");
+        }
     }
 
     public List<PlayerParameterProjection> findByPlayerId(Long id) {
-        return parameterRepository.findByPlayerId(id);
+        try {
+            return parameterRepository.findByPlayerId(id);
+
+        } catch (NoSuchElementException e) {
+            throw new EntityNotFoundException("Parameter ID not found");
+        }
     }
 
     public ParameterDTO save(PostParameterDTO parameterInputDTO) {
-        Parameter parameter = new Parameter();
-        parameter.setName(parameterInputDTO.getName());
-        parameter.setDescription(parameterInputDTO.getDescription());
-        parameter = parameterRepository.save(parameter);
-        return new ParameterDTO(parameter);
+        try {
+            Parameter parameter = new Parameter();
+            parameter.setName(parameterInputDTO.getName());
+            parameter.setDescription(parameterInputDTO.getDescription());
+            parameter = parameterRepository.save(parameter);
+            return new ParameterDTO(parameter);
+
+        } catch (NoSuchElementException e) {
+            throw new EntityNotFoundException("Parameter request. IDs not found");
+
+        } catch (InvalidDataAccessApiUsageException e) {
+            throw new EntityNotFoundException("Parameter request. The given IDs must not be null");
+        
+        } catch (DataIntegrityViolationException e) {
+            throw new DatabaseException("Parameter request. Unique index, not null, check index or primary key violation");
+        }
     }
 
     public ParameterDTO update(Long id, UpdateParameterDTO updateParameterDTO) {
-        Parameter parameter = parameterRepository.getReferenceById(id);
-        parameter.updateData(updateParameterDTO);
-        parameter = parameterRepository.save(parameter);
-        return new ParameterDTO(parameter);
+        try {
+            Parameter parameter = parameterRepository.getReferenceById(id);
+            parameter.updateData(updateParameterDTO);
+            parameter = parameterRepository.save(parameter);
+            return new ParameterDTO(parameter);
+        }
+        catch (jakarta.persistence.EntityNotFoundException e) {
+            throw new EntityNotFoundException("Parameter request. IDs not found");
+        
+        } catch (DataIntegrityViolationException e) {
+            throw new DatabaseException("Parameter request. Unique index, not null, check index or primary key violation");
+        }
     }
 
     public void deleteById(Long id) {
+        if (!parameterRepository.existsById(id)) {
+            throw new EntityNotFoundException("Parameter request. ID not found");
+        }
         parameterRepository.deleteById(id);
     }
 

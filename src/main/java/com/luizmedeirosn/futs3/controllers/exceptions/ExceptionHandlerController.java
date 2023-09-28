@@ -28,7 +28,7 @@ public class ExceptionHandlerController {
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
      public ResponseEntity<StandardError> endpointValueConversionError(MethodArgumentTypeMismatchException e, HttpServletRequest request) {
         final String ERROR = "ERROR IN ENDPOINT VALUE CONVERSION";
-        final HttpStatus STATUS = HttpStatus.NOT_FOUND;
+        final HttpStatus STATUS = HttpStatus.BAD_REQUEST;
         final StandardError EXCEPTION = new StandardError(Instant.now(), STATUS.value(), ERROR, e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(STATUS).body(EXCEPTION);
     }
