@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import jakarta.annotation.Nonnull;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -33,7 +34,7 @@ public class Player implements Serializable {
     @JoinColumn(name = "position_id")
     private Position position;
 
-    @OneToMany(mappedBy = "id.player")
+    @OneToMany(mappedBy = "id.player", cascade = CascadeType.REMOVE)
     private Set<PlayerParameter> playerParameters = new HashSet<>();
 
     public Player() {
