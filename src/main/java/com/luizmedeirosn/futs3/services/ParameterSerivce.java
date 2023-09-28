@@ -85,10 +85,15 @@ public class ParameterSerivce {
     }
 
     public void deleteById(Long id) {
-        if (!parameterRepository.existsById(id)) {
-            throw new EntityNotFoundException("Parameter request. ID not found");
+        try {
+            if (!parameterRepository.existsById(id)) {
+                throw new EntityNotFoundException("Parameter request. ID not found");
+            }
+            parameterRepository.deleteById(id);
+
+        } catch (DataIntegrityViolationException e) {
+            throw new DatabaseException("Parameter request. Database integrity reference constraint error");
         }
-        parameterRepository.deleteById(id);
     }
 
 }

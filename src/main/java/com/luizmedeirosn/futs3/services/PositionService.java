@@ -72,10 +72,15 @@ public class PositionService {
     }
 
     public void deleteById(Long id) {
-        if (!positionRepository.existsById(id)) {
-            throw new EntityNotFoundException("Position request. ID not found");
+        try {
+            if (!positionRepository.existsById(id)) {
+                throw new EntityNotFoundException("Position request. ID not found");
+            }
+            positionRepository.deleteById(id);
+
+        } catch (DataIntegrityViolationException e) {
+            throw new DatabaseException("Position request. Database integrity reference constraint error");
         }
-        positionRepository.deleteById(id);
     }
     
 }
