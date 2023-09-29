@@ -14,11 +14,11 @@ public class PlayerParameterPK implements Serializable {
     
     private static final long serialVersionUID = 1L;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "player_id")
     private Player player;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "parameter_id")
     private Parameter parameter;
 

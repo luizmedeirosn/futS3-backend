@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.luizmedeirosn.futs3.dto.input.post.PostPlayerDTO;
 import com.luizmedeirosn.futs3.dto.input.update.UpdatePlayerDTO;
@@ -39,10 +42,12 @@ public class PlayerService {
     @Autowired
     private PositionRepository positionRepository;
 
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public List<PlayerProjection> findAll() {
         return playerRepository.findAllOptimized();
     }
 
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public PlayerMinDTO findById(Long id) {
         try {
             return new PlayerMinDTO( playerRepository.findById(id).get());
@@ -53,6 +58,7 @@ public class PlayerService {
     }
 
 
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public PlayerDTO findByIdWithParameters(Long id) {
         try {
             return new PlayerDTO( playerRepository.findById(id).get(), parameterRepository.findByPlayerId(id) );
@@ -62,10 +68,12 @@ public class PlayerService {
         }
     }
 
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public List<AllPlayersParametersProjection> findAllWithParameters() {
         return playerParameterRepository.findAllPlayersParameters();
     }
 
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public PlayerDTO save(PostPlayerDTO playerInputDTO) {
         try {
             Player newPlayer = new Player();
@@ -94,6 +102,7 @@ public class PlayerService {
         }
     }
 
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public PlayerMinDTO update(Long id, UpdatePlayerDTO updatePlayerDTO) {
         try {
             Player player = playerRepository.getReferenceById(id);
@@ -102,13 +111,14 @@ public class PlayerService {
             return new PlayerMinDTO(player);
 
         } catch (jakarta.persistence.EntityNotFoundException e) {
-            throw new EntityNotFoundException("Player request. IDs not found");
+            throw new EntityNotFoundException("Player request. ID not found");
         
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException("Player request. Unique index, check index or primary key violation");
         }
     }
 
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public void deleteById(Long id) {
         if (!playerRepository.existsById(id)) {
             throw new EntityNotFoundException("Player request. ID not found");

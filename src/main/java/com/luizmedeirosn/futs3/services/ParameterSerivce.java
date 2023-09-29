@@ -8,6 +8,9 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.luizmedeirosn.futs3.dto.input.post.PostParameterDTO;
 import com.luizmedeirosn.futs3.dto.input.update.UpdateParameterDTO;
@@ -24,6 +27,7 @@ public class ParameterSerivce {
     @Autowired
     private ParameterRepository parameterRepository;
 
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public List<ParameterDTO> findAll() {
         return parameterRepository
             .findAll(Sort.by("name"))
@@ -32,6 +36,7 @@ public class ParameterSerivce {
             .toList();
     }
 
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public ParameterDTO findById(Long id) {
         try {
             return new ParameterDTO(parameterRepository.findById(id).get());
@@ -41,6 +46,7 @@ public class ParameterSerivce {
         }
     }
 
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public List<PlayerParameterProjection> findByPlayerId(Long id) {
         try {
             return parameterRepository.findByPlayerId(id);
@@ -49,7 +55,8 @@ public class ParameterSerivce {
             throw new EntityNotFoundException("Parameter ID not found");
         }
     }
-
+    
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public ParameterDTO save(PostParameterDTO parameterInputDTO) {
         try {
             Parameter parameter = new Parameter();
@@ -68,7 +75,8 @@ public class ParameterSerivce {
             throw new DatabaseException("Parameter request. Unique index, not null, check index or primary key violation");
         }
     }
-
+    
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public ParameterDTO update(Long id, UpdateParameterDTO updateParameterDTO) {
         try {
             Parameter parameter = parameterRepository.getReferenceById(id);
@@ -77,13 +85,14 @@ public class ParameterSerivce {
             return new ParameterDTO(parameter);
         }
         catch (jakarta.persistence.EntityNotFoundException e) {
-            throw new EntityNotFoundException("Parameter request. IDs not found");
+            throw new EntityNotFoundException("Parameter request. ID not found");
         
         } catch (DataIntegrityViolationException e) {
-            throw new DatabaseException("Parameter request. Unique index, not null, check index or primary key violation");
+            throw new DatabaseException("Parameter request. Unique index, check index or primary key violation");
         }
     }
 
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public void deleteById(Long id) {
         try {
             if (!parameterRepository.existsById(id)) {

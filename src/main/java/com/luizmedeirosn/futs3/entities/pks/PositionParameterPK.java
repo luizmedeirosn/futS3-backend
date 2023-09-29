@@ -14,11 +14,11 @@ public class PositionParameterPK implements Serializable {
     
     private static final long serialVersionUID = 1L;
     
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "position_id")
     private Position position;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "parameter_id")
     private Parameter parameter;
 

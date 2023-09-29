@@ -30,7 +30,7 @@ public class Player implements Serializable {
     @Column(nullable = false, unique = true)
     private String name;
     
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "position_id")
     private Position position;
 

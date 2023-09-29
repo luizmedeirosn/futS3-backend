@@ -8,6 +8,9 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.luizmedeirosn.futs3.dto.input.post.PostPositionDTO;
 import com.luizmedeirosn.futs3.dto.input.update.UpdatePositionDTO;
@@ -23,6 +26,7 @@ public class PositionService {
     @Autowired
     private PositionRepository positionRepository;
 
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public List<PositionDTO> findAll() {
         return positionRepository
             .findAll(Sort.by("id"))
@@ -31,6 +35,7 @@ public class PositionService {
             .toList();
     }
 
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public PositionDTO findById(Long id) {
         try {
             return new PositionDTO(positionRepository.findById(id).get());
@@ -39,7 +44,8 @@ public class PositionService {
             throw new EntityNotFoundException("Position ID not found");
         }
     }
-
+    
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public PositionDTO save(PostPositionDTO postPositionDTO) {
         try {
             Position position = positionRepository.save(new Position(postPositionDTO.getName(), postPositionDTO.getDescription()));
@@ -55,7 +61,8 @@ public class PositionService {
             throw new DatabaseException("Position request. Unique index, check index or primary key violation");
         }
     }
-
+    
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public PositionDTO update(Long id, UpdatePositionDTO updatePositionDTO) {
         try {
             Position position = positionRepository.getReferenceById(id);
@@ -64,13 +71,14 @@ public class PositionService {
             return new PositionDTO(position);
 
         } catch (jakarta.persistence.EntityNotFoundException e) {
-            throw new EntityNotFoundException("Position request. IDs not found");
+            throw new EntityNotFoundException("Position request. ID not found");
         
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException("Position request. Unique index, check index or primary key violation");
         }
     }
 
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public void deleteById(Long id) {
         try {
             if (!positionRepository.existsById(id)) {

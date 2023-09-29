@@ -2,6 +2,8 @@ package com.luizmedeirosn.futs3.controllers.exceptions;
 
 import java.time.Instant;
 
+import org.hibernate.PropertyValueException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -38,6 +40,23 @@ public class ExceptionHandlerController {
         final String ERROR = "DATA BASE ERROR";
         final HttpStatus STATUS = HttpStatus.BAD_REQUEST; 
         final StandardError EXCEPTION = new StandardError(Instant.now(), STATUS.value(), ERROR, e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(STATUS).body(EXCEPTION);
+    }
+
+    @ExceptionHandler(PropertyValueException.class)
+    public ResponseEntity<StandardError> notNullError(PropertyValueException e, HttpServletRequest request) {
+        final String ERROR = "DATA BASE ERROR";
+        final HttpStatus STATUS = HttpStatus.BAD_REQUEST; 
+        final StandardError EXCEPTION = new StandardError(Instant.now(), STATUS.value(), ERROR, e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(STATUS).body(EXCEPTION);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<StandardError> dataIntegrityError(DataIntegrityViolationException e, HttpServletRequest request) {
+        final String ERROR = "DATA BASE ERROR";
+        final HttpStatus STATUS = HttpStatus.BAD_REQUEST;
+        final String MESSAGE = "UPDATE FAILED. Unique index, not null, check index violation";
+        final StandardError EXCEPTION = new StandardError(Instant.now(), STATUS.value(), ERROR, MESSAGE, request.getRequestURI());
         return ResponseEntity.status(STATUS).body(EXCEPTION);
     }
 

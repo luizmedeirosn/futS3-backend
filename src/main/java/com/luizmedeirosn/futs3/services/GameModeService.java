@@ -9,6 +9,9 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.luizmedeirosn.futs3.dto.input.post.PostGameModeDTO;
 import com.luizmedeirosn.futs3.dto.input.update.UpdateGameModeDTO;
@@ -40,6 +43,7 @@ public class GameModeService {
     @Autowired
     PositionParameterRepository positionParameterRepository;
 
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public List<GameModeMinDTO> findAll() {
         return gameModeRepository
             .findAll(Sort.by("id"))
@@ -48,6 +52,7 @@ public class GameModeService {
             .toList();
     }
 
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public GameModeMinDTO findById(Long id) {
         try {
             return new GameModeMinDTO(gameModeRepository.findById(id).get());
@@ -57,11 +62,13 @@ public class GameModeService {
         }
     }
 
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public List<AllGameModesProjection> findAllFull() {
         List<AllGameModesProjection> fullGameModes = gameModeRepository.findAllFull();
         return fullGameModes;
     }
 
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public GameModeDTO findFullById(Long id) {
         try {
             return new GameModeDTO( gameModeRepository.findById(id).get(), gameModeRepository.findFullById(id) );
@@ -71,6 +78,7 @@ public class GameModeService {
         }
     }
 
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public GameModeDTO save(PostGameModeDTO postGameModeDTO) {
         try {
             GameMode newGameMode = new GameMode();
@@ -108,6 +116,7 @@ public class GameModeService {
         }
     }
 
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public GameModeMinDTO update(Long id, UpdateGameModeDTO updateGameModeDTO) {
         try {
             GameMode gameMode = gameModeRepository.getReferenceById(id);
@@ -117,13 +126,14 @@ public class GameModeService {
 
         } catch (jakarta.persistence.EntityNotFoundException e) {
             // jakarta.persistence.EntityNotFoundException: Unable to find com.luizmedeirosn.futs3.entities.GameMode with id 10
-            throw new EntityNotFoundException("GameMode request. IDs not found");
+            throw new EntityNotFoundException("GameMode request. ID not found");
         
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException("GameMode request. Unique index, check index or primary key violation");
         }
     }
 
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public void deleteById(Long id) {
         if (!gameModeRepository.existsById(id)) {
             throw new EntityNotFoundException("GameMode request. ID not found");
