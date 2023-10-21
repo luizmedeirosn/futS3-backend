@@ -59,7 +59,7 @@ public class PlayerService {
 
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public PlayerDTO findByIdWithParameters(Long id) {
+    public PlayerDTO findFullById(Long id) {
         try {
             return new PlayerDTO( playerRepository.findById(id).get(), parameterRepository.findByPlayerId(id) );
         

@@ -45,9 +45,9 @@ public class PlayerController {
         return ResponseEntity.ok().body(playerService.findAllWithParameters());
     }
 
-    @GetMapping("/{id}/parameters")
-    public ResponseEntity<PlayerDTO> findByIdWithParameters(@PathVariable Long id) {
-        return ResponseEntity.ok().body(playerService.findByIdWithParameters(id));
+    @GetMapping("/{id}/full")
+    public ResponseEntity<PlayerDTO> findFullById(@PathVariable Long id) {
+        return ResponseEntity.ok().body(playerService.findFullById(id));
     }
 
     @PostMapping
