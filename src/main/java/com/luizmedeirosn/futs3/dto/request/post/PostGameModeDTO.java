@@ -1,4 +1,4 @@
-package com.luizmedeirosn.futs3.dto.input.post;
+package com.luizmedeirosn.futs3.dto.request.post;
 
 import java.io.Serializable;
 import java.util.List;
@@ -11,9 +11,6 @@ public class PostGameModeDTO implements Serializable {
     private String description;
     private List<PositionParametersDTO> positionsParameters;
     
-    public PostGameModeDTO() {
-    }
-
     public String getFormationName() {
         return formationName;
     }

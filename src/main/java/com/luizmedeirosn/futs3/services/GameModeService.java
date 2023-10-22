@@ -13,10 +13,10 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.luizmedeirosn.futs3.dto.input.post.PostGameModeDTO;
-import com.luizmedeirosn.futs3.dto.input.update.UpdateGameModeDTO;
-import com.luizmedeirosn.futs3.dto.output.GameModeDTO;
-import com.luizmedeirosn.futs3.dto.output.min.GameModeMinDTO;
+import com.luizmedeirosn.futs3.dto.request.post.PostGameModeDTO;
+import com.luizmedeirosn.futs3.dto.request.update.UpdateGameModeDTO;
+import com.luizmedeirosn.futs3.dto.response.GameModeDTO;
+import com.luizmedeirosn.futs3.dto.response.min.GameModeMinDTO;
 import com.luizmedeirosn.futs3.entities.GameMode;
 import com.luizmedeirosn.futs3.entities.Position;
 import com.luizmedeirosn.futs3.entities.PositionParameter;
@@ -48,7 +48,7 @@ public class GameModeService {
         return gameModeRepository
             .findAll(Sort.by("id"))
             .stream()
-            .map( x -> new GameModeMinDTO(x) )
+            .map( GameModeMinDTO::new )
             .toList();
     }
 
@@ -64,8 +64,7 @@ public class GameModeService {
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public List<AllGameModesProjection> findAllFull() {
-        List<AllGameModesProjection> fullGameModes = gameModeRepository.findAllFull();
-        return fullGameModes;
+        return gameModeRepository.findAllFull();
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
@@ -102,8 +101,7 @@ public class GameModeService {
                     }
                 );
             gameModeRepository.save(newGameMode);
-            GameModeDTO gameModeDTO = findFullById(newGameMode.getId());
-            return gameModeDTO;
+            return  findFullById(newGameMode.getId());
 
         } catch (NoSuchElementException e) {
             throw new EntityNotFoundException("GameMode request. IDs not found");

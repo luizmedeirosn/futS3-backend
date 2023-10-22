@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.luizmedeirosn.futs3.dto.input.post.PostPositionDTO;
-import com.luizmedeirosn.futs3.dto.input.update.UpdatePositionDTO;
-import com.luizmedeirosn.futs3.dto.output.PositionDTO;
+import com.luizmedeirosn.futs3.dto.request.post.PostPositionDTO;
+import com.luizmedeirosn.futs3.dto.request.update.UpdatePositionDTO;
+import com.luizmedeirosn.futs3.dto.response.PositionDTO;
 import com.luizmedeirosn.futs3.services.PositionService;
 
 @RestController

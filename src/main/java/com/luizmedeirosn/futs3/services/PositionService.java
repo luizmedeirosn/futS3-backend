@@ -12,9 +12,9 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.luizmedeirosn.futs3.dto.input.post.PostPositionDTO;
-import com.luizmedeirosn.futs3.dto.input.update.UpdatePositionDTO;
-import com.luizmedeirosn.futs3.dto.output.PositionDTO;
+import com.luizmedeirosn.futs3.dto.request.post.PostPositionDTO;
+import com.luizmedeirosn.futs3.dto.request.update.UpdatePositionDTO;
+import com.luizmedeirosn.futs3.dto.response.PositionDTO;
 import com.luizmedeirosn.futs3.entities.Position;
 import com.luizmedeirosn.futs3.repositories.PositionRepository;
 import com.luizmedeirosn.futs3.services.exceptions.DatabaseException;
@@ -31,7 +31,7 @@ public class PositionService {
         return positionRepository
             .findAll(Sort.by("id"))
             .stream()
-            .map( x -> new PositionDTO(x) )
+            .map( PositionDTO::new )
             .toList();
     }
 

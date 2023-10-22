@@ -1,4 +1,4 @@
-package com.luizmedeirosn.futs3.dto.input.update;
+package com.luizmedeirosn.futs3.dto.request.update;
 
 import java.io.Serializable;
 
@@ -9,9 +9,6 @@ public class UpdateGameModeDTO implements Serializable {
     private String formationName;
     private String description;
     
-    public UpdateGameModeDTO() {
-    }
-
     public String getFormationName() {
         return formationName;
     }

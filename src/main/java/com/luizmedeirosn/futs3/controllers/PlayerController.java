@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.luizmedeirosn.futs3.dto.input.post.PostPlayerDTO;
-import com.luizmedeirosn.futs3.dto.input.update.UpdatePlayerDTO;
-import com.luizmedeirosn.futs3.dto.output.PlayerDTO;
-import com.luizmedeirosn.futs3.dto.output.min.PlayerMinDTO;
+import com.luizmedeirosn.futs3.dto.request.post.PostPlayerDTO;
+import com.luizmedeirosn.futs3.dto.request.update.UpdatePlayerDTO;
+import com.luizmedeirosn.futs3.dto.response.PlayerDTO;
+import com.luizmedeirosn.futs3.dto.response.min.PlayerMinDTO;
 import com.luizmedeirosn.futs3.projections.AllPlayersParametersProjection;
 import com.luizmedeirosn.futs3.projections.PlayerProjection;
 import com.luizmedeirosn.futs3.services.PlayerService;

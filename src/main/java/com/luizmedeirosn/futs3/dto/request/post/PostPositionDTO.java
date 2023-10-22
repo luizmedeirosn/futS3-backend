@@ -1,30 +1,22 @@
-package com.luizmedeirosn.futs3.dto.output;
+package com.luizmedeirosn.futs3.dto.request.post;
 
 import java.io.Serializable;
 
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.luizmedeirosn.futs3.entities.Position;
 
-@JsonPropertyOrder( { "id", "name", "position" } )
-public class PositionDTO implements Serializable {
+public class PostPositionDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Long id;
     private String name;
     private String description;
 
-    public PositionDTO() {
+    public PostPositionDTO() {
     }
 
-    public PositionDTO(Position entity) {
-        id = entity.getId();
+    public PostPositionDTO(Position entity) {
         name = entity.getName();
         description = entity.getDescription();
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public String getName() {
@@ -34,5 +26,5 @@ public class PositionDTO implements Serializable {
     public String getDescription() {
         return description;
     }
-    
+
 }

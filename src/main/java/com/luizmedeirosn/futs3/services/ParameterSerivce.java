@@ -12,9 +12,9 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.luizmedeirosn.futs3.dto.input.post.PostParameterDTO;
-import com.luizmedeirosn.futs3.dto.input.update.UpdateParameterDTO;
-import com.luizmedeirosn.futs3.dto.output.ParameterDTO;
+import com.luizmedeirosn.futs3.dto.request.post.PostParameterDTO;
+import com.luizmedeirosn.futs3.dto.request.update.UpdateParameterDTO;
+import com.luizmedeirosn.futs3.dto.response.ParameterDTO;
 import com.luizmedeirosn.futs3.entities.Parameter;
 import com.luizmedeirosn.futs3.projections.PlayerParameterProjection;
 import com.luizmedeirosn.futs3.repositories.ParameterRepository;
@@ -32,7 +32,7 @@ public class ParameterSerivce {
         return parameterRepository
             .findAll(Sort.by("name"))
             .stream()
-            .map( x -> new ParameterDTO(x) )
+            .map( ParameterDTO::new )
             .toList();
     }
 

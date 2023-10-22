@@ -1,4 +1,4 @@
-package com.luizmedeirosn.futs3.dto.input.update;
+package com.luizmedeirosn.futs3.dto.request.update;
 
 import java.io.Serializable;
 
@@ -9,9 +9,6 @@ public class UpdatePlayerDTO implements Serializable {
     private String name;
     private Long positionId;
     
-    public UpdatePlayerDTO() {
-    }
-
     public static long getSerialversionuid() {
         return serialVersionUID;
     }

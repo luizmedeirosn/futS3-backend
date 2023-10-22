@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.luizmedeirosn.futs3.dto.input.update.UpdatePositionDTO;
+import com.luizmedeirosn.futs3.dto.request.update.UpdatePositionDTO;
 
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.Column;
@@ -34,7 +34,7 @@ public class Position implements Serializable {
     private String description;
     
     @OneToMany(mappedBy = "position")
-    Set<Player> players = new HashSet<>();
+    private Set<Player> players = new HashSet<>();
 
     @ManyToMany(mappedBy = "positions")
     private Set<GameMode> gameModes = new HashSet<>();

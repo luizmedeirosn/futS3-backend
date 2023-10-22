@@ -11,10 +11,10 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.luizmedeirosn.futs3.dto.input.post.PostPlayerDTO;
-import com.luizmedeirosn.futs3.dto.input.update.UpdatePlayerDTO;
-import com.luizmedeirosn.futs3.dto.output.PlayerDTO;
-import com.luizmedeirosn.futs3.dto.output.min.PlayerMinDTO;
+import com.luizmedeirosn.futs3.dto.request.post.PostPlayerDTO;
+import com.luizmedeirosn.futs3.dto.request.update.UpdatePlayerDTO;
+import com.luizmedeirosn.futs3.dto.response.PlayerDTO;
+import com.luizmedeirosn.futs3.dto.response.min.PlayerMinDTO;
 import com.luizmedeirosn.futs3.entities.Parameter;
 import com.luizmedeirosn.futs3.entities.Player;
 import com.luizmedeirosn.futs3.entities.PlayerParameter;

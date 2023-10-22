@@ -1,4 +1,4 @@
-package com.luizmedeirosn.futs3.dto.output;
+package com.luizmedeirosn.futs3.dto.response;
 
 import java.io.Serializable;
 import java.util.List;
@@ -19,7 +19,7 @@ public class PlayerDTO implements Serializable {
     @JsonProperty(value = "position")
     private PositionDTO positionDTO;
 
-    private List<PlayerParameterProjection> parameters;
+    private transient List<PlayerParameterProjection> parameters;
     
     public PlayerDTO() {
     }

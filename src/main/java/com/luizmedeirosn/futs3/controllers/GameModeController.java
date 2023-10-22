@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.luizmedeirosn.futs3.dto.input.post.PostGameModeDTO;
-import com.luizmedeirosn.futs3.dto.input.update.UpdateGameModeDTO;
-import com.luizmedeirosn.futs3.dto.output.GameModeDTO;
-import com.luizmedeirosn.futs3.dto.output.min.GameModeMinDTO;
+import com.luizmedeirosn.futs3.dto.request.post.PostGameModeDTO;
+import com.luizmedeirosn.futs3.dto.request.update.UpdateGameModeDTO;
+import com.luizmedeirosn.futs3.dto.response.GameModeDTO;
+import com.luizmedeirosn.futs3.dto.response.min.GameModeMinDTO;
 import com.luizmedeirosn.futs3.projections.AllGameModesProjection;
 import com.luizmedeirosn.futs3.services.GameModeService;
 
