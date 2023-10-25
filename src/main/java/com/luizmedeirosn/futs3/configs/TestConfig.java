@@ -1,6 +1,8 @@
 package com.luizmedeirosn.futs3.configs;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -120,54 +122,63 @@ public class TestConfig implements CommandLineRunner {
         );
 
         /*--!> OS JOGADORES ESTÃO ESCALADOS COM POSIÇÕES NO GERAL PARA FACILITAR A MOCKAGEM E PUXAR O RANKING, MAS NÃO SÃO DADOS REAIS */ 
-
         /* GOLEIROS */
-        Player player1 = new Player( "Denis",   pos1 );
-        Player player2 = new Player( "Denival", pos1 );
-        Player player3 = new Player( "Renan",   pos1 );
-        Player player4 = new Player( "Jordan",  pos1 );
-        Player player5 = new Player( "Adriano", pos1 );
+        Player player1 = new Player( "Denis",   pos1, null);
+        Player player2 = new Player( "Denival", pos1, null );
+        Player player3 = new Player( "Renan",   pos1, null );
+        Player player4 = new Player( "Jordan",  pos1, null );
+        Player player5 = new Player( "Adriano", pos1, null );
 
-        /* ZAGUEIRO CANHOTO */ 
-        Player player6 = new Player( "Roberto Rosales", pos5 );
-        Player player7 = new Player( "Everton",         pos5 );
-        Player player8 = new Player( "Felipinho",       pos5 );
-        Player player9 = new Player( "Igor Cariús",     pos5 );
-        Player player10 = new Player( "Eduardo",        pos5 );
-        Player player11 = new Player( "Devyson",        pos5 );
-        Player player12 = new Player( "Victor Gabriel", pos5 );
+        /* LATERAL ESQUERDO */ 
+        Player player6 = new Player( "Roberto Rosales", pos5, null );
+        Player player7 = new Player( "Everton",         pos5, null );
+        Player player8 = new Player( "Felipinho",       pos5, null );
+        Player player9 = new Player( "Igor Cariús",     pos5, null );
+        Player player10 = new Player( "Nathan",         pos5, null );
+        Player player11 = new Player( "Eduardo",        pos5, null );
+        Player player12 = new Player( "Victor Gabriel", pos5, null );
+
+        // ZAGUEIRO DESTRO
+        Player player13 = new Player( "Alisson Cassiano",   pos3, null);
+        Player player14 = new Player( "Renzo",              pos3, null );
+        Player player15 = new Player( "Rafael Thyere",      pos3, null );
+        Player player16 = new Player( "Sabino",             pos3, null );
+        Player player17 = new Player( "Chico",              pos3, null );
+        Player player18 = new Player( "Matheus Baraka",     pos3, null );
+
 
         /* PRIMEIRO VOLANTE */
-        Player player13 = new Player("Felipe",          pos7 );
-        Player player14 = new Player("Ronaldo",         pos7 );
-        Player player15 = new Player("Fabinho",         pos7 );
-        Player player16 = new Player("Pedro Martins",   pos7 );
-        Player player17 = new Player("Fábio Matheus",   pos7 );
-        Player player18 = new Player("Lucas André",     pos7 );
+        Player player19 = new Player("Felipe",          pos7, null );
+        Player player20 = new Player("Ronaldo",         pos7, null );
+        Player player21 = new Player("Fabinho",         pos7, null );
+        Player player22 = new Player("Pedro Martins",   pos7, null );
+        Player player23 = new Player("Fábio Matheus",   pos7, null );
+        Player player24 = new Player("Lucas André",     pos7, null );
 
         /* MEIA DIREITO */
-        Player player19 = new Player("Alan Ruiz",       pos9 );
-        Player player20 = new Player("Jorginho",        pos9 );
-        Player player21 = new Player("Luciano Juba",    pos9 );
-        Player player22 = new Player("Juan Xavier",    pos9 );
+        Player player25 = new Player("Alan Ruiz",       pos9, null );
+        Player player26 = new Player("Jorginho",        pos9, null );
+        Player player27 = new Player("Luciano Juba",    pos9, null );
+        Player player28 = new Player("Juan Xavier",     pos9, null );
 
         /* ATACANTES */
-         Player player23 = new Player("Michael Lima",       pos14 );
-         Player player24 = new Player("Peglow",             pos14 );
-         Player player25 = new Player("Diego Souza",        pos14 );
-         Player player26 = new Player("Vagner Love",        pos14 );
-         Player player27 = new Player("Edinho",             pos14 );
-         Player player28 = new Player("Facundo Labandeira", pos14 );
-         Player player29 = new Player("Gean Carlos",        pos14 );
-         Player player30 = new Player("Wanderson",          pos14 );
-         Player player31 = new Player("Gabriel Santos",     pos14 );
-         Player player32 = new Player("Fabrício Daniel",    pos14 );
-
-        playerRepository.saveAll(
+        Player player29 = new Player("Michael Lima",       pos14, null );
+        Player player30 = new Player("Peglow",             pos14, null );
+        Player player31 = new Player("Diego Souza",        pos14, null );
+        Player player32 = new Player("Vagner Love",        pos14, null );
+        Player player33 = new Player("Edinho",             pos14, null );
+        Player player34 = new Player("Facundo Labandeira", pos14, null );
+        Player player35 = new Player("Gean Carlos",        pos14, null );
+        Player player36 = new Player("Wanderson",          pos14, null );
+        Player player37 = new Player("Gabriel Santos",     pos14, null );
+        Player player38 = new Player("Fabrício Daniel",    pos14, null );
+        
+        List<Player> players = new ArrayList<>(
             Arrays.asList (
-                player1, player2, player3 ,player4, player5, player6, player7, player8, player9, player10, player11, player12, player13, player14, player15, player16, player17, player18, player19, player20, player21, player21, player22, player23, player24, player25, player26, player27, player28, player29, player30, player31, player32
+                player1, player2, player3 ,player4, player5, player6, player7, player8, player9, player10, player11, player12, player13, player14, player15, player16, player17, player18, player19, player20, player21, player21, player22, player23, player24, player25, player26, player27, player28, player29, player30, player31, player32, player33, player34, player35, player36, player37, player38
             )
         );
+        playerRepository.saveAll(players);
 
         PositionParameter pp1 = new PositionParameter(  pos5, prmt14, 25 );
         PositionParameter pp2 = new PositionParameter(  pos5, prmt15, 25 );
@@ -188,45 +199,45 @@ public class TestConfig implements CommandLineRunner {
         positionParameterRepository.saveAll( Arrays.asList(pp1, pp2, pp3, pp4, pp5, pp6, pp7, pp8, pp9, pp10, pp11) );
 
         /* ESTATÍSTICA DOS ATACANTES */
-        PlayerParameter pylp1 = new PlayerParameter( player23, prmt15, 30 );
-        PlayerParameter pylp2 = new PlayerParameter( player23, prmt21, 30 );
-        PlayerParameter pylp3 = new PlayerParameter( player23, prmt25, 30 );
+        PlayerParameter pylp1 = new PlayerParameter( player29, prmt15, 30 );
+        PlayerParameter pylp2 = new PlayerParameter( player29, prmt21, 30 );
+        PlayerParameter pylp3 = new PlayerParameter( player29, prmt25, 30 );
 
-        PlayerParameter pylp4 = new PlayerParameter( player24, prmt15, 90 );
-        PlayerParameter pylp5 = new PlayerParameter( player24, prmt21, 90 );
-        PlayerParameter pylp6 = new PlayerParameter( player24, prmt25, 90 );
+        PlayerParameter pylp4 = new PlayerParameter( player30, prmt15, 90 );
+        PlayerParameter pylp5 = new PlayerParameter( player30, prmt21, 90 );
+        PlayerParameter pylp6 = new PlayerParameter( player30, prmt25, 90 );
 
-        PlayerParameter pylp7 = new PlayerParameter( player25, prmt15, 50 );
-        PlayerParameter pylp8 = new PlayerParameter( player25, prmt21, 50 );
-        PlayerParameter pylp9 = new PlayerParameter( player25, prmt25, 50 );
+        PlayerParameter pylp7 = new PlayerParameter( player31, prmt15, 50 );
+        PlayerParameter pylp8 = new PlayerParameter( player31, prmt21, 50 );
+        PlayerParameter pylp9 = new PlayerParameter( player31, prmt25, 50 );
 
-        PlayerParameter pylp10 = new PlayerParameter( player26, prmt15, 100 );
-        PlayerParameter pylp11 = new PlayerParameter( player26, prmt21, 100 );
-        PlayerParameter pylp12 = new PlayerParameter( player26, prmt25, 100 );
+        PlayerParameter pylp10 = new PlayerParameter( player32, prmt15, 100 );
+        PlayerParameter pylp11 = new PlayerParameter( player32, prmt21, 100 );
+        PlayerParameter pylp12 = new PlayerParameter( player32, prmt25, 100 );
 
-        PlayerParameter pylp13 = new PlayerParameter( player27, prmt15, 70 );
-        PlayerParameter pylp14 = new PlayerParameter( player27, prmt21, 70 );
-        PlayerParameter pylp15 = new PlayerParameter( player27, prmt25, 70);
+        PlayerParameter pylp13 = new PlayerParameter( player33, prmt15, 70 );
+        PlayerParameter pylp14 = new PlayerParameter( player33, prmt21, 70 );
+        PlayerParameter pylp15 = new PlayerParameter( player33, prmt25, 70);
 
-        PlayerParameter pylp16 = new PlayerParameter( player28, prmt15, 20 );
-        PlayerParameter pylp17 = new PlayerParameter( player28, prmt21, 20 );
-        PlayerParameter pylp18 = new PlayerParameter( player28, prmt25, 20 );
+        PlayerParameter pylp16 = new PlayerParameter( player34, prmt15, 20 );
+        PlayerParameter pylp17 = new PlayerParameter( player34, prmt21, 20 );
+        PlayerParameter pylp18 = new PlayerParameter( player34, prmt25, 20 );
 
-        PlayerParameter pylp19 = new PlayerParameter( player29, prmt15, 60 );
-        PlayerParameter pylp20 = new PlayerParameter( player29, prmt21, 60 );
-        PlayerParameter pylp21 = new PlayerParameter( player29, prmt25, 60 );
+        PlayerParameter pylp19 = new PlayerParameter( player35, prmt15, 60 );
+        PlayerParameter pylp20 = new PlayerParameter( player35, prmt21, 60 );
+        PlayerParameter pylp21 = new PlayerParameter( player35, prmt25, 60 );
 
-        PlayerParameter pylp22 = new PlayerParameter( player30, prmt15, 40 );
-        PlayerParameter pylp23 = new PlayerParameter( player30, prmt21, 40 );
-        PlayerParameter pylp24 = new PlayerParameter( player30, prmt25, 40 );
+        PlayerParameter pylp22 = new PlayerParameter( player36, prmt15, 40 );
+        PlayerParameter pylp23 = new PlayerParameter( player36, prmt21, 40 );
+        PlayerParameter pylp24 = new PlayerParameter( player36, prmt25, 40 );
 
-        PlayerParameter pylp25 = new PlayerParameter( player31, prmt15, 10 );
-        PlayerParameter pylp26 = new PlayerParameter( player31, prmt21, 10 );
-        PlayerParameter pylp27 = new PlayerParameter( player31, prmt25, 10 );
+        PlayerParameter pylp25 = new PlayerParameter( player37, prmt15, 10 );
+        PlayerParameter pylp26 = new PlayerParameter( player37, prmt21, 10 );
+        PlayerParameter pylp27 = new PlayerParameter( player37, prmt25, 10 );
 
-        PlayerParameter pylp28 = new PlayerParameter( player32, prmt15, 80 );
-        PlayerParameter pylp29 = new PlayerParameter( player32, prmt21, 80 );
-        PlayerParameter pylp30 = new PlayerParameter( player32, prmt25, 80 );
+        PlayerParameter pylp28 = new PlayerParameter( player38, prmt15, 80 );
+        PlayerParameter pylp29 = new PlayerParameter( player38, prmt21, 80 );
+        PlayerParameter pylp30 = new PlayerParameter( player38, prmt25, 80 );
 
         // java.util.Random random = new java.util.Random();
         // PlayerParameter pylp1 = new PlayerParameter( player23, prmt15, random.nextInt(1, 100) );
