@@ -17,7 +17,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.luizmedeirosn.futs3.dto.request.post.PostPositionDTO;
 import com.luizmedeirosn.futs3.dto.request.update.UpdatePositionDTO;
-import com.luizmedeirosn.futs3.dto.response.PositionDTO;
+import com.luizmedeirosn.futs3.dto.response.min.PositionMinDTO;
 import com.luizmedeirosn.futs3.services.PositionService;
 
 @RestController
@@ -28,18 +28,18 @@ public class PositionController {
     private PositionService positionService;
 
     @GetMapping
-    public ResponseEntity<List<PositionDTO>> findAll() {
+    public ResponseEntity<List<PositionMinDTO>> findAll() {
         return ResponseEntity.ok().body(positionService.findAll());
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<PositionDTO> findById(@PathVariable Long id) {
+    public ResponseEntity<PositionMinDTO> findById(@PathVariable Long id) {
         return ResponseEntity.ok().body(positionService.findById(id));
     }
 
     @PostMapping
-    public ResponseEntity<PositionDTO> save(@RequestBody PostPositionDTO postPositionDTO) {
-        PositionDTO positionDTO = positionService.save(postPositionDTO);
+    public ResponseEntity<PositionMinDTO> save(@RequestBody PostPositionDTO postPositionDTO) {
+        PositionMinDTO positionDTO = positionService.save(postPositionDTO);
         URI uri = 
             ServletUriComponentsBuilder
             .fromCurrentRequest()
@@ -50,7 +50,7 @@ public class PositionController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<PositionDTO> updateById(@PathVariable Long id, @RequestBody UpdatePositionDTO updatePositionDTO) {
+    public ResponseEntity<PositionMinDTO> updateById(@PathVariable Long id, @RequestBody UpdatePositionDTO updatePositionDTO) {
         return ResponseEntity.ok().body(positionService.update(id, updatePositionDTO));
     }
 

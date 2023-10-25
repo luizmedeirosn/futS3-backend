@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.luizmedeirosn.futs3.dto.response.min.PositionMinDTO;
 import com.luizmedeirosn.futs3.entities.Player;
 import com.luizmedeirosn.futs3.entities.PlayerPicture;
 import com.luizmedeirosn.futs3.projections.PlayerParameterProjection;
@@ -19,7 +20,7 @@ public class PlayerDTO implements Serializable {
     private String name;
 
     @JsonProperty(value = "position")
-    private PositionDTO positionDTO;
+    private PositionMinDTO positionDTO;
 
     private String profilePictureLink;
     private List<PlayerParameterProjection> parameters;
@@ -30,7 +31,7 @@ public class PlayerDTO implements Serializable {
     public PlayerDTO(Player player, List<PlayerParameterProjection> parameters) {
         id = player.getId();
         name = player.getName();
-        positionDTO = new PositionDTO(player.getPosition());
+        positionDTO = new PositionMinDTO(player.getPosition());
         PlayerPicture playerPicture = player.getPlayerPicture();
         profilePictureLink = playerPicture == null ? "": PlayerPictureService.createPictureLink(playerPicture.getId());
         this.parameters = parameters;
@@ -44,7 +45,7 @@ public class PlayerDTO implements Serializable {
         return name;
     }
 
-    public PositionDTO getPositionDTO() {
+    public PositionMinDTO getPositionDTO() {
         return positionDTO;
     }
 

@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.luizmedeirosn.futs3.dto.request.post.PostPositionDTO;
 import com.luizmedeirosn.futs3.dto.request.update.UpdatePositionDTO;
-import com.luizmedeirosn.futs3.dto.response.PositionDTO;
+import com.luizmedeirosn.futs3.dto.response.min.PositionMinDTO;
 import com.luizmedeirosn.futs3.entities.Position;
 import com.luizmedeirosn.futs3.repositories.PositionRepository;
 import com.luizmedeirosn.futs3.services.exceptions.DatabaseException;
@@ -27,18 +27,18 @@ public class PositionService {
     private PositionRepository positionRepository;
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public List<PositionDTO> findAll() {
+    public List<PositionMinDTO> findAll() {
         return positionRepository
             .findAll(Sort.by("id"))
             .stream()
-            .map( PositionDTO::new )
+            .map( PositionMinDTO::new )
             .toList();
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public PositionDTO findById(Long id) {
+    public PositionMinDTO findById(Long id) {
         try {
-            return new PositionDTO(positionRepository.findById(id).get());
+            return new PositionMinDTO(positionRepository.findById(id).get());
 
         } catch (NoSuchElementException e) {
             throw new EntityNotFoundException("Position ID not found");
@@ -46,10 +46,10 @@ public class PositionService {
     }
     
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-    public PositionDTO save(PostPositionDTO postPositionDTO) {
+    public PositionMinDTO save(PostPositionDTO postPositionDTO) {
         try {
             Position position = positionRepository.save(new Position(postPositionDTO.getName(), postPositionDTO.getDescription()));
-            return new PositionDTO(position);
+            return new PositionMinDTO(position);
 
         } catch (NoSuchElementException e) {
             throw new EntityNotFoundException("Position request. IDs not found");
@@ -63,12 +63,12 @@ public class PositionService {
     }
     
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-    public PositionDTO update(Long id, UpdatePositionDTO updatePositionDTO) {
+    public PositionMinDTO update(Long id, UpdatePositionDTO updatePositionDTO) {
         try {
             Position position = positionRepository.getReferenceById(id);
             position.updateData(updatePositionDTO);
             position = positionRepository.save(position);
-            return new PositionDTO(position);
+            return new PositionMinDTO(position);
 
         } catch (jakarta.persistence.EntityNotFoundException e) {
             throw new EntityNotFoundException("Position request. ID not found");

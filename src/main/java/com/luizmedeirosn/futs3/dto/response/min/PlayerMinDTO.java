@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.luizmedeirosn.futs3.dto.response.PositionDTO;
 import com.luizmedeirosn.futs3.entities.Player;
 import com.luizmedeirosn.futs3.entities.PlayerPicture;
 import com.luizmedeirosn.futs3.projections.PlayerProjection;
@@ -19,7 +18,7 @@ public class PlayerMinDTO implements Serializable {
     private String name;
 
     @JsonProperty(value = "position")
-    private PositionDTO positionDTO;
+    private PositionMinDTO positionDTO;
 
     String profilePictureLink;
 
@@ -29,7 +28,7 @@ public class PlayerMinDTO implements Serializable {
     public PlayerMinDTO(Player player) {
         id = player.getId();
         name = player.getName();
-        positionDTO = new PositionDTO(player.getPosition());
+        positionDTO = new PositionMinDTO(player.getPosition());
         PlayerPicture playerPicture = player.getPlayerPicture();
         profilePictureLink = playerPicture == null ? "": PlayerPictureService.createPictureLink(playerPicture.getId());
     }
@@ -37,7 +36,7 @@ public class PlayerMinDTO implements Serializable {
     public PlayerMinDTO(PlayerProjection playerProjection) {
         id = playerProjection.getPlayerId();
         name = playerProjection.getPlayerName();
-        positionDTO = new PositionDTO(playerProjection.getPositionId(), playerProjection.getPositionName());
+        positionDTO = new PositionMinDTO(playerProjection.getPositionId(), playerProjection.getPositionName());
         profilePictureLink = id == null ? "": PlayerPictureService.createPictureLink(id);
     }
 
@@ -49,7 +48,7 @@ public class PlayerMinDTO implements Serializable {
         return name;
     }
 
-    public PositionDTO getPositionDTO() {
+    public PositionMinDTO getPositionDTO() {
         return positionDTO;
     }
 
