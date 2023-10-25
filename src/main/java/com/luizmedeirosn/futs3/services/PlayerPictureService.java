@@ -25,9 +25,9 @@ public class PlayerPictureService {
      
         PlayerPicture playerPicture = new PlayerPicture();
         playerPicture.setFilename(file.getOriginalFilename());
-        playerPicture.setType(file.getContentType());
+        playerPicture.setContentType(file.getContentType());
         try {
-            playerPicture.setData(file.getBytes());
+            playerPicture.setContent(file.getBytes());
         } catch (IOException e) {
             throw new DatabaseException("Error in picture reading");
         }

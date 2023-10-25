@@ -1,12 +1,13 @@
 package com.luizmedeirosn.futs3.entities;
 
-import jakarta.annotation.Nonnull;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
+import jakarta.persistence.MapsId;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -19,20 +20,24 @@ public class PlayerPicture {
 
     private String filename;
 
-    @Column(name = "image_type", unique = true, nullable = false)
-    @Nonnull
-    private String type;
+    @Column(name = "content_type", unique = true)
+    private String contentType;
 
     @Lob
-    private byte[] data;
+    private byte[] content;
+
+    @OneToOne
+    @MapsId
+    private Player player;
 
     public PlayerPicture() {
     }
 
-    public PlayerPicture(String filename, String type, byte[] data) {
+    public PlayerPicture(String filename, String contentType, byte[] content, Player player) {
         this.filename = filename;
-        this.type = type;
-        this.data = data;
+        this.contentType = contentType;
+        this.content = content;
+        this.player = player;
     }
 
     public Long getId() {
@@ -51,20 +56,28 @@ public class PlayerPicture {
         this.filename = filename;
     }
 
-    public String getType() {
-        return type;
+    public String getContentType() {
+        return contentType;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
     }
 
-    public byte[] getData() {
-        return data;
+    public byte[] getContent() {
+        return content;
     }
 
-    public void setData(byte[] data) {
-        this.data = data;
+    public void setContent(byte[] content) {
+        this.content = content;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 
     @Override

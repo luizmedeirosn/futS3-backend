@@ -14,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -37,12 +38,16 @@ public class Player implements Serializable {
     @OneToMany(mappedBy = "id.player", cascade = CascadeType.REMOVE)
     private Set<PlayerParameter> playerParameters = new HashSet<>();
 
+    @OneToOne(mappedBy = "player", cascade = CascadeType.ALL)
+    private transient PlayerPicture playerPicture;
+
     public Player() {
     }
 
-    public Player(String name, Position position) {
+    public Player(String name, Position position, PlayerPicture playerPicture) {
         this.name = name;
         this.position = position;
+        this.playerPicture = playerPicture;
     }
 
     public Long getId() {
@@ -76,6 +81,14 @@ public class Player implements Serializable {
     public void updateData(String name, Position position) {
         this.name = name;
         this.position = position;
+    }
+
+    public PlayerPicture getPlayerPicture() {
+        return playerPicture;
+    }
+
+    public void setPlayerPicture(PlayerPicture playerPicture) {
+        this.playerPicture = playerPicture;
     }
     
     @Override

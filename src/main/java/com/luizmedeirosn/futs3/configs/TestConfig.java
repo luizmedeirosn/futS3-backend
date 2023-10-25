@@ -158,20 +158,20 @@ public class TestConfig implements CommandLineRunner {
         /* MEIA DIREITO */
         Player player25 = new Player("Alan Ruiz",       pos9, null );
         Player player26 = new Player("Jorginho",        pos9, null );
-        Player player27 = new Player("Luciano Juba",    pos9, null );
-        Player player28 = new Player("Juan Xavier",     pos9, null );
-
+        Player player27 = new Player("Juan Xavier",     pos9, null );
+        
         /* ATACANTES */
-        Player player29 = new Player("Michael Lima",       pos14, null );
-        Player player30 = new Player("Peglow",             pos14, null );
-        Player player31 = new Player("Diego Souza",        pos14, null );
-        Player player32 = new Player("Vagner Love",        pos14, null );
-        Player player33 = new Player("Edinho",             pos14, null );
-        Player player34 = new Player("Facundo Labandeira", pos14, null );
-        Player player35 = new Player("Gean Carlos",        pos14, null );
-        Player player36 = new Player("Wanderson",          pos14, null );
-        Player player37 = new Player("Gabriel Santos",     pos14, null );
-        Player player38 = new Player("Fabrício Daniel",    pos14, null );
+        Player player28 = new Player("Michael Lima",        pos14, null );
+        Player player29 = new Player("Peglow",              pos14, null );
+        Player player30 = new Player("Diego Souza",         pos14, null );
+        Player player31 = new Player("Vagner Love",         pos14, null );
+        Player player32 = new Player("Edinho",              pos14, null );
+        Player player33 = new Player("Luciano Juba",        pos14, null );
+        Player player34 = new Player("Facundo Labandeira",  pos14, null );
+        Player player35 = new Player("Gean Carlos",         pos14, null );
+        Player player36 = new Player("Wanderson",           pos14, null );
+        Player player37 = new Player("Gabriel Santos",      pos14, null );
+        Player player38 = new Player("Fabrício Daniel",     pos14, null );
         
         List<Player> players = new ArrayList<>(
             Arrays.asList (
@@ -179,6 +179,7 @@ public class TestConfig implements CommandLineRunner {
             )
         );
         playerRepository.saveAll(players);
+
 
         PositionParameter pp1 = new PositionParameter(  pos5, prmt14, 25 );
         PositionParameter pp2 = new PositionParameter(  pos5, prmt15, 25 );
@@ -199,45 +200,49 @@ public class TestConfig implements CommandLineRunner {
         positionParameterRepository.saveAll( Arrays.asList(pp1, pp2, pp3, pp4, pp5, pp6, pp7, pp8, pp9, pp10, pp11) );
 
         /* ESTATÍSTICA DOS ATACANTES */
-        PlayerParameter pylp1 = new PlayerParameter( player29, prmt15, 30 );
-        PlayerParameter pylp2 = new PlayerParameter( player29, prmt21, 30 );
-        PlayerParameter pylp3 = new PlayerParameter( player29, prmt25, 30 );
+        PlayerParameter pylp2 = new PlayerParameter( player28, prmt21, 30 );
+        PlayerParameter pylp3 = new PlayerParameter( player28, prmt25, 30 );
+        PlayerParameter pylp1 = new PlayerParameter( player28, prmt15, 30 );
 
-        PlayerParameter pylp4 = new PlayerParameter( player30, prmt15, 90 );
-        PlayerParameter pylp5 = new PlayerParameter( player30, prmt21, 90 );
-        PlayerParameter pylp6 = new PlayerParameter( player30, prmt25, 90 );
+        PlayerParameter pylp4 = new PlayerParameter( player29, prmt15, 90 );
+        PlayerParameter pylp5 = new PlayerParameter( player29, prmt21, 90 );
+        PlayerParameter pylp6 = new PlayerParameter( player29, prmt25, 90 );
 
-        PlayerParameter pylp7 = new PlayerParameter( player31, prmt15, 50 );
-        PlayerParameter pylp8 = new PlayerParameter( player31, prmt21, 50 );
-        PlayerParameter pylp9 = new PlayerParameter( player31, prmt25, 50 );
+        PlayerParameter pylp7 = new PlayerParameter( player30, prmt15, 50 );
+        PlayerParameter pylp8 = new PlayerParameter( player30, prmt21, 50 );
+        PlayerParameter pylp9 = new PlayerParameter( player30, prmt25, 50 );
 
-        PlayerParameter pylp10 = new PlayerParameter( player32, prmt15, 100 );
-        PlayerParameter pylp11 = new PlayerParameter( player32, prmt21, 100 );
-        PlayerParameter pylp12 = new PlayerParameter( player32, prmt25, 100 );
+        PlayerParameter pylp10 = new PlayerParameter( player31, prmt15, 100 );
+        PlayerParameter pylp11 = new PlayerParameter( player31, prmt21, 100 );
+        PlayerParameter pylp12 = new PlayerParameter( player31, prmt25, 100 );
 
-        PlayerParameter pylp13 = new PlayerParameter( player33, prmt15, 70 );
-        PlayerParameter pylp14 = new PlayerParameter( player33, prmt21, 70 );
-        PlayerParameter pylp15 = new PlayerParameter( player33, prmt25, 70);
-
-        PlayerParameter pylp16 = new PlayerParameter( player34, prmt15, 20 );
-        PlayerParameter pylp17 = new PlayerParameter( player34, prmt21, 20 );
-        PlayerParameter pylp18 = new PlayerParameter( player34, prmt25, 20 );
-
-        PlayerParameter pylp19 = new PlayerParameter( player35, prmt15, 60 );
-        PlayerParameter pylp20 = new PlayerParameter( player35, prmt21, 60 );
-        PlayerParameter pylp21 = new PlayerParameter( player35, prmt25, 60 );
-
-        PlayerParameter pylp22 = new PlayerParameter( player36, prmt15, 40 );
-        PlayerParameter pylp23 = new PlayerParameter( player36, prmt21, 40 );
-        PlayerParameter pylp24 = new PlayerParameter( player36, prmt25, 40 );
-
-        PlayerParameter pylp25 = new PlayerParameter( player37, prmt15, 10 );
-        PlayerParameter pylp26 = new PlayerParameter( player37, prmt21, 10 );
-        PlayerParameter pylp27 = new PlayerParameter( player37, prmt25, 10 );
-
-        PlayerParameter pylp28 = new PlayerParameter( player38, prmt15, 80 );
-        PlayerParameter pylp29 = new PlayerParameter( player38, prmt21, 80 );
-        PlayerParameter pylp30 = new PlayerParameter( player38, prmt25, 80 );
+        PlayerParameter pylp13 = new PlayerParameter( player32, prmt15, 70 );
+        PlayerParameter pylp14 = new PlayerParameter( player32, prmt21, 70 );
+        PlayerParameter pylp15 = new PlayerParameter( player32, prmt25, 70 );
+        
+        PlayerParameter pylp16 = new PlayerParameter( player33, prmt15, 20 );
+        PlayerParameter pylp17 = new PlayerParameter( player33, prmt21, 20 );
+        PlayerParameter pylp18 = new PlayerParameter( player33, prmt25, 20 );
+        
+        PlayerParameter pylp19 = new PlayerParameter( player34, prmt15, 60 );
+        PlayerParameter pylp20 = new PlayerParameter( player34, prmt21, 60 );
+        PlayerParameter pylp21 = new PlayerParameter( player34, prmt25, 60 );
+        
+        PlayerParameter pylp22 = new PlayerParameter( player35, prmt15, 40 );
+        PlayerParameter pylp23 = new PlayerParameter( player35, prmt21, 40 );
+        PlayerParameter pylp24 = new PlayerParameter( player35, prmt25, 40 );
+        
+        PlayerParameter pylp25 = new PlayerParameter( player36, prmt15, 10 );
+        PlayerParameter pylp26 = new PlayerParameter( player36, prmt21, 10 );
+        PlayerParameter pylp27 = new PlayerParameter( player36, prmt25, 10 );
+        
+        PlayerParameter pylp28 = new PlayerParameter( player37, prmt15, 80 );
+        PlayerParameter pylp29 = new PlayerParameter( player37, prmt21, 80 );
+        PlayerParameter pylp30 = new PlayerParameter( player37, prmt25, 80 );
+        
+        PlayerParameter pylp32 = new PlayerParameter( player38, prmt21, 85 );
+        PlayerParameter pylp33 = new PlayerParameter( player38, prmt25, 85 );
+        PlayerParameter pylp31 = new PlayerParameter( player38, prmt15, 85 );
 
         // java.util.Random random = new java.util.Random();
         // PlayerParameter pylp1 = new PlayerParameter( player23, prmt15, random.nextInt(1, 100) );
@@ -282,7 +287,7 @@ public class TestConfig implements CommandLineRunner {
 
         playerParameterRepository.saveAll (
             Arrays.asList (
-                pylp1, pylp2, pylp3, pylp4, pylp5, pylp6, pylp7, pylp8, pylp9, pylp10, pylp11, pylp12, pylp13, pylp14, pylp15, pylp16, pylp17, pylp18, pylp19, pylp20, pylp21, pylp22, pylp23, pylp24, pylp25, pylp26, pylp27, pylp28, pylp29, pylp30
+                pylp1, pylp2, pylp3, pylp4, pylp5, pylp6, pylp7, pylp8, pylp9, pylp10, pylp11, pylp12, pylp13, pylp14, pylp15, pylp16, pylp17, pylp18, pylp19, pylp20, pylp21, pylp22, pylp23, pylp24, pylp25, pylp26, pylp27, pylp28, pylp29, pylp30, pylp31, pylp32, pylp33
             )
         );
 

@@ -27,9 +27,9 @@ public class PlayerPictureController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<ByteArrayResource> findById(@PathVariable Long id) {
         PlayerPicture playerPicture = playerPictureService.findById(id);
-        ByteArrayResource body = new ByteArrayResource(playerPicture.getData());
+        ByteArrayResource body = new ByteArrayResource(playerPicture.getContent());
 
-        return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, playerPicture.getType()).body(body);
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, playerPicture.getContentType()).body(body);
     }
 
     @PostMapping
