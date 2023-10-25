@@ -19,7 +19,7 @@ public class PlayerDTO implements Serializable {
     @JsonProperty(value = "position")
     private PositionDTO positionDTO;
 
-    private transient List<PlayerParameterProjection> parameters;
+    private List<PlayerParameterProjection> parameters;
     
     public PlayerDTO() {
     }

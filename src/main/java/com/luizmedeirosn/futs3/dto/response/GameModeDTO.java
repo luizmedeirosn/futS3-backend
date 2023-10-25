@@ -15,7 +15,7 @@ public class GameModeDTO implements Serializable {
     private Long id;
     private String formationName;
     private String description;
-    private transient List<GameModeProjection> fields;
+    private List<GameModeProjection> fields;
     
     public GameModeDTO() {
     }

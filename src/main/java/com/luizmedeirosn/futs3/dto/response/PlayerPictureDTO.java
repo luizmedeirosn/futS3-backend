@@ -13,7 +13,6 @@ public class PlayerPictureDTO {
         this.link = link;
     }
     
-    
     public String getFilename() {
         return filename;
     }

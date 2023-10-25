@@ -18,9 +18,10 @@ public class PlayerPicture {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private String filename;
 
-    @Column(name = "content_type", unique = true)
+    @Column(name = "content_type")
     private String contentType;
 
     @Lob

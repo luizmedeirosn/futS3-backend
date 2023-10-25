@@ -31,8 +31,7 @@ public class PlayerPictureService {
         } catch (IOException e) {
             throw new DatabaseException("Error in picture reading");
         }
-
-        System.out.println("aqui");
+        
         return playerPictureRepository.save(playerPicture);
     }
 

@@ -1,5 +1,8 @@
 package com.luizmedeirosn.futs3.configs;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -13,6 +16,7 @@ import com.luizmedeirosn.futs3.entities.GameMode;
 import com.luizmedeirosn.futs3.entities.Parameter;
 import com.luizmedeirosn.futs3.entities.Player;
 import com.luizmedeirosn.futs3.entities.PlayerParameter;
+import com.luizmedeirosn.futs3.entities.PlayerPicture;
 import com.luizmedeirosn.futs3.entities.Position;
 import com.luizmedeirosn.futs3.entities.PositionParameter;
 import com.luizmedeirosn.futs3.repositories.GameModeRepository;
@@ -123,62 +127,86 @@ public class TestConfig implements CommandLineRunner {
 
         /*--!> OS JOGADORES ESTÃO ESCALADOS COM POSIÇÕES NO GERAL PARA FACILITAR A MOCKAGEM E PUXAR O RANKING, MAS NÃO SÃO DADOS REAIS */ 
         /* GOLEIROS */
-        Player player1 = new Player( "Denis",   pos1, null);
-        Player player2 = new Player( "Denival", pos1, null );
-        Player player3 = new Player( "Renan",   pos1, null );
-        Player player4 = new Player( "Jordan",  pos1, null );
-        Player player5 = new Player( "Adriano", pos1, null );
+        Player player1 = new Player( "Denis",   pos1 );
+        Player player2 = new Player( "Denival", pos1 );
+        Player player3 = new Player( "Renan",   pos1 );
+        Player player4 = new Player( "Jordan",  pos1 );
+        Player player5 = new Player( "Adriano", pos1 );
 
         /* LATERAL ESQUERDO */ 
-        Player player6 = new Player( "Roberto Rosales", pos5, null );
-        Player player7 = new Player( "Everton",         pos5, null );
-        Player player8 = new Player( "Felipinho",       pos5, null );
-        Player player9 = new Player( "Igor Cariús",     pos5, null );
-        Player player10 = new Player( "Nathan",         pos5, null );
-        Player player11 = new Player( "Eduardo",        pos5, null );
-        Player player12 = new Player( "Victor Gabriel", pos5, null );
+        Player player6 = new Player( "Roberto Rosales", pos5 );
+        Player player7 = new Player( "Everton",         pos5 );
+        Player player8 = new Player( "Felipinho",       pos5 );
+        Player player9 = new Player( "Igor Cariús",     pos5 );
+        Player player10 = new Player( "Nathan",         pos5 );
+        Player player11 = new Player( "Eduardo",        pos5 );
+        Player player12 = new Player( "Victor Gabriel", pos5 );
 
         // ZAGUEIRO DESTRO
-        Player player13 = new Player( "Alisson Cassiano",   pos3, null);
-        Player player14 = new Player( "Renzo",              pos3, null );
-        Player player15 = new Player( "Rafael Thyere",      pos3, null );
-        Player player16 = new Player( "Sabino",             pos3, null );
-        Player player17 = new Player( "Chico",              pos3, null );
-        Player player18 = new Player( "Matheus Baraka",     pos3, null );
+        Player player13 = new Player( "Alisson Cassiano",   pos3 );
+        Player player14 = new Player( "Renzo",              pos3 );
+        Player player15 = new Player( "Rafael Thyere",      pos3 );
+        Player player16 = new Player( "Sabino",             pos3 );
+        Player player17 = new Player( "Chico",              pos3 );
+        Player player18 = new Player( "Matheus Baraka",     pos3 );
 
 
         /* PRIMEIRO VOLANTE */
-        Player player19 = new Player("Felipe",          pos7, null );
-        Player player20 = new Player("Ronaldo",         pos7, null );
-        Player player21 = new Player("Fabinho",         pos7, null );
-        Player player22 = new Player("Pedro Martins",   pos7, null );
-        Player player23 = new Player("Fábio Matheus",   pos7, null );
-        Player player24 = new Player("Lucas André",     pos7, null );
+        Player player19 = new Player("Felipe",          pos7 );
+        Player player20 = new Player("Ronaldo",         pos7 );
+        Player player21 = new Player("Fabinho",         pos7 );
+        Player player22 = new Player("Pedro Martins",   pos7 );
+        Player player23 = new Player("Fábio Matheus",   pos7 );
+        Player player24 = new Player("Lucas André",     pos7 );
 
         /* MEIA DIREITO */
-        Player player25 = new Player("Alan Ruiz",       pos9, null );
-        Player player26 = new Player("Jorginho",        pos9, null );
-        Player player27 = new Player("Juan Xavier",     pos9, null );
+        Player player25 = new Player("Alan Ruiz",       pos9 );
+        Player player26 = new Player("Jorginho",        pos9 );
+        Player player27 = new Player("Juan Xavier",     pos9 );
         
         /* ATACANTES */
-        Player player28 = new Player("Michael Lima",        pos14, null );
-        Player player29 = new Player("Peglow",              pos14, null );
-        Player player30 = new Player("Diego Souza",         pos14, null );
-        Player player31 = new Player("Vagner Love",         pos14, null );
-        Player player32 = new Player("Edinho",              pos14, null );
-        Player player33 = new Player("Luciano Juba",        pos14, null );
-        Player player34 = new Player("Facundo Labandeira",  pos14, null );
-        Player player35 = new Player("Gean Carlos",         pos14, null );
-        Player player36 = new Player("Wanderson",           pos14, null );
-        Player player37 = new Player("Gabriel Santos",      pos14, null );
-        Player player38 = new Player("Fabrício Daniel",     pos14, null );
+        Player player28 = new Player("Michael Lima",        pos14 );
+        Player player29 = new Player("Peglow",              pos14 );
+        Player player30 = new Player("Diego Souza",         pos14 );
+        Player player31 = new Player("Vagner Love",         pos14 );
+        Player player32 = new Player("Edinho",              pos14 );
+        Player player33 = new Player("Luciano Juba",        pos14 );
+        Player player34 = new Player("Facundo Labandeira",  pos14 );
+        Player player35 = new Player("Gean Carlos",         pos14 );
+        Player player36 = new Player("Wanderson",           pos14 );
+        Player player37 = new Player("Gabriel Santos",      pos14 );
+        Player player38 = new Player("Fabrício Daniel",     pos14 );
         
         List<Player> players = new ArrayList<>(
             Arrays.asList (
-                player1, player2, player3 ,player4, player5, player6, player7, player8, player9, player10, player11, player12, player13, player14, player15, player16, player17, player18, player19, player20, player21, player21, player22, player23, player24, player25, player26, player27, player28, player29, player30, player31, player32, player33, player34, player35, player36, player37, player38
+                player1, player2, player3 ,player4, player5, player6, player7, player8, player9, player10, player11, player12, player13, player14, player15, player16, player17, player18, player19, player20, player21, player22, player23, player24, player25, player26, player27, player28, player29, player30, player31, player32, player33, player34, player35, player36, player37, player38
             )
         );
         playerRepository.saveAll(players);
+
+
+
+        final String PICTURES_FOLDER_PATH = "src/main/java/com/luizmedeirosn/futs3/configs/sport-pictures";
+        File picturesFolder = new File(PICTURES_FOLDER_PATH);
+        File[] picturesArray = picturesFolder.listFiles(File::isFile);
+
+        List<File> picturesList = new ArrayList<>(Arrays.asList(picturesArray));
+        picturesList.sort((f1, f2) -> Integer.parseInt(f1.getName().split("-")[0]) - Integer.parseInt(f2.getName().split("-")[0]));
+
+
+        for (int i = 0; i < 38; i++) {
+            Player player = players.get(i);
+            File pictureFile = picturesList.get(i);
+            byte[] pictureData = Files.readAllBytes(Paths.get(pictureFile.getAbsolutePath()));
+
+            PlayerPicture playerPicture = new PlayerPicture(
+                pictureFile.getName(), "image/webp", pictureData, player
+            );
+
+            player.setPlayerPicture(playerPicture);
+            playerRepository.save(player);
+        }
+
 
 
         PositionParameter pp1 = new PositionParameter(  pos5, prmt14, 25 );

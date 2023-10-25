@@ -39,15 +39,14 @@ public class Player implements Serializable {
     private Set<PlayerParameter> playerParameters = new HashSet<>();
 
     @OneToOne(mappedBy = "player", cascade = CascadeType.ALL)
-    private transient PlayerPicture playerPicture;
+    private PlayerPicture playerPicture;
 
     public Player() {
     }
 
-    public Player(String name, Position position, PlayerPicture playerPicture) {
+    public Player(String name, Position position) {
         this.name = name;
         this.position = position;
-        this.playerPicture = playerPicture;
     }
 
     public Long getId() {
