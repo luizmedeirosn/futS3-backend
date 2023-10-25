@@ -20,7 +20,6 @@ import com.luizmedeirosn.futs3.dto.request.update.UpdatePlayerDTO;
 import com.luizmedeirosn.futs3.dto.response.PlayerDTO;
 import com.luizmedeirosn.futs3.dto.response.min.PlayerMinDTO;
 import com.luizmedeirosn.futs3.projections.AllPlayersParametersProjection;
-import com.luizmedeirosn.futs3.projections.PlayerProjection;
 import com.luizmedeirosn.futs3.services.PlayerService;
 
 @RestController
@@ -31,7 +30,7 @@ public class PlayerController {
     private PlayerService playerService;
 
     @GetMapping
-    public ResponseEntity<List<PlayerProjection>> findAll() {
+    public ResponseEntity<List<PlayerMinDTO>> findAll() {
         return ResponseEntity.ok().body(playerService.findAll());
     }
 

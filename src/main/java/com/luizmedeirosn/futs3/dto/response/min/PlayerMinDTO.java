@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.luizmedeirosn.futs3.dto.response.PositionDTO;
 import com.luizmedeirosn.futs3.entities.Player;
 import com.luizmedeirosn.futs3.entities.PlayerPicture;
+import com.luizmedeirosn.futs3.projections.PlayerProjection;
 import com.luizmedeirosn.futs3.services.PlayerPictureService;
 
 @JsonPropertyOrder( { "id", "name", "position", "profilePictureLink" } )
@@ -31,6 +32,13 @@ public class PlayerMinDTO implements Serializable {
         positionDTO = new PositionDTO(player.getPosition());
         PlayerPicture playerPicture = player.getPlayerPicture();
         profilePictureLink = playerPicture == null ? "": PlayerPictureService.createPictureLink(playerPicture.getId());
+    }
+
+    public PlayerMinDTO(PlayerProjection playerProjection) {
+        id = playerProjection.getPlayerId();
+        name = playerProjection.getPlayerName();
+        positionDTO = new PositionDTO(playerProjection.getPositionId(), playerProjection.getPositionName());
+        profilePictureLink = id == null ? "": PlayerPictureService.createPictureLink(id);
     }
 
     public Long getId() {

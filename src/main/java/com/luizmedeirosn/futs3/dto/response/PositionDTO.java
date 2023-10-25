@@ -23,6 +23,11 @@ public class PositionDTO implements Serializable {
         description = entity.getDescription();
     }
 
+     public PositionDTO(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public Long getId() {
         return id;
     }
