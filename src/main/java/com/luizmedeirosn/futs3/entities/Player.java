@@ -77,11 +77,6 @@ public class Player implements Serializable {
         return playerParameters;
     }
 
-    public void updateData(String name, Position position) {
-        this.name = name;
-        this.position = position;
-    }
-
     public PlayerPicture getPlayerPicture() {
         return playerPicture;
     }
@@ -89,7 +84,12 @@ public class Player implements Serializable {
     public void setPlayerPicture(PlayerPicture playerPicture) {
         this.playerPicture = playerPicture;
     }
-    
+
+    public void updateData(String name, Position position) {
+        this.name = name;
+        this.position = position;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;

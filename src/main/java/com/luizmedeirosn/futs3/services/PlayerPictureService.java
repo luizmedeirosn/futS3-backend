@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.luizmedeirosn.futs3.entities.PlayerPicture;
 import com.luizmedeirosn.futs3.repositories.PlayerPictureRepository;
@@ -17,6 +18,10 @@ public class PlayerPictureService {
     @Autowired
     private PlayerPictureRepository playerPictureRepository;
 
+    public static String createPictureLink(Long id) {
+        return ServletUriComponentsBuilder.fromCurrentRequest().replacePath("/playerspictures/" + id).toUriString();
+    }
+
     public PlayerPicture findById(Long id) {
         return playerPictureRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Image ID not found"));
     }
@@ -28,11 +33,10 @@ public class PlayerPictureService {
         playerPicture.setContentType(file.getContentType());
         try {
             playerPicture.setContent(file.getBytes());
-        } catch (IOException e) {
+            return playerPictureRepository.save(playerPicture);
+        }catch (IOException | RuntimeException e) {
             throw new DatabaseException("Error in picture reading");
         }
-        
-        return playerPictureRepository.save(playerPicture);
     }
 
 }

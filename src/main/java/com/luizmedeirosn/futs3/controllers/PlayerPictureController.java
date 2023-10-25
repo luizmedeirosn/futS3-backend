@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.luizmedeirosn.futs3.dto.response.PlayerPictureDTO;
 import com.luizmedeirosn.futs3.entities.PlayerPicture;
@@ -35,11 +34,8 @@ public class PlayerPictureController {
     @PostMapping
     public PlayerPictureDTO save(@RequestPart MultipartFile file) {
         PlayerPicture playerPicture = playerPictureService.save(file);
-        return new PlayerPictureDTO(file.getOriginalFilename(), createPictureLink(playerPicture.getId()));
-    }
-
-    private String createPictureLink(Long id) {
-        return ServletUriComponentsBuilder.fromCurrentRequest().replacePath("/playerspictures/" + id).toUriString();
+        String pictureLink =  PlayerPictureService.createPictureLink(playerPicture.getId());
+        return new PlayerPictureDTO(file.getOriginalFilename(), pictureLink);
     }
 
 }
