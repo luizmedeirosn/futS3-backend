@@ -170,7 +170,7 @@ public class TestConfig implements CommandLineRunner {
         Player player30 = new Player("Diego Souza",         pos14 );
         Player player31 = new Player("Vagner Love",         pos14 );
         Player player32 = new Player("Edinho",              pos14 );
-        Player player33 = new Player("Luciano Juba",        pos14 );
+        Player player33 = new Player("Edison Negueba",      pos14 );
         Player player34 = new Player("Facundo Labandeira",  pos14 );
         Player player35 = new Player("Gean Carlos",         pos14 );
         Player player36 = new Player("Wanderson",           pos14 );
@@ -186,7 +186,7 @@ public class TestConfig implements CommandLineRunner {
 
 
 
-        final String PICTURES_FOLDER_PATH = "src/main/java/com/luizmedeirosn/futs3/configs/sport-pictures";
+        final String PICTURES_FOLDER_PATH = "/home/luizmedeirosn/Desktop/futS3-files/futS3-backend/src/main/java/com/luizmedeirosn/futs3/configs/data/sport-pictures";
         File picturesFolder = new File(PICTURES_FOLDER_PATH);
         File[] picturesArray = picturesFolder.listFiles(File::isFile);
 
