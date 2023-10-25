@@ -129,13 +129,13 @@ public class TestConfig implements CommandLineRunner {
         Player player5 = new Player( "Adriano", pos1 );
 
         /* ZAGUEIRO CANHOTO */ 
-        Player player6 = new Player( "Roberto Rosales", pos2 );
-        Player player7 = new Player( "Everton",         pos2 );
-        Player player8 = new Player( "Felipinho",       pos2 );
-        Player player9 = new Player( "Igor Cariús",     pos2 );
-        Player player10 = new Player( "Eduardo",        pos2 );
-        Player player11 = new Player( "Devyson",        pos2 );
-        Player player12 = new Player( "Victor Gabriel", pos2 );
+        Player player6 = new Player( "Roberto Rosales", pos5 );
+        Player player7 = new Player( "Everton",         pos5 );
+        Player player8 = new Player( "Felipinho",       pos5 );
+        Player player9 = new Player( "Igor Cariús",     pos5 );
+        Player player10 = new Player( "Eduardo",        pos5 );
+        Player player11 = new Player( "Devyson",        pos5 );
+        Player player12 = new Player( "Victor Gabriel", pos5 );
 
         /* PRIMEIRO VOLANTE */
         Player player13 = new Player("Felipe",          pos7 );
@@ -149,7 +149,7 @@ public class TestConfig implements CommandLineRunner {
         Player player19 = new Player("Alan Ruiz",       pos9 );
         Player player20 = new Player("Jorginho",        pos9 );
         Player player21 = new Player("Luciano Juba",    pos9 );
-        Player player22 = new Player("Juan Xavier,",    pos9 );
+        Player player22 = new Player("Juan Xavier",    pos9 );
 
         /* ATACANTES */
          Player player23 = new Player("Michael Lima",       pos14 );
@@ -274,6 +274,8 @@ public class TestConfig implements CommandLineRunner {
                 pylp1, pylp2, pylp3, pylp4, pylp5, pylp6, pylp7, pylp8, pylp9, pylp10, pylp11, pylp12, pylp13, pylp14, pylp15, pylp16, pylp17, pylp18, pylp19, pylp20, pylp21, pylp22, pylp23, pylp24, pylp25, pylp26, pylp27, pylp28, pylp29, pylp30
             )
         );
+
+
     
     }
     
