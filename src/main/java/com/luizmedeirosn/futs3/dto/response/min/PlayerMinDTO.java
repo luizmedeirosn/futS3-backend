@@ -37,7 +37,7 @@ public class PlayerMinDTO implements Serializable {
         id = playerProjection.getPlayerId();
         name = playerProjection.getPlayerName();
         positionDTO = new PositionMinDTO(playerProjection.getPositionId(), playerProjection.getPositionName());
-        profilePictureLink = id == null ? "": PlayerPictureService.createPictureLink(id);
+        profilePictureLink = playerProjection.getPlayerProfilePicture() == null ? "": PlayerPictureService.createPictureLink(playerProjection.getPlayerId());
     }
 
     public Long getId() {

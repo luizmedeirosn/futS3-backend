@@ -22,9 +22,6 @@ public class PlayerParameterPK implements Serializable {
     @JoinColumn(name = "parameter_id")
     private Parameter parameter;
 
-    public PlayerParameterPK() {
-    }
-
     public Player getPlayer() {
         return player;
     }

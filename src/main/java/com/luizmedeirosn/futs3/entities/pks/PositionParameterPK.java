@@ -22,9 +22,6 @@ public class PositionParameterPK implements Serializable {
     @JoinColumn(name = "parameter_id")
     private Parameter parameter;
 
-    public PositionParameterPK() {
-    }
-
     public Position getPosition() {
         return position;
     }
