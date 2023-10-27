@@ -20,7 +20,7 @@ import com.luizmedeirosn.futs3.dto.response.min.GameModeMinDTO;
 import com.luizmedeirosn.futs3.entities.GameMode;
 import com.luizmedeirosn.futs3.entities.Position;
 import com.luizmedeirosn.futs3.entities.PositionParameter;
-import com.luizmedeirosn.futs3.projections.AllGameModesProjection;
+import com.luizmedeirosn.futs3.projections.gamemode.AllGameModesProjection;
 import com.luizmedeirosn.futs3.repositories.GameModeRepository;
 import com.luizmedeirosn.futs3.repositories.ParameterRepository;
 import com.luizmedeirosn.futs3.repositories.PositionParameterRepository;

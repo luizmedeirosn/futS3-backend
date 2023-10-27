@@ -18,6 +18,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.luizmedeirosn.futs3.dto.request.post.PostPositionDTO;
 import com.luizmedeirosn.futs3.dto.request.update.UpdatePositionDTO;
 import com.luizmedeirosn.futs3.dto.response.min.PositionMinDTO;
+import com.luizmedeirosn.futs3.projections.postition.PositionParametersProjection;
 import com.luizmedeirosn.futs3.services.PositionService;
 
 @RestController
@@ -35,6 +36,11 @@ public class PositionController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<PositionMinDTO> findById(@PathVariable Long id) {
         return ResponseEntity.ok().body(positionService.findById(id));
+    }
+
+    @GetMapping(value = "/{id}/parameters")
+    public ResponseEntity<List<PositionParametersProjection>> findAllPositionParameters(@PathVariable Long id) {
+        return ResponseEntity.ok().body(positionService.findAllPositionParameters(id));
     }
 
     @PostMapping

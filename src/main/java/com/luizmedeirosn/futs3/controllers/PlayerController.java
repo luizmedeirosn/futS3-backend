@@ -19,7 +19,7 @@ import com.luizmedeirosn.futs3.dto.request.post.PostPlayerDTO;
 import com.luizmedeirosn.futs3.dto.request.update.UpdatePlayerDTO;
 import com.luizmedeirosn.futs3.dto.response.PlayerDTO;
 import com.luizmedeirosn.futs3.dto.response.min.PlayerMinDTO;
-import com.luizmedeirosn.futs3.projections.AllPlayersParametersProjection;
+import com.luizmedeirosn.futs3.projections.player.AllPlayersParametersProjection;
 import com.luizmedeirosn.futs3.services.PlayerService;
 
 @RestController

@@ -19,7 +19,7 @@ import com.luizmedeirosn.futs3.dto.request.post.PostGameModeDTO;
 import com.luizmedeirosn.futs3.dto.request.update.UpdateGameModeDTO;
 import com.luizmedeirosn.futs3.dto.response.GameModeDTO;
 import com.luizmedeirosn.futs3.dto.response.min.GameModeMinDTO;
-import com.luizmedeirosn.futs3.projections.AllGameModesProjection;
+import com.luizmedeirosn.futs3.projections.gamemode.AllGameModesProjection;
 import com.luizmedeirosn.futs3.services.GameModeService;
 
 @RestController

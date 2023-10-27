@@ -6,8 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.luizmedeirosn.futs3.entities.GameMode;
-import com.luizmedeirosn.futs3.projections.AllGameModesProjection;
-import com.luizmedeirosn.futs3.projections.GameModeProjection;
+import com.luizmedeirosn.futs3.projections.gamemode.AllGameModesProjection;
+import com.luizmedeirosn.futs3.projections.gamemode.GameModeProjection;
 
 public interface GameModeRepository extends JpaRepository<GameMode, Long> {
 

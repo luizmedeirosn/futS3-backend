@@ -18,7 +18,7 @@ import com.luizmedeirosn.futs3.dto.response.min.PlayerMinDTO;
 import com.luizmedeirosn.futs3.entities.Parameter;
 import com.luizmedeirosn.futs3.entities.Player;
 import com.luizmedeirosn.futs3.entities.PlayerParameter;
-import com.luizmedeirosn.futs3.projections.AllPlayersParametersProjection;
+import com.luizmedeirosn.futs3.projections.player.AllPlayersParametersProjection;
 import com.luizmedeirosn.futs3.repositories.ParameterRepository;
 import com.luizmedeirosn.futs3.repositories.PlayerParameterRepository;
 import com.luizmedeirosn.futs3.repositories.PlayerRepository;

@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.luizmedeirosn.futs3.entities.GameMode;
-import com.luizmedeirosn.futs3.projections.GameModeProjection;
+import com.luizmedeirosn.futs3.projections.gamemode.GameModeProjection;
 
 @JsonPropertyOrder( { "id", "formationName", "description", "fields" } )
 public class GameModeDTO implements Serializable {

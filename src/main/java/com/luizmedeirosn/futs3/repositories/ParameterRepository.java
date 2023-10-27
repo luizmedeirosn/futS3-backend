@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.luizmedeirosn.futs3.entities.Parameter;
-import com.luizmedeirosn.futs3.projections.PlayerParameterProjection;
+import com.luizmedeirosn.futs3.projections.player.PlayerParameterProjection;
 
 public interface ParameterRepository extends JpaRepository<Parameter, Long> {
 

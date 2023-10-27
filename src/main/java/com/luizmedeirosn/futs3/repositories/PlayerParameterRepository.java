@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.luizmedeirosn.futs3.entities.PlayerParameter;
-import com.luizmedeirosn.futs3.projections.AllPlayersParametersProjection;
+import com.luizmedeirosn.futs3.projections.player.AllPlayersParametersProjection;
 
 public interface PlayerParameterRepository extends JpaRepository<PlayerParameter, Long> {
 
@@ -14,10 +14,10 @@ public interface PlayerParameterRepository extends JpaRepository<PlayerParameter
             nativeQuery = true,
             value = """
                 SELECT
-                    play.id as playerId,
-                    play.name as playerName,
-                    param.id as parameterId, 
-                    param.name as parameterName, 
+                    play.id AS playerId,
+                    play.name AS playerName,
+                    param.id AS parameterId, 
+                    param.name AS parameterName, 
                     playparam.score AS playerScore 
                 FROM 
                     tb_player_parameter AS playparam 

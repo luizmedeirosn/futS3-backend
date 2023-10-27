@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.luizmedeirosn.futs3.dto.response.min.PositionMinDTO;
 import com.luizmedeirosn.futs3.entities.Player;
 import com.luizmedeirosn.futs3.entities.PlayerPicture;
-import com.luizmedeirosn.futs3.projections.PlayerParameterProjection;
+import com.luizmedeirosn.futs3.projections.player.PlayerParameterProjection;
 import com.luizmedeirosn.futs3.services.PlayerPictureService;
 
 @JsonPropertyOrder( { "id", "name", "position", "profilePictureLink", "parameters" } )

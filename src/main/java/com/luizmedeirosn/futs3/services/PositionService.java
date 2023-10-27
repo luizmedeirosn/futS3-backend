@@ -16,6 +16,8 @@ import com.luizmedeirosn.futs3.dto.request.post.PostPositionDTO;
 import com.luizmedeirosn.futs3.dto.request.update.UpdatePositionDTO;
 import com.luizmedeirosn.futs3.dto.response.min.PositionMinDTO;
 import com.luizmedeirosn.futs3.entities.Position;
+import com.luizmedeirosn.futs3.projections.postition.PositionParametersProjection;
+import com.luizmedeirosn.futs3.repositories.PositionParameterRepository;
 import com.luizmedeirosn.futs3.repositories.PositionRepository;
 import com.luizmedeirosn.futs3.services.exceptions.DatabaseException;
 import com.luizmedeirosn.futs3.services.exceptions.EntityNotFoundException;
@@ -25,6 +27,9 @@ public class PositionService {
 
     @Autowired
     private PositionRepository positionRepository;
+
+    @Autowired
+    private PositionParameterRepository positionParameterRepository;
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public List<PositionMinDTO> findAll() {
@@ -39,6 +44,16 @@ public class PositionService {
     public PositionMinDTO findById(Long id) {
         try {
             return new PositionMinDTO(positionRepository.findById(id).get());
+
+        } catch (NoSuchElementException e) {
+            throw new EntityNotFoundException("Position ID not found");
+        }
+    }
+
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+    public List<PositionParametersProjection> findAllPositionParameters(Long id) {
+        try {
+            return positionParameterRepository.findAllPositionParameters(id);
 
         } catch (NoSuchElementException e) {
             throw new EntityNotFoundException("Position ID not found");

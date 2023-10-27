@@ -1,4 +1,4 @@
-package com.luizmedeirosn.futs3.projections;
+package com.luizmedeirosn.futs3.projections.postition;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
@@ -7,6 +7,6 @@ public interface PositionParametersProjection {
     
     Long getParameterId();
     String getParameterName();
-    Long getParameterWeight();
+    Integer getParameterWeight();
 
 }
