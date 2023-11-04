@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -20,6 +21,7 @@ import com.luizmedeirosn.futs3.dto.request.update.UpdateGameModeDTO;
 import com.luizmedeirosn.futs3.dto.response.GameModeDTO;
 import com.luizmedeirosn.futs3.dto.response.min.GameModeMinDTO;
 import com.luizmedeirosn.futs3.projections.gamemode.AllGameModesProjection;
+import com.luizmedeirosn.futs3.projections.gamemode.PlayerScoreProjection;
 import com.luizmedeirosn.futs3.services.GameModeService;
 
 @RestController
@@ -47,6 +49,14 @@ public class GameModeController {
     @GetMapping(value = "/{id}/full")
     public ResponseEntity<GameModeDTO> findFullById(@PathVariable Long id) {
         return ResponseEntity.ok().body(gameModeService.findFullById(id));
+    }
+
+    @GetMapping("/ranking")
+    public ResponseEntity<List<PlayerScoreProjection>> getPlayerRanking (
+        @RequestParam("gameModeId") Long gameModeId,
+        @RequestParam("positionId") Long positionId
+    ) {
+        return ResponseEntity.ok().body(gameModeService.getPlayerRanking(gameModeId, positionId));
     }
 
     @PostMapping

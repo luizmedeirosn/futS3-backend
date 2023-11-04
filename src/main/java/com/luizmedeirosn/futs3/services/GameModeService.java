@@ -21,6 +21,7 @@ import com.luizmedeirosn.futs3.entities.GameMode;
 import com.luizmedeirosn.futs3.entities.Position;
 import com.luizmedeirosn.futs3.entities.PositionParameter;
 import com.luizmedeirosn.futs3.projections.gamemode.AllGameModesProjection;
+import com.luizmedeirosn.futs3.projections.gamemode.PlayerScoreProjection;
 import com.luizmedeirosn.futs3.repositories.GameModeRepository;
 import com.luizmedeirosn.futs3.repositories.ParameterRepository;
 import com.luizmedeirosn.futs3.repositories.PositionParameterRepository;
@@ -77,6 +78,11 @@ public class GameModeService {
         }
     }
 
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+    public List<PlayerScoreProjection> getPlayerRanking(Long gameModeId, Long positionId) {
+        return gameModeRepository.getPlayerRanking(gameModeId, positionId).orElseThrow(() -> new DatabaseException("Error getting the ranking"));
+    }
+
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public GameModeDTO save(PostGameModeDTO postGameModeDTO) {
         try {
@@ -101,7 +107,7 @@ public class GameModeService {
                     }
                 );
             gameModeRepository.save(newGameMode);
-            return  findFullById(newGameMode.getId());
+            return findFullById(newGameMode.getId());
 
         } catch (NoSuchElementException e) {
             throw new EntityNotFoundException("GameMode request. IDs not found");
