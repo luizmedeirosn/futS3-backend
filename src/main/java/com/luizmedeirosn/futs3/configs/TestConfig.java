@@ -141,55 +141,56 @@ public class TestConfig implements CommandLineRunner {
 
         /*--!> OS JOGADORES ESTÃO ESCALADOS COM POSIÇÕES NO GERAL PARA FACILITAR A MOCKAGEM E PUXAR O RANKING, MAS NÃO SÃO DADOS REAIS */ 
         /* GOLEIROS */
-        Player player1 = new Player( "Denis",   pos1 );
-        Player player2 = new Player( "Denival", pos1 );
-        Player player3 = new Player( "Renan",   pos1 );
-        Player player4 = new Player( "Jordan",  pos1 );
-        Player player5 = new Player( "Adriano", pos1 );
+        final String sportRecife = "Sport Recife";
+        Player player1 = new Player( "Denis",   null, null, sportRecife, pos1 );
+        Player player2 = new Player( "Denival", 23,   203,  sportRecife, pos1 );
+        Player player3 = new Player( "Renan",   null, null, sportRecife, pos1 );
+        Player player4 = new Player( "Jordan",  null, null, sportRecife, pos1 );
+        Player player5 = new Player( "Adriano", null, null, sportRecife, pos1 );
 
         /* LATERAL ESQUERDO */ 
-        Player player6 = new Player( "Roberto Rosales", pos5 );
-        Player player7 = new Player( "Everton",         pos5 );
-        Player player8 = new Player( "Felipinho",       pos5 );
-        Player player9 = new Player( "Igor Cariús",     pos5 );
-        Player player10 = new Player( "Nathan",         pos5 );
-        Player player11 = new Player( "Eduardo",        pos5 );
-        Player player12 = new Player( "Victor Gabriel", pos5 );
+        Player player6 = new Player( "Roberto Rosales", null, null, sportRecife, pos5 );
+        Player player7 = new Player( "Everton",         23, 171,    sportRecife, pos5 );
+        Player player8 = new Player( "Felipinho",       19, 182,    sportRecife, pos5 );
+        Player player9 = new Player( "Igor Cariús",     null, null, sportRecife, pos5 );
+        Player player10 = new Player( "Nathan",         null, null, sportRecife, pos5 );
+        Player player11 = new Player( "Eduardo",        null, null, sportRecife, pos5 );
+        Player player12 = new Player( "Victor Gabriel", null, null, sportRecife, pos5 );
 
         // ZAGUEIRO DESTRO
-        Player player13 = new Player( "Alisson Cassiano",   pos3 );
-        Player player14 = new Player( "Renzo",              pos3 );
-        Player player15 = new Player( "Rafael Thyere",      pos3 );
-        Player player16 = new Player( "Sabino",             pos3 );
-        Player player17 = new Player( "Chico",              pos3 );
-        Player player18 = new Player( "Matheus Baraka",     pos3 );
+        Player player13 = new Player( "Alisson Cassiano",   null, null, sportRecife, pos3 );
+        Player player14 = new Player( "Renzo",              22, 184,    sportRecife, pos3 );
+        Player player15 = new Player( "Rafael Thyere",      30, 189,    sportRecife, pos3 );
+        Player player16 = new Player( "Sabino",             27, 189,    sportRecife, pos3 );
+        Player player17 = new Player( "Chico",              25, 188,    sportRecife, pos3 );
+        Player player18 = new Player( "Matheus Baraka",     null, null, sportRecife, pos3 );
 
 
         /* PRIMEIRO VOLANTE */
-        Player player19 = new Player("Felipe",          pos7 );
-        Player player20 = new Player("Ronaldo",         pos7 );
-        Player player21 = new Player("Fabinho",         pos7 );
-        Player player22 = new Player("Pedro Martins",   pos7 );
-        Player player23 = new Player("Fábio Matheus",   pos7 );
-        Player player24 = new Player("Lucas André",     pos7 );
+        Player player19 = new Player("Felipe",          null, null, sportRecife, pos7 );
+        Player player20 = new Player("Ronaldo",         29, 172,    sportRecife, pos7 );
+        Player player21 = new Player("Fabinho",         null, null, sportRecife, pos7 );
+        Player player22 = new Player("Pedro Martins",   23, 175,    sportRecife, pos7 );
+        Player player23 = new Player("Fábio Matheus",   null, null, sportRecife, pos7 );
+        Player player24 = new Player("Lucas André",     null, null, sportRecife, pos7 );
 
         /* MEIA DIREITO */
-        Player player25 = new Player("Alan Ruiz",       pos9 );
-        Player player26 = new Player("Jorginho",        pos9 );
-        Player player27 = new Player("Juan Xavier",     pos9 );
+        Player player25 = new Player("Alan Ruiz",       null, null, sportRecife, pos9 );
+        Player player26 = new Player("Jorginho",        null, null, sportRecife, pos9 );
+        Player player27 = new Player("Juan Xavier",     null, null, sportRecife, pos9 );
         
         /* ATACANTES */
-        Player player28 = new Player("Michael Lima",        pos14 );
-        Player player29 = new Player("Peglow",              pos14 );
-        Player player30 = new Player("Diego Souza",         pos14 );
-        Player player31 = new Player("Vagner Love",         pos14 );
-        Player player32 = new Player("Edinho",              pos14 );
-        Player player33 = new Player("Edison Negueba",      pos14 );
-        Player player34 = new Player("Facundo Labandeira",  pos14 );
-        Player player35 = new Player("Gean Carlos",         pos14 );
-        Player player36 = new Player("Wanderson",           pos14 );
-        Player player37 = new Player("Gabriel Santos",      pos14 );
-        Player player38 = new Player("Fabrício Daniel",     pos14 );
+        Player player28 = new Player("Michael Lima",        null, null, sportRecife, pos14 );
+        Player player29 = new Player("Peglow",              null, null, sportRecife, pos14 );
+        Player player30 = new Player("Diego Souza",         null, null, sportRecife, pos14 );
+        Player player31 = new Player("Vagner Love",         null, null, sportRecife, pos14 );
+        Player player32 = new Player("Edinho",              null, null, sportRecife, pos14 );
+        Player player33 = new Player("Edison Negueba",      null, null, sportRecife, pos14 );
+        Player player34 = new Player("Facundo Labandeira",  null, null, sportRecife, pos14 );
+        Player player35 = new Player("Gean Carlos",         null, null, sportRecife, pos14 );
+        Player player36 = new Player("Wanderson",           null, null, sportRecife, pos14 );
+        Player player37 = new Player("Gabriel Santos",      null, null, sportRecife, pos14 );
+        Player player38 = new Player("Fabrício Daniel",     null, null, sportRecife, pos14 );
         
         List<Player> players = new ArrayList<>(
             Arrays.asList (

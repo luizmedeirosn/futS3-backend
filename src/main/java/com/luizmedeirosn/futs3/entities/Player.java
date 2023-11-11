@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.hibernate.annotations.Check;
+
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -31,6 +33,16 @@ public class Player implements Serializable {
     @Column(nullable = false, unique = true)
     private String name;
     
+    @Check(constraints = "age >= 1 AND age <= 150")
+    private Integer age;
+
+    @Check(constraints = "height >= 65 AND height <= 250")
+    private Integer height;
+
+    @Nonnull
+    @Column(nullable = false)
+    private String team;
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "position_id")
     private Position position;
@@ -44,8 +56,11 @@ public class Player implements Serializable {
     public Player() {
     }
 
-    public Player(String name, Position position) {
+    public Player(String name, Integer age, Integer height, String team , Position position) {
         this.name = name;
+        this.age = age;
+        this.height = height;
+        this.team = team;
         this.position = position;
     }
 
