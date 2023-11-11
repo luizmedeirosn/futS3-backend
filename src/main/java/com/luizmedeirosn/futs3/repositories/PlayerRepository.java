@@ -14,18 +14,18 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
         nativeQuery = true,
         value = """
             SELECT 
-                play.id AS playerId,
-                play.name AS playerName,
-                pos.id AS positionId,
-                pos.name AS positionName,
-                playpic.content as playerProfilePicture
+                PLAY.id AS playerId,
+                PLAY.name AS playerName,
+                POS.id AS positionId,
+                POS.name AS positionName,
+                PLAYPIC.content as playerProfilePicture
             FROM 
-                tb_player AS play
-                INNER JOIN tb_position AS pos
-                    ON play.position_id = pos.id
-                LEFT JOIN tb_player_picture AS playpic
-                    ON play.id = playpic.player_id
-            ORDER BY play.name DESC;
+                tb_player AS PLAY
+                INNER JOIN tb_position AS POS
+                    ON PLAY.position_id = POS.id
+                LEFT JOIN tb_player_picture AS PLAYPIC
+                    ON PLAY.id = PLAYPIC.player_id
+            ORDER BY PLAY.name;
         """
     ) List<PlayerProjection> findAllOptimized();
 
