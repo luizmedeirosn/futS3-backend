@@ -183,12 +183,12 @@ public class TestConfig implements CommandLineRunner {
         Player player28 = new Player("Michael Lima",        null, null, sportRecife, pos14 );
         Player player29 = new Player("Peglow",              null, null, sportRecife, pos14 );
         Player player30 = new Player("Diego Souza",         null, null, sportRecife, pos14 );
-        Player player31 = new Player("Vagner Love",         null, null, sportRecife, pos14 );
+        Player player31 = new Player("Vagner Love",         39, 172,    sportRecife, pos14 );
         Player player32 = new Player("Edinho",              null, null, sportRecife, pos14 );
         Player player33 = new Player("Edison Negueba",      null, null, sportRecife, pos14 );
-        Player player34 = new Player("Facundo Labandeira",  null, null, sportRecife, pos14 );
+        Player player34 = new Player("Facundo Labandeira",  27, 173,    sportRecife, pos14 );
         Player player35 = new Player("Gean Carlos",         null, null, sportRecife, pos14 );
-        Player player36 = new Player("Wanderson",           null, null, sportRecife, pos14 );
+        Player player36 = new Player("Wanderson",           35, 167, sportRecife, pos14 );
         Player player37 = new Player("Gabriel Santos",      null, null, sportRecife, pos14 );
         Player player38 = new Player("Fabrício Daniel",     null, null, sportRecife, pos14 );
         
