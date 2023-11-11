@@ -16,8 +16,11 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
             SELECT 
                 play.id AS playerId,
                 play.name AS playerName,
+                play.age AS playerAge,
+                play.height AS playerHeight,
                 pos.id AS positionId,
                 pos.name AS positionName,
+                play.team AS playerTeam,
                 playpic.content as playerProfilePicture
             FROM 
                 tb_player AS play
