@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.luizmedeirosn</groupId>
-	<artifactId>futs3</artifactId>
+	<artifactId>futS3</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>futs3</name>
 	<description>Demo project for Spring Boot</description>

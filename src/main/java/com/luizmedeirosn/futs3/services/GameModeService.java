@@ -16,12 +16,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.luizmedeirosn.futs3.dto.request.post.PostGameModeDTO;
 import com.luizmedeirosn.futs3.dto.request.update.UpdateGameModeDTO;
 import com.luizmedeirosn.futs3.dto.response.GameModeDTO;
+import com.luizmedeirosn.futs3.dto.response.PlayerFullScoreDTO;
 import com.luizmedeirosn.futs3.dto.response.min.GameModeMinDTO;
 import com.luizmedeirosn.futs3.entities.GameMode;
 import com.luizmedeirosn.futs3.entities.Position;
 import com.luizmedeirosn.futs3.entities.PositionParameter;
 import com.luizmedeirosn.futs3.projections.gamemode.AllGameModesProjection;
-import com.luizmedeirosn.futs3.projections.gamemode.PlayerScoreProjection;
 import com.luizmedeirosn.futs3.repositories.GameModeRepository;
 import com.luizmedeirosn.futs3.repositories.ParameterRepository;
 import com.luizmedeirosn.futs3.repositories.PositionParameterRepository;
@@ -79,8 +79,12 @@ public class GameModeService {
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public List<PlayerScoreProjection> getPlayerRanking(Long gameModeId, Long positionId) {
-        return gameModeRepository.getPlayerRanking(gameModeId, positionId).orElseThrow(() -> new DatabaseException("Error getting the ranking"));
+    public List<PlayerFullScoreDTO> getPlayerRanking(Long gameModeId, Long positionId) {
+        return gameModeRepository.getPlayerRanking(gameModeId, positionId)
+            .orElseThrow(() -> new DatabaseException("Error getting the ranking"))
+            .stream()
+            .map( player -> new PlayerFullScoreDTO( player,  parameterRepository.findByPlayerId(player.getPlayerId()) ) )
+            .toList();
     }
 
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)

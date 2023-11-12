@@ -19,7 +19,7 @@ public class PlayerPictureService {
     private PlayerPictureRepository playerPictureRepository;
 
     public static String createPictureLink(Long id) {
-        return ServletUriComponentsBuilder.fromCurrentRequest().replacePath("/playerspictures/" + id).toUriString();
+        return ServletUriComponentsBuilder.fromCurrentRequest().replacePath("/playerspictures/" + id).replaceQuery(null).toUriString();
     }
 
     public PlayerPicture findById(Long id) {

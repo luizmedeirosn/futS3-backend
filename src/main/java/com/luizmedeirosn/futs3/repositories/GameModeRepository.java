@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import com.luizmedeirosn.futs3.entities.GameMode;
 import com.luizmedeirosn.futs3.projections.gamemode.AllGameModesProjection;
 import com.luizmedeirosn.futs3.projections.gamemode.GameModeProjection;
-import com.luizmedeirosn.futs3.projections.gamemode.PlayerScoreProjection;
+import com.luizmedeirosn.futs3.projections.gamemode.PlayerFullScoreProjection;
 
 public interface GameModeRepository extends JpaRepository<GameMode, Long> {
 
@@ -81,6 +81,7 @@ public interface GameModeRepository extends JpaRepository<GameMode, Long> {
             SELECT
                 player_id AS playerId, 
                 player_name AS playerName,
+                player_picture AS playerProfilePicture,
                 player_age AS playerAge,
                 player_height AS playerHeight,
                 player_team AS playerTeam,
@@ -89,6 +90,7 @@ public interface GameModeRepository extends JpaRepository<GameMode, Long> {
                 SELECT
                     PLAY.id AS player_id,
                     PLAY.name AS player_name,
+                    PLAYPIC.content AS player_picture,
                     PLAY.age AS player_age,
                     PLAY.height AS player_height,
                     PLAY.team AS player_team,
@@ -106,14 +108,16 @@ public interface GameModeRepository extends JpaRepository<GameMode, Long> {
                             ON POSPARAM.parameter_id = PARAM.id
                         INNER JOIN tb_player_parameter AS PLAYPARAM
                             ON PLAY.id = PLAYPARAM.player_id
+                        LEFT JOIN tb_player_picture AS PLAYPIC
+                            ON play.id = playpic.player_id
                 WHERE
                     GAMEPOS.gamemode_id = 1 AND
                     POSPARAM.position_id = 14 AND
                     PLAYPARAM.parameter_id = POSPARAM.parameter_id
             ) subquery
-            GROUP BY player_id, player_name, player_age, player_height, player_team
-            ORDER BY totalScore DESC;         
+            GROUP BY player_id, player_name, player_picture, player_age, player_height, player_team
+            ORDER BY totalScore DESC;     
     """
-    ) Optional<List<PlayerScoreProjection>> getPlayerRanking(Long gameModeId, Long positionId);
+    ) Optional<List<PlayerFullScoreProjection>> getPlayerRanking(Long gameModeId, Long positionId);
 
 }

@@ -19,9 +19,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.luizmedeirosn.futs3.dto.request.post.PostGameModeDTO;
 import com.luizmedeirosn.futs3.dto.request.update.UpdateGameModeDTO;
 import com.luizmedeirosn.futs3.dto.response.GameModeDTO;
+import com.luizmedeirosn.futs3.dto.response.PlayerFullScoreDTO;
 import com.luizmedeirosn.futs3.dto.response.min.GameModeMinDTO;
 import com.luizmedeirosn.futs3.projections.gamemode.AllGameModesProjection;
-import com.luizmedeirosn.futs3.projections.gamemode.PlayerScoreProjection;
 import com.luizmedeirosn.futs3.services.GameModeService;
 
 @RestController
@@ -52,7 +52,7 @@ public class GameModeController {
     }
 
     @GetMapping("/ranking")
-    public ResponseEntity<List<PlayerScoreProjection>> getPlayerRanking (
+    public ResponseEntity<List<PlayerFullScoreDTO>> getPlayerRanking (
         @RequestParam("gameModeId") Long gameModeId,
         @RequestParam("positionId") Long positionId
     ) {
