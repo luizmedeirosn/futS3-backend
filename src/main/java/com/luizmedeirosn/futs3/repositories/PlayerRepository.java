@@ -25,7 +25,7 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
                     ON PLAY.position_id = POS.id
                 LEFT JOIN tb_player_picture AS PLAYPIC
                     ON PLAY.id = PLAYPIC.player_id
-            ORDER BY PLAY.name;
+            ORDER BY PLAY.name DESC;
         """
     ) List<PlayerProjection> findAllOptimized();
 
