@@ -111,8 +111,8 @@ public interface GameModeRepository extends JpaRepository<GameMode, Long> {
                         LEFT JOIN tb_player_picture AS PLAYPIC
                             ON play.id = playpic.player_id
                 WHERE
-                    GAMEPOS.gamemode_id = 1 AND
-                    POSPARAM.position_id = 14 AND
+                    GAMEPOS.gamemode_id = :gameModeId AND
+                    POSPARAM.position_id = :positionId AND
                     PLAYPARAM.parameter_id = POSPARAM.parameter_id
             ) subquery
             GROUP BY player_id, player_name, player_picture, player_age, player_height, player_team
