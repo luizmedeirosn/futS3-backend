@@ -22,6 +22,7 @@ import com.luizmedeirosn.futs3.dto.response.GameModeDTO;
 import com.luizmedeirosn.futs3.dto.response.PlayerFullScoreDTO;
 import com.luizmedeirosn.futs3.dto.response.min.GameModeMinDTO;
 import com.luizmedeirosn.futs3.projections.gamemode.AllGameModesProjection;
+import com.luizmedeirosn.futs3.projections.gamemode.GameModePositionProjection;
 import com.luizmedeirosn.futs3.services.GameModeService;
 
 @RestController
@@ -49,6 +50,11 @@ public class GameModeController {
     @GetMapping(value = "/{id}/full")
     public ResponseEntity<GameModeDTO> findFullById(@PathVariable Long id) {
         return ResponseEntity.ok().body(gameModeService.findFullById(id));
+    }
+
+    @GetMapping(value = "/{id}/positions")
+    public ResponseEntity<List<GameModePositionProjection>> findGameModePositions(@PathVariable Long id) {
+        return ResponseEntity.ok().body(gameModeService.findGameModePositions(id));
     }
 
     @GetMapping("/ranking")

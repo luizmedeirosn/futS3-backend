@@ -8,11 +8,28 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.luizmedeirosn.futs3.entities.GameMode;
 import com.luizmedeirosn.futs3.projections.gamemode.AllGameModesProjection;
+import com.luizmedeirosn.futs3.projections.gamemode.GameModePositionProjection;
 import com.luizmedeirosn.futs3.projections.gamemode.GameModeProjection;
 import com.luizmedeirosn.futs3.projections.gamemode.PlayerFullScoreProjection;
 
 public interface GameModeRepository extends JpaRepository<GameMode, Long> {
 
+    @Query (
+        nativeQuery = true,
+        value = """
+            SELECT
+                POS.id AS positionId,
+                POS.name AS positionName
+            FROM
+                tb_gamemode_position AS GAMEPOS
+                    INNER JOIN tb_position AS POS
+                        ON GAMEPOS.position_id = POS.id
+            WHERE
+                GAMEPOS.gamemode_id = :id ;
+        """
+    ) Optional<List<GameModePositionProjection>> findGameModePositions(Long id);
+
+    
     @Query (
         nativeQuery = true,
         value = """

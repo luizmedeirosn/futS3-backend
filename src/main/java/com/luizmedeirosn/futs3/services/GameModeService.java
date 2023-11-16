@@ -22,6 +22,7 @@ import com.luizmedeirosn.futs3.entities.GameMode;
 import com.luizmedeirosn.futs3.entities.Position;
 import com.luizmedeirosn.futs3.entities.PositionParameter;
 import com.luizmedeirosn.futs3.projections.gamemode.AllGameModesProjection;
+import com.luizmedeirosn.futs3.projections.gamemode.GameModePositionProjection;
 import com.luizmedeirosn.futs3.repositories.GameModeRepository;
 import com.luizmedeirosn.futs3.repositories.ParameterRepository;
 import com.luizmedeirosn.futs3.repositories.PositionParameterRepository;
@@ -76,6 +77,11 @@ public class GameModeService {
         } catch (NoSuchElementException e) {
             throw new EntityNotFoundException("GameMode ID not found");
         }
+    }
+
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+    public List<GameModePositionProjection> findGameModePositions(Long id) {
+        return gameModeRepository.findGameModePositions(id).orElseThrow( () -> new DatabaseException("GameMode ID not found"));
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
