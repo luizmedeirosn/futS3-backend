@@ -58,11 +58,16 @@ public class GameModeController {
     }
 
     @GetMapping("/ranking")
-    public ResponseEntity<List<PlayerFullScoreDTO>> getPlayerRanking (
+    public ResponseEntity<List<PlayerFullScoreDTO>> getPlayersRanking (
         @RequestParam("gameModeId") Long gameModeId,
         @RequestParam("positionId") Long positionId
     ) {
-        return ResponseEntity.ok().body(gameModeService.getPlayerRanking(gameModeId, positionId));
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        return ResponseEntity.ok().body(gameModeService.getPlayersRanking(gameModeId, positionId));
     }
 
     @PostMapping

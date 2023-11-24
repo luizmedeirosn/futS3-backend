@@ -238,12 +238,14 @@ public class TestConfig implements CommandLineRunner {
         PositionParameter pp8 = new PositionParameter(  pos11, prmt21, 30 );
 
         PositionParameter pp9 = new PositionParameter(  pos14, prmt15, 10 );
-        PositionParameter pp10 = new PositionParameter(  pos14, prmt21, 40 );
-        PositionParameter pp11 = new PositionParameter(  pos14, prmt25, 50 );
+        PositionParameter pp10 = new PositionParameter( pos14, prmt21, 20 );
+        PositionParameter pp11 = new PositionParameter( pos14, prmt25, 30 );
+        PositionParameter pp12 = new PositionParameter( pos14, prmt19, 20 );
+        PositionParameter pp13 = new PositionParameter( pos14, prmt20, 20 );
 
         
 
-        positionParameterRepository.saveAll( Arrays.asList(pp1, pp2, pp3, pp4, pp5, pp6, pp7, pp8, pp9, pp10, pp11) );
+        positionParameterRepository.saveAll ( Arrays.asList(pp1, pp2, pp3, pp4, pp5, pp6, pp7, pp8, pp9, pp10, pp11, pp12, pp13) );
 
         /* ESTATÍSTICA DOS ATACANTES */
         // PlayerParameter pylp2 = new PlayerParameter( player28, prmt21, 30 );
@@ -290,57 +292,91 @@ public class TestConfig implements CommandLineRunner {
         // PlayerParameter pylp32 = new PlayerParameter( player38, prmt21, 85 );
         // PlayerParameter pylp33 = new PlayerParameter( player38, prmt25, 85 );
 
-        PlayerParameter pylp1 = new PlayerParameter( player28, prmt15, random.nextInt(50, 100) );
-        PlayerParameter pylp2 = new PlayerParameter( player28, prmt21, random.nextInt(50, 100) );
-        PlayerParameter pylp3 = new PlayerParameter( player28, prmt25, random.nextInt(50, 100) );
+        PlayerParameter pylp1 = new PlayerParameter( player28, prmt15, random.nextInt(30, 100) );
+        PlayerParameter pylp2 = new PlayerParameter( player28, prmt21, random.nextInt(30, 100) );
+        PlayerParameter pylp3 = new PlayerParameter( player28, prmt25, random.nextInt(30, 100) );
 
-        PlayerParameter pylp4 = new PlayerParameter( player29, prmt15, random.nextInt(50, 100) );
-        PlayerParameter pylp5 = new PlayerParameter( player29, prmt21, random.nextInt(50, 100) );
-        PlayerParameter pylp6 = new PlayerParameter( player29, prmt25, random.nextInt(50, 100) );
+        PlayerParameter pylp4 = new PlayerParameter( player29, prmt15, random.nextInt(30, 100) );
+        PlayerParameter pylp5 = new PlayerParameter( player29, prmt21, random.nextInt(30, 100) );
+        PlayerParameter pylp6 = new PlayerParameter( player29, prmt25, random.nextInt(30, 100) );
         
-        PlayerParameter pylp7 = new PlayerParameter( player30, prmt15, random.nextInt(50, 100) );
-        PlayerParameter pylp8 = new PlayerParameter( player30, prmt21, random.nextInt(50, 100) );
-        PlayerParameter pylp9 = new PlayerParameter( player30, prmt25, random.nextInt(50, 100) );
+        PlayerParameter pylp7 = new PlayerParameter( player30, prmt15, random.nextInt(30, 100) );
+        PlayerParameter pylp8 = new PlayerParameter( player30, prmt21, random.nextInt(30, 100) );
+        PlayerParameter pylp9 = new PlayerParameter( player30, prmt25, random.nextInt(30, 100) );
         
-        PlayerParameter pylp10 = new PlayerParameter( player31, prmt15, random.nextInt(50, 100) );
-        PlayerParameter pylp11 = new PlayerParameter( player31, prmt21, random.nextInt(50, 100) );
-        PlayerParameter pylp12 = new PlayerParameter( player31, prmt25, random.nextInt(50, 100) );
+        PlayerParameter pylp10 = new PlayerParameter( player31, prmt15, random.nextInt(30, 100) );
+        PlayerParameter pylp11 = new PlayerParameter( player31, prmt21, random.nextInt(30, 100) );
+        PlayerParameter pylp12 = new PlayerParameter( player31, prmt25, random.nextInt(30, 100) );
         
-        PlayerParameter pylp13 = new PlayerParameter( player32, prmt15, random.nextInt(50, 100) );
-        PlayerParameter pylp14 = new PlayerParameter( player32, prmt21, random.nextInt(50, 100) );
-        PlayerParameter pylp15 = new PlayerParameter( player32, prmt25, random.nextInt(50, 100) );
+        PlayerParameter pylp13 = new PlayerParameter( player32, prmt15, random.nextInt(30, 100) );
+        PlayerParameter pylp14 = new PlayerParameter( player32, prmt21, random.nextInt(30, 100) );
+        PlayerParameter pylp15 = new PlayerParameter( player32, prmt25, random.nextInt(30, 100) );
         
-        PlayerParameter pylp16 = new PlayerParameter( player33, prmt15, random.nextInt(50, 100) );
-        PlayerParameter pylp17 = new PlayerParameter( player33, prmt21, random.nextInt(50, 100) );
-        PlayerParameter pylp18 = new PlayerParameter( player33, prmt25, random.nextInt(50, 100) );
+        PlayerParameter pylp16 = new PlayerParameter( player33, prmt15, random.nextInt(30, 100) );
+        PlayerParameter pylp17 = new PlayerParameter( player33, prmt21, random.nextInt(30, 100) );
+        PlayerParameter pylp18 = new PlayerParameter( player33, prmt25, random.nextInt(30, 100) );
         
-        PlayerParameter pylp19 = new PlayerParameter( player34, prmt15, random.nextInt(50, 100) );
-        PlayerParameter pylp20 = new PlayerParameter( player34, prmt21, random.nextInt(50, 100) );
-        PlayerParameter pylp21 = new PlayerParameter( player34, prmt25, random.nextInt(50, 100) );
+        PlayerParameter pylp19 = new PlayerParameter( player34, prmt15, random.nextInt(30, 100) );
+        PlayerParameter pylp20 = new PlayerParameter( player34, prmt21, random.nextInt(30, 100) );
+        PlayerParameter pylp21 = new PlayerParameter( player34, prmt25, random.nextInt(30, 100) );
         
-        PlayerParameter pylp22 = new PlayerParameter( player35, prmt15, random.nextInt(50, 100) );
-        PlayerParameter pylp23 = new PlayerParameter( player35, prmt21, random.nextInt(50, 100) );
-        PlayerParameter pylp24 = new PlayerParameter( player35, prmt25, random.nextInt(50, 100) );
+        PlayerParameter pylp22 = new PlayerParameter( player35, prmt15, random.nextInt(30, 100) );
+        PlayerParameter pylp23 = new PlayerParameter( player35, prmt21, random.nextInt(30, 100) );
+        PlayerParameter pylp24 = new PlayerParameter( player35, prmt25, random.nextInt(30, 100) );
         
-        PlayerParameter pylp25 = new PlayerParameter( player36, prmt15, random.nextInt(50, 100) );
-        PlayerParameter pylp26 = new PlayerParameter( player36, prmt21, random.nextInt(50, 100) );
-        PlayerParameter pylp27 = new PlayerParameter( player36, prmt25, random.nextInt(50, 100) );
+        PlayerParameter pylp25 = new PlayerParameter( player36, prmt15, random.nextInt(30, 100) );
+        PlayerParameter pylp26 = new PlayerParameter( player36, prmt21, random.nextInt(30, 100) );
+        PlayerParameter pylp27 = new PlayerParameter( player36, prmt25, random.nextInt(30, 100) );
         
-        PlayerParameter pylp28 = new PlayerParameter( player37, prmt15, random.nextInt(50, 100) );
-        PlayerParameter pylp29 = new PlayerParameter( player37, prmt21, random.nextInt(50, 100) );
-        PlayerParameter pylp30 = new PlayerParameter( player37, prmt25, random.nextInt(50, 100) );
+        PlayerParameter pylp28 = new PlayerParameter( player37, prmt15, random.nextInt(30, 100) );
+        PlayerParameter pylp29 = new PlayerParameter( player37, prmt21, random.nextInt(30, 100) );
+        PlayerParameter pylp30 = new PlayerParameter( player37, prmt25, random.nextInt(30, 100) );
         
-        PlayerParameter pylp31 = new PlayerParameter( player38, prmt15, random.nextInt(50, 100) );
-        PlayerParameter pylp32 = new PlayerParameter( player38, prmt21, random.nextInt(50, 100) );
-        PlayerParameter pylp33 = new PlayerParameter( player38, prmt25, random.nextInt(50, 100) );
+        PlayerParameter pylp31 = new PlayerParameter( player38, prmt15, random.nextInt(30, 100) );
+        PlayerParameter pylp32 = new PlayerParameter( player38, prmt21, random.nextInt(30, 100) );
+        PlayerParameter pylp33 = new PlayerParameter( player38, prmt25, random.nextInt(30, 100) );
+
+        /*-------------------------------------------------------------------------------------*/
+
+        PlayerParameter pylp34 = new PlayerParameter( player28, prmt19, random.nextInt(30, 100) );
+        PlayerParameter pylp35 = new PlayerParameter( player28, prmt20, random.nextInt(30, 100) );
+
+        PlayerParameter pylp36 = new PlayerParameter( player29, prmt19, random.nextInt(30, 100) );
+        PlayerParameter pylp37 = new PlayerParameter( player29, prmt20, random.nextInt(30, 100) );
+
+        PlayerParameter pylp38 = new PlayerParameter( player30, prmt19, random.nextInt(30, 100) );
+        PlayerParameter pylp39 = new PlayerParameter( player30, prmt20, random.nextInt(30, 100) );
+
+        PlayerParameter pylp40 = new PlayerParameter( player31, prmt19, random.nextInt(30, 100) );
+        PlayerParameter pylp41 = new PlayerParameter( player31, prmt20, random.nextInt(30, 100) );
+
+        PlayerParameter pylp42 = new PlayerParameter( player32, prmt19, random.nextInt(30, 100) );
+        PlayerParameter pylp43 = new PlayerParameter( player32, prmt20, random.nextInt(30, 100) );
+
+        PlayerParameter pylp44 = new PlayerParameter( player33, prmt19, random.nextInt(30, 100) );
+        PlayerParameter pylp45 = new PlayerParameter( player33, prmt20, random.nextInt(30, 100) );
+
+        PlayerParameter pylp46 = new PlayerParameter( player34, prmt19, random.nextInt(30, 100) );
+        PlayerParameter pylp47 = new PlayerParameter( player34, prmt20, random.nextInt(30, 100) );
+
+        PlayerParameter pylp48 = new PlayerParameter( player35, prmt19, random.nextInt(30, 100) );
+        PlayerParameter pylp49 = new PlayerParameter( player35, prmt20, random.nextInt(30, 100) );
+
+        PlayerParameter pylp50 = new PlayerParameter( player36, prmt19, random.nextInt(30, 100) );
+        PlayerParameter pylp51 = new PlayerParameter( player36, prmt20, random.nextInt(30, 100) );
+
+        PlayerParameter pylp52 = new PlayerParameter( player37, prmt19, random.nextInt(30, 100) );
+        PlayerParameter pylp53 = new PlayerParameter( player37, prmt20, random.nextInt(30, 100) );
+
+        PlayerParameter pylp54 = new PlayerParameter( player38, prmt19, random.nextInt(30, 100) );
+        PlayerParameter pylp55 = new PlayerParameter( player38, prmt20, random.nextInt(30, 100) );
 
         playerParameterRepository.saveAll (
             Arrays.asList (
-                pylp1, pylp2, pylp3, pylp4, pylp5, pylp6, pylp7, pylp8, pylp9, pylp10, pylp11, pylp12, pylp13, pylp14, pylp15, pylp16, pylp17, pylp18, pylp19, pylp20, pylp21, pylp22, pylp23, pylp24, pylp25, pylp26, pylp27, pylp28, pylp29, pylp30, pylp31, pylp32, pylp33
+                pylp1, pylp2, pylp3, pylp4, pylp5, pylp6, pylp7, pylp8, pylp9, pylp10, pylp11, pylp12, pylp13, pylp14, pylp15, pylp16, pylp17, pylp18, pylp19, pylp20, pylp21, pylp22, pylp23, pylp24, pylp25, pylp26, pylp27, pylp28, pylp29, pylp30, pylp31, pylp32, pylp33, pylp34, pylp35,  pylp36, pylp37, pylp38, pylp39, pylp40,
+                pylp41, pylp42, pylp43, pylp44, pylp45, pylp46, pylp47, pylp48, pylp49, pylp50, pylp51, pylp52, pylp53, pylp54, pylp55
             )
         );
-
-
     
     }
     

@@ -135,6 +135,6 @@ public interface GameModeRepository extends JpaRepository<GameMode, Long> {
             GROUP BY player_id, player_name, player_picture, player_age, player_height, player_team
             ORDER BY totalScore DESC;     
     """
-    ) Optional<List<PlayerFullScoreProjection>> getPlayerRanking(Long gameModeId, Long positionId);
+    ) Optional<List<PlayerFullScoreProjection>> getPlayersRanking(Long gameModeId, Long positionId);
 
 }

@@ -85,8 +85,8 @@ public class GameModeService {
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public List<PlayerFullScoreDTO> getPlayerRanking(Long gameModeId, Long positionId) {
-        return gameModeRepository.getPlayerRanking(gameModeId, positionId)
+    public List<PlayerFullScoreDTO> getPlayersRanking(Long gameModeId, Long positionId) {
+        return gameModeRepository.getPlayersRanking(gameModeId, positionId)
             .orElseThrow(() -> new DatabaseException("Error getting the ranking"))
             .stream()
             .map( player -> new PlayerFullScoreDTO( player,  parameterRepository.findByPlayerId(player.getPlayerId()) ) )
