@@ -63,7 +63,7 @@ public class GameModeController {
         @RequestParam("positionId") Long positionId
     ) {
         try {
-            Thread.sleep(2000);
+            Thread.sleep(0);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
