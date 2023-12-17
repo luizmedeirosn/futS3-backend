@@ -1,14 +1,14 @@
-package com.luizmedeirosn.futs3.dto.request.update;
+package com.luizmedeirosn.futs3.shared.dto.request.update;
 
 import java.io.Serializable;
 
-public class UpdateParameterDTO implements Serializable {
+public class UpdatePositionDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private String name;
     private String description;
-    
+
     public String getName() {
         return name;
     }

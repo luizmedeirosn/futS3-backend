@@ -1,4 +1,4 @@
-package com.luizmedeirosn.futs3.dto.response.min;
+package com.luizmedeirosn.futs3.shared.dto.response.min;
 
 import java.io.Serializable;
 
@@ -9,9 +9,9 @@ import com.luizmedeirosn.futs3.entities.PlayerPicture;
 import com.luizmedeirosn.futs3.projections.player.PlayerProjection;
 import com.luizmedeirosn.futs3.services.PlayerPictureService;
 
-@JsonPropertyOrder( { "id", "name", "position", "profilePictureLink" } )
+@JsonPropertyOrder({ "id", "name", "position", "profilePictureLink" })
 public class PlayerMinDTO implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
 
     private Long id;
@@ -24,20 +24,22 @@ public class PlayerMinDTO implements Serializable {
 
     public PlayerMinDTO() {
     }
-    
+
     public PlayerMinDTO(Player player) {
         id = player.getId();
         name = player.getName();
         positionDTO = new PositionMinDTO(player.getPosition());
         PlayerPicture playerPicture = player.getPlayerPicture();
-        profilePictureLink = playerPicture == null ? null: PlayerPictureService.createPictureLink(playerPicture.getId());
+        profilePictureLink = playerPicture == null ? null
+                : PlayerPictureService.createPictureLink(playerPicture.getId());
     }
 
     public PlayerMinDTO(PlayerProjection playerProjection) {
         id = playerProjection.getPlayerId();
         name = playerProjection.getPlayerName();
         positionDTO = new PositionMinDTO(playerProjection.getPositionId(), playerProjection.getPositionName());
-        profilePictureLink = playerProjection.getPlayerProfilePicture() == null ? "": PlayerPictureService.createPictureLink(playerProjection.getPlayerId());
+        profilePictureLink = playerProjection.getPlayerProfilePicture() == null ? ""
+                : PlayerPictureService.createPictureLink(playerProjection.getPlayerId());
     }
 
     public Long getId() {
@@ -55,6 +57,5 @@ public class PlayerMinDTO implements Serializable {
     public String getProfilePictureLink() {
         return profilePictureLink;
     }
-    
-}
 
+}

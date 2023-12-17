@@ -3,7 +3,6 @@ package com.luizmedeirosn.futs3.controllers;
 import java.net.URI;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,18 +14,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.luizmedeirosn.futs3.dto.request.post.PostPositionDTO;
-import com.luizmedeirosn.futs3.dto.request.update.UpdatePositionDTO;
-import com.luizmedeirosn.futs3.dto.response.min.PositionMinDTO;
 import com.luizmedeirosn.futs3.projections.postition.PositionParametersProjection;
 import com.luizmedeirosn.futs3.services.PositionService;
+import com.luizmedeirosn.futs3.shared.dto.request.post.PostPositionDTO;
+import com.luizmedeirosn.futs3.shared.dto.request.update.UpdatePositionDTO;
+import com.luizmedeirosn.futs3.shared.dto.response.min.PositionMinDTO;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping(value = "/positions")
+@RequiredArgsConstructor
 public class PositionController {
-    
-    @Autowired
-    private PositionService positionService;
+
+    private final PositionService positionService;
 
     @GetMapping
     public ResponseEntity<List<PositionMinDTO>> findAll() {
@@ -46,17 +47,17 @@ public class PositionController {
     @PostMapping
     public ResponseEntity<PositionMinDTO> save(@RequestBody PostPositionDTO postPositionDTO) {
         PositionMinDTO positionDTO = positionService.save(postPositionDTO);
-        URI uri = 
-            ServletUriComponentsBuilder
-            .fromCurrentRequest()
-            .path("/{id}")
-            .buildAndExpand(positionDTO.getId())
-            .toUri();
+        URI uri = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(positionDTO.getId())
+                .toUri();
         return ResponseEntity.created(uri).body(positionDTO);
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<PositionMinDTO> updateById(@PathVariable Long id, @RequestBody UpdatePositionDTO updatePositionDTO) {
+    public ResponseEntity<PositionMinDTO> updateById(@PathVariable Long id,
+            @RequestBody UpdatePositionDTO updatePositionDTO) {
         return ResponseEntity.ok().body(positionService.update(id, updatePositionDTO));
     }
 

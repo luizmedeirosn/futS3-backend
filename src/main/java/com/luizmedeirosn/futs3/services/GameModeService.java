@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.domain.Sort;
@@ -13,11 +12,6 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.luizmedeirosn.futs3.dto.request.post.PostGameModeDTO;
-import com.luizmedeirosn.futs3.dto.request.update.UpdateGameModeDTO;
-import com.luizmedeirosn.futs3.dto.response.GameModeDTO;
-import com.luizmedeirosn.futs3.dto.response.PlayerFullScoreDTO;
-import com.luizmedeirosn.futs3.dto.response.min.GameModeMinDTO;
 import com.luizmedeirosn.futs3.entities.GameMode;
 import com.luizmedeirosn.futs3.entities.Position;
 import com.luizmedeirosn.futs3.entities.PositionParameter;
@@ -27,31 +21,35 @@ import com.luizmedeirosn.futs3.repositories.GameModeRepository;
 import com.luizmedeirosn.futs3.repositories.ParameterRepository;
 import com.luizmedeirosn.futs3.repositories.PositionParameterRepository;
 import com.luizmedeirosn.futs3.repositories.PositionRepository;
-import com.luizmedeirosn.futs3.services.exceptions.DatabaseException;
-import com.luizmedeirosn.futs3.services.exceptions.EntityNotFoundException;
+import com.luizmedeirosn.futs3.shared.dto.request.post.PostGameModeDTO;
+import com.luizmedeirosn.futs3.shared.dto.request.update.UpdateGameModeDTO;
+import com.luizmedeirosn.futs3.shared.dto.response.GameModeDTO;
+import com.luizmedeirosn.futs3.shared.dto.response.PlayerFullScoreDTO;
+import com.luizmedeirosn.futs3.shared.dto.response.min.GameModeMinDTO;
+import com.luizmedeirosn.futs3.shared.exceptions.DatabaseException;
+import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class GameModeService {
 
-    @Autowired
-    private GameModeRepository gameModeRepository;
+    private final GameModeRepository gameModeRepository;
 
-    @Autowired
-    private PositionRepository positionRepository;
+    private final PositionRepository positionRepository;
 
-    @Autowired
-    private ParameterRepository parameterRepository;
+    private final ParameterRepository parameterRepository;
 
-    @Autowired
-    PositionParameterRepository positionParameterRepository;
+    private final PositionParameterRepository positionParameterRepository;
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public List<GameModeMinDTO> findAll() {
         return gameModeRepository
-            .findAll(Sort.by("id"))
-            .stream()
-            .map( GameModeMinDTO::new )
-            .toList();
+                .findAll(Sort.by("id"))
+                .stream()
+                .map(GameModeMinDTO::new)
+                .toList();
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
@@ -72,8 +70,8 @@ public class GameModeService {
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public GameModeDTO findFullById(Long id) {
         try {
-            return new GameModeDTO( gameModeRepository.findById(id).get(), gameModeRepository.findFullById(id) );
-        
+            return new GameModeDTO(gameModeRepository.findById(id).get(), gameModeRepository.findFullById(id));
+
         } catch (NoSuchElementException e) {
             throw new EntityNotFoundException("GameMode ID not found");
         }
@@ -81,16 +79,17 @@ public class GameModeService {
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public List<GameModePositionProjection> findGameModePositions(Long id) {
-        return gameModeRepository.findGameModePositions(id).orElseThrow( () -> new DatabaseException("GameMode ID not found"));
+        return gameModeRepository.findGameModePositions(id)
+                .orElseThrow(() -> new DatabaseException("GameMode ID not found"));
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public List<PlayerFullScoreDTO> getPlayersRanking(Long gameModeId, Long positionId) {
         return gameModeRepository.getPlayersRanking(gameModeId, positionId)
-            .orElseThrow(() -> new DatabaseException("Error getting the ranking"))
-            .stream()
-            .map( player -> new PlayerFullScoreDTO( player,  parameterRepository.findByPlayerId(player.getPlayerId()) ) )
-            .toList();
+                .orElseThrow(() -> new DatabaseException("Error getting the ranking"))
+                .stream()
+                .map(player -> new PlayerFullScoreDTO(player, parameterRepository.findByPlayerId(player.getPlayerId())))
+                .toList();
     }
 
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
@@ -99,23 +98,22 @@ public class GameModeService {
             GameMode newGameMode = new GameMode();
             newGameMode.setFormationName(postGameModeDTO.getFormationName());
             newGameMode.setDescription(postGameModeDTO.getDescription());
-            
+
             Set<Position> positions = newGameMode.getPositions();
             postGameModeDTO
-                .getPositionsParameters()
-                .forEach (
-                    positionParameters -> {
-                        Position pos = positionRepository.findById( positionParameters.getPositionId() ).get();
-                        positions.add(pos);
-                        positionParameters
-                            .getParameters()
-                            .forEach (
-                                parameterWeight -> positionParameterRepository.save ( 
-                                    new PositionParameter( pos, parameterRepository.findById(parameterWeight.getParameterId()).get(), parameterWeight.getWeight() )
-                                )
-                            );
-                    }
-                );
+                    .getPositionsParameters()
+                    .forEach(
+                            positionParameters -> {
+                                Position pos = positionRepository.findById(positionParameters.getPositionId()).get();
+                                positions.add(pos);
+                                positionParameters
+                                        .getParameters()
+                                        .forEach(
+                                                parameterWeight -> positionParameterRepository.save(
+                                                        new PositionParameter(pos, parameterRepository
+                                                                .findById(parameterWeight.getParameterId()).get(),
+                                                                parameterWeight.getWeight())));
+                            });
             gameModeRepository.save(newGameMode);
             return findFullById(newGameMode.getId());
 
@@ -124,7 +122,7 @@ public class GameModeService {
 
         } catch (InvalidDataAccessApiUsageException e) {
             throw new EntityNotFoundException("GameMode request. The given IDs must not be null");
-        
+
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException("GameMode request. Unique index, check index or primary key violation");
         }
@@ -139,9 +137,10 @@ public class GameModeService {
             return new GameModeMinDTO(gameMode);
 
         } catch (jakarta.persistence.EntityNotFoundException e) {
-            // jakarta.persistence.EntityNotFoundException: Unable to find com.luizmedeirosn.futs3.entities.GameMode with id 10
+            // jakarta.persistence.EntityNotFoundException: Unable to find
+            // com.luizmedeirosn.futs3.entities.GameMode with id 10
             throw new EntityNotFoundException("GameMode request. ID not found");
-        
+
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException("GameMode request. Unique index, check index or primary key violation");
         }
@@ -154,5 +153,5 @@ public class GameModeService {
         }
         gameModeRepository.deleteById(id);
     }
-    
+
 }

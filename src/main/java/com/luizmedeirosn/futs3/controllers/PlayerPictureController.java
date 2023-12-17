@@ -1,6 +1,5 @@
 package com.luizmedeirosn.futs3.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -12,16 +11,18 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.luizmedeirosn.futs3.dto.response.PlayerPictureDTO;
 import com.luizmedeirosn.futs3.entities.PlayerPicture;
 import com.luizmedeirosn.futs3.services.PlayerPictureService;
+import com.luizmedeirosn.futs3.shared.dto.response.PlayerPictureDTO;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping(value = "/playerspictures")
+@RequiredArgsConstructor
 public class PlayerPictureController {
-    
-    @Autowired
-    private PlayerPictureService playerPictureService;
+
+    private final PlayerPictureService playerPictureService;
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<ByteArrayResource> findById(@PathVariable Long id) {
@@ -34,7 +35,7 @@ public class PlayerPictureController {
     @PostMapping
     public PlayerPictureDTO save(@RequestPart MultipartFile file) {
         PlayerPicture playerPicture = playerPictureService.save(file);
-        String pictureLink =  PlayerPictureService.createPictureLink(playerPicture.getId());
+        String pictureLink = PlayerPictureService.createPictureLink(playerPicture.getId());
         return new PlayerPictureDTO(file.getOriginalFilename(), pictureLink);
     }
 

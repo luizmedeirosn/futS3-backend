@@ -1,11 +1,11 @@
-package com.luizmedeirosn.futs3.dto.response.min;
+package com.luizmedeirosn.futs3.shared.dto.response.min;
 
 import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.luizmedeirosn.futs3.entities.Position;
 
-@JsonPropertyOrder( { "id", "name", "position" } )
+@JsonPropertyOrder({ "id", "name", "position" })
 public class PositionMinDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -23,7 +23,7 @@ public class PositionMinDTO implements Serializable {
         description = entity.getDescription();
     }
 
-     public PositionMinDTO(Long id, String name) {
+    public PositionMinDTO(Long id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -39,5 +39,5 @@ public class PositionMinDTO implements Serializable {
     public String getDescription() {
         return description;
     }
-    
+
 }

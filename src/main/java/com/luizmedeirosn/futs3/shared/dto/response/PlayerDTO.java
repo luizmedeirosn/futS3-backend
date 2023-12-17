@@ -1,21 +1,21 @@
-package com.luizmedeirosn.futs3.dto.response;
+package com.luizmedeirosn.futs3.shared.dto.response;
 
 import java.io.Serializable;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.luizmedeirosn.futs3.dto.response.min.PositionMinDTO;
 import com.luizmedeirosn.futs3.entities.Player;
 import com.luizmedeirosn.futs3.entities.PlayerPicture;
 import com.luizmedeirosn.futs3.projections.player.PlayerParameterProjection;
 import com.luizmedeirosn.futs3.services.PlayerPictureService;
+import com.luizmedeirosn.futs3.shared.dto.response.min.PositionMinDTO;
 
-@JsonPropertyOrder( { "id", "name", "age", "height", "position", "team", "profilePictureLink", "parameters" } )
+@JsonPropertyOrder({ "id", "name", "age", "height", "position", "team", "profilePictureLink", "parameters" })
 public class PlayerDTO implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     private Long id;
     private String name;
     private Integer age;
@@ -27,10 +27,10 @@ public class PlayerDTO implements Serializable {
     private String team;
     private String profilePictureLink;
     private List<PlayerParameterProjection> parameters;
-    
+
     public PlayerDTO() {
     }
-    
+
     public PlayerDTO(Player player, List<PlayerParameterProjection> parameters) {
         id = player.getId();
         name = player.getName();
@@ -40,10 +40,11 @@ public class PlayerDTO implements Serializable {
         positionDTO = new PositionMinDTO(player.getPosition());
 
         PlayerPicture playerPicture = player.getPlayerPicture();
-        profilePictureLink = playerPicture == null ? null: PlayerPictureService.createPictureLink(playerPicture.getId());
-        
+        profilePictureLink = playerPicture == null ? null
+                : PlayerPictureService.createPictureLink(playerPicture.getId());
+
         team = player.getTeam();
-        
+
         this.parameters = parameters;
     }
 

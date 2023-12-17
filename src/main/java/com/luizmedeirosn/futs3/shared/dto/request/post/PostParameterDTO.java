@@ -1,4 +1,4 @@
-package com.luizmedeirosn.futs3.dto.request.post;
+package com.luizmedeirosn.futs3.shared.dto.request.post;
 
 import java.io.Serializable;
 
@@ -26,5 +26,5 @@ public class PostParameterDTO implements Serializable {
     public String getDescription() {
         return description;
     }
-    
+
 }

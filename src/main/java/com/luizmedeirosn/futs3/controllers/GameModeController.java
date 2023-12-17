@@ -3,7 +3,6 @@ package com.luizmedeirosn.futs3.controllers;
 import java.net.URI;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,21 +15,23 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.luizmedeirosn.futs3.dto.request.post.PostGameModeDTO;
-import com.luizmedeirosn.futs3.dto.request.update.UpdateGameModeDTO;
-import com.luizmedeirosn.futs3.dto.response.GameModeDTO;
-import com.luizmedeirosn.futs3.dto.response.PlayerFullScoreDTO;
-import com.luizmedeirosn.futs3.dto.response.min.GameModeMinDTO;
 import com.luizmedeirosn.futs3.projections.gamemode.AllGameModesProjection;
 import com.luizmedeirosn.futs3.projections.gamemode.GameModePositionProjection;
 import com.luizmedeirosn.futs3.services.GameModeService;
+import com.luizmedeirosn.futs3.shared.dto.request.post.PostGameModeDTO;
+import com.luizmedeirosn.futs3.shared.dto.request.update.UpdateGameModeDTO;
+import com.luizmedeirosn.futs3.shared.dto.response.GameModeDTO;
+import com.luizmedeirosn.futs3.shared.dto.response.PlayerFullScoreDTO;
+import com.luizmedeirosn.futs3.shared.dto.response.min.GameModeMinDTO;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping(value = "/gamemodes")
+@RequiredArgsConstructor
 public class GameModeController {
-    
-    @Autowired
-    private GameModeService gameModeService;
+
+    private final GameModeService gameModeService;
 
     @GetMapping
     public ResponseEntity<List<GameModeMinDTO>> findAll() {
@@ -58,10 +59,9 @@ public class GameModeController {
     }
 
     @GetMapping("/ranking")
-    public ResponseEntity<List<PlayerFullScoreDTO>> getPlayersRanking (
-        @RequestParam("gameModeId") Long gameModeId,
-        @RequestParam("positionId") Long positionId
-    ) {
+    public ResponseEntity<List<PlayerFullScoreDTO>> getPlayersRanking(
+            @RequestParam("gameModeId") Long gameModeId,
+            @RequestParam("positionId") Long positionId) {
         try {
             Thread.sleep(0);
         } catch (InterruptedException e) {
@@ -73,12 +73,11 @@ public class GameModeController {
     @PostMapping
     public ResponseEntity<GameModeDTO> save(@RequestBody PostGameModeDTO postGameModeDTO) {
         GameModeDTO gameModeDTO = gameModeService.save(postGameModeDTO);
-        URI uri = 
-            ServletUriComponentsBuilder
-            .fromCurrentRequest()
-            .path("/{id}")
-            .buildAndExpand(gameModeDTO.getId())
-            .toUri();
+        URI uri = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(gameModeDTO.getId())
+                .toUri();
         return ResponseEntity.created(uri).body(gameModeDTO);
     }
 
@@ -86,7 +85,6 @@ public class GameModeController {
     public ResponseEntity<GameModeMinDTO> updateById(@PathVariable Long id, @RequestBody UpdateGameModeDTO obj) {
         return ResponseEntity.ok().body(gameModeService.update(id, obj));
     }
-
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {

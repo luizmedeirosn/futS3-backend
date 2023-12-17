@@ -1,4 +1,4 @@
-package com.luizmedeirosn.futs3.services.exceptions;
+package com.luizmedeirosn.futs3.shared.exceptions;
 
 public class EntityNotFoundException extends RuntimeException {
 

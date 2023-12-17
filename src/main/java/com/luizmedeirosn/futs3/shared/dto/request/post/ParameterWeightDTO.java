@@ -1,14 +1,14 @@
-package com.luizmedeirosn.futs3.dto.request.post;
+package com.luizmedeirosn.futs3.shared.dto.request.post;
 
 import java.io.Serializable;
 
 public class ParameterWeightDTO implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     private Long parameterId;
     private Integer weight;
-    
+
     public ParameterWeightDTO() {
     }
 
@@ -20,7 +20,6 @@ public class ParameterWeightDTO implements Serializable {
     public Long getParameterId() {
         return parameterId;
     }
-
 
     public Integer getWeight() {
         return weight;
