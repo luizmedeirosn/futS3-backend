@@ -1,4 +1,4 @@
-package com.luizmedeirosn.futs3.dto.request.update;
+package com.luizmedeirosn.futs3.shared.dto.request.update;
 
 import java.io.Serializable;
 

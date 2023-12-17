@@ -12,13 +12,13 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.luizmedeirosn.futs3.dto.request.post.PostPositionDTO;
-import com.luizmedeirosn.futs3.dto.request.update.UpdatePositionDTO;
-import com.luizmedeirosn.futs3.dto.response.min.PositionMinDTO;
 import com.luizmedeirosn.futs3.entities.Position;
 import com.luizmedeirosn.futs3.projections.postition.PositionParametersProjection;
 import com.luizmedeirosn.futs3.repositories.PositionParameterRepository;
 import com.luizmedeirosn.futs3.repositories.PositionRepository;
+import com.luizmedeirosn.futs3.shared.dto.request.post.PostPositionDTO;
+import com.luizmedeirosn.futs3.shared.dto.request.update.UpdatePositionDTO;
+import com.luizmedeirosn.futs3.shared.dto.response.min.PositionMinDTO;
 import com.luizmedeirosn.futs3.shared.exceptions.DatabaseException;
 import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
 

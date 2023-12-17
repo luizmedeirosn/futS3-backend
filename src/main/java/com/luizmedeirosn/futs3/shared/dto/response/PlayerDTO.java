@@ -1,45 +1,51 @@
-package com.luizmedeirosn.futs3.dto.response.min;
+package com.luizmedeirosn.futs3.shared.dto.response;
 
 import java.io.Serializable;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.luizmedeirosn.futs3.entities.Player;
 import com.luizmedeirosn.futs3.entities.PlayerPicture;
-import com.luizmedeirosn.futs3.projections.player.PlayerProjection;
+import com.luizmedeirosn.futs3.projections.player.PlayerParameterProjection;
 import com.luizmedeirosn.futs3.services.PlayerPictureService;
+import com.luizmedeirosn.futs3.shared.dto.response.min.PositionMinDTO;
 
-@JsonPropertyOrder({ "id", "name", "position", "profilePictureLink" })
-public class PlayerMinDTO implements Serializable {
+@JsonPropertyOrder({ "id", "name", "age", "height", "position", "team", "profilePictureLink", "parameters" })
+public class PlayerDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private Long id;
     private String name;
+    private Integer age;
+    private Integer height;
 
     @JsonProperty(value = "position")
     private PositionMinDTO positionDTO;
 
-    String profilePictureLink;
+    private String team;
+    private String profilePictureLink;
+    private List<PlayerParameterProjection> parameters;
 
-    public PlayerMinDTO() {
+    public PlayerDTO() {
     }
 
-    public PlayerMinDTO(Player player) {
+    public PlayerDTO(Player player, List<PlayerParameterProjection> parameters) {
         id = player.getId();
         name = player.getName();
+        age = player.getAge();
+        height = player.getHeight();
+
         positionDTO = new PositionMinDTO(player.getPosition());
+
         PlayerPicture playerPicture = player.getPlayerPicture();
         profilePictureLink = playerPicture == null ? null
                 : PlayerPictureService.createPictureLink(playerPicture.getId());
-    }
 
-    public PlayerMinDTO(PlayerProjection playerProjection) {
-        id = playerProjection.getPlayerId();
-        name = playerProjection.getPlayerName();
-        positionDTO = new PositionMinDTO(playerProjection.getPositionId(), playerProjection.getPositionName());
-        profilePictureLink = playerProjection.getPlayerProfilePicture() == null ? ""
-                : PlayerPictureService.createPictureLink(playerProjection.getPlayerId());
+        team = player.getTeam();
+
+        this.parameters = parameters;
     }
 
     public Long getId() {
@@ -50,8 +56,24 @@ public class PlayerMinDTO implements Serializable {
         return name;
     }
 
+    public Integer getAge() {
+        return age;
+    }
+
+    public Integer getHeight() {
+        return height;
+    }
+
     public PositionMinDTO getPositionDTO() {
         return positionDTO;
+    }
+
+    public List<PlayerParameterProjection> getParameters() {
+        return parameters;
+    }
+
+    public String getTeam() {
+        return team;
     }
 
     public String getProfilePictureLink() {

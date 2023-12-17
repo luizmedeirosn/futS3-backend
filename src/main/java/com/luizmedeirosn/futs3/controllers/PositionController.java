@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.luizmedeirosn.futs3.dto.request.post.PostPositionDTO;
-import com.luizmedeirosn.futs3.dto.request.update.UpdatePositionDTO;
-import com.luizmedeirosn.futs3.dto.response.min.PositionMinDTO;
 import com.luizmedeirosn.futs3.projections.postition.PositionParametersProjection;
 import com.luizmedeirosn.futs3.services.PositionService;
+import com.luizmedeirosn.futs3.shared.dto.request.post.PostPositionDTO;
+import com.luizmedeirosn.futs3.shared.dto.request.update.UpdatePositionDTO;
+import com.luizmedeirosn.futs3.shared.dto.response.min.PositionMinDTO;
 
 @RestController
 @RequestMapping(value = "/positions")

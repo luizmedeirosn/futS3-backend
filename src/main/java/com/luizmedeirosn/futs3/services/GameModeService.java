@@ -13,11 +13,6 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.luizmedeirosn.futs3.dto.request.post.PostGameModeDTO;
-import com.luizmedeirosn.futs3.dto.request.update.UpdateGameModeDTO;
-import com.luizmedeirosn.futs3.dto.response.GameModeDTO;
-import com.luizmedeirosn.futs3.dto.response.PlayerFullScoreDTO;
-import com.luizmedeirosn.futs3.dto.response.min.GameModeMinDTO;
 import com.luizmedeirosn.futs3.entities.GameMode;
 import com.luizmedeirosn.futs3.entities.Position;
 import com.luizmedeirosn.futs3.entities.PositionParameter;
@@ -27,6 +22,11 @@ import com.luizmedeirosn.futs3.repositories.GameModeRepository;
 import com.luizmedeirosn.futs3.repositories.ParameterRepository;
 import com.luizmedeirosn.futs3.repositories.PositionParameterRepository;
 import com.luizmedeirosn.futs3.repositories.PositionRepository;
+import com.luizmedeirosn.futs3.shared.dto.request.post.PostGameModeDTO;
+import com.luizmedeirosn.futs3.shared.dto.request.update.UpdateGameModeDTO;
+import com.luizmedeirosn.futs3.shared.dto.response.GameModeDTO;
+import com.luizmedeirosn.futs3.shared.dto.response.PlayerFullScoreDTO;
+import com.luizmedeirosn.futs3.shared.dto.response.min.GameModeMinDTO;
 import com.luizmedeirosn.futs3.shared.exceptions.DatabaseException;
 import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
 

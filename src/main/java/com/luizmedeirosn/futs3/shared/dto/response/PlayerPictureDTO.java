@@ -1,4 +1,4 @@
-package com.luizmedeirosn.futs3.dto.response;
+package com.luizmedeirosn.futs3.shared.dto.response;
 
 public class PlayerPictureDTO {
 

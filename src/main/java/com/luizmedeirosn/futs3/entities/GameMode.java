@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.luizmedeirosn.futs3.dto.request.update.UpdateGameModeDTO;
+import com.luizmedeirosn.futs3.shared.dto.request.update.UpdateGameModeDTO;
 
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.Column;

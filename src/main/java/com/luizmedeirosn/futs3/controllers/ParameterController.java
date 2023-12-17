@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.luizmedeirosn.futs3.dto.request.post.PostParameterDTO;
-import com.luizmedeirosn.futs3.dto.request.update.UpdateParameterDTO;
-import com.luizmedeirosn.futs3.dto.response.ParameterDTO;
 import com.luizmedeirosn.futs3.services.ParameterSerivce;
+import com.luizmedeirosn.futs3.shared.dto.request.post.PostParameterDTO;
+import com.luizmedeirosn.futs3.shared.dto.request.update.UpdateParameterDTO;
+import com.luizmedeirosn.futs3.shared.dto.response.ParameterDTO;
 
 @RestController
 @RequestMapping(value = "/parameters")

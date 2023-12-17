@@ -16,14 +16,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.luizmedeirosn.futs3.dto.request.post.PostGameModeDTO;
-import com.luizmedeirosn.futs3.dto.request.update.UpdateGameModeDTO;
-import com.luizmedeirosn.futs3.dto.response.GameModeDTO;
-import com.luizmedeirosn.futs3.dto.response.PlayerFullScoreDTO;
-import com.luizmedeirosn.futs3.dto.response.min.GameModeMinDTO;
 import com.luizmedeirosn.futs3.projections.gamemode.AllGameModesProjection;
 import com.luizmedeirosn.futs3.projections.gamemode.GameModePositionProjection;
 import com.luizmedeirosn.futs3.services.GameModeService;
+import com.luizmedeirosn.futs3.shared.dto.request.post.PostGameModeDTO;
+import com.luizmedeirosn.futs3.shared.dto.request.update.UpdateGameModeDTO;
+import com.luizmedeirosn.futs3.shared.dto.response.GameModeDTO;
+import com.luizmedeirosn.futs3.shared.dto.response.PlayerFullScoreDTO;
+import com.luizmedeirosn.futs3.shared.dto.response.min.GameModeMinDTO;
 
 @RestController
 @RequestMapping(value = "/gamemodes")

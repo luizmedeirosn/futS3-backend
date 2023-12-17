@@ -11,10 +11,6 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.luizmedeirosn.futs3.dto.request.post.PostPlayerDTO;
-import com.luizmedeirosn.futs3.dto.request.update.UpdatePlayerDTO;
-import com.luizmedeirosn.futs3.dto.response.PlayerDTO;
-import com.luizmedeirosn.futs3.dto.response.min.PlayerMinDTO;
 import com.luizmedeirosn.futs3.entities.Parameter;
 import com.luizmedeirosn.futs3.entities.Player;
 import com.luizmedeirosn.futs3.entities.PlayerParameter;
@@ -23,6 +19,10 @@ import com.luizmedeirosn.futs3.repositories.ParameterRepository;
 import com.luizmedeirosn.futs3.repositories.PlayerParameterRepository;
 import com.luizmedeirosn.futs3.repositories.PlayerRepository;
 import com.luizmedeirosn.futs3.repositories.PositionRepository;
+import com.luizmedeirosn.futs3.shared.dto.request.post.PostPlayerDTO;
+import com.luizmedeirosn.futs3.shared.dto.request.update.UpdatePlayerDTO;
+import com.luizmedeirosn.futs3.shared.dto.response.PlayerDTO;
+import com.luizmedeirosn.futs3.shared.dto.response.min.PlayerMinDTO;
 import com.luizmedeirosn.futs3.shared.exceptions.DatabaseException;
 import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
 

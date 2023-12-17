@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.luizmedeirosn.futs3.dto.response.PlayerPictureDTO;
 import com.luizmedeirosn.futs3.entities.PlayerPicture;
 import com.luizmedeirosn.futs3.services.PlayerPictureService;
+import com.luizmedeirosn.futs3.shared.dto.response.PlayerPictureDTO;
 
 @RestController
 @RequestMapping(value = "/playerspictures")

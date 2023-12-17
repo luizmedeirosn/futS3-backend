@@ -12,12 +12,12 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.luizmedeirosn.futs3.dto.request.post.PostParameterDTO;
-import com.luizmedeirosn.futs3.dto.request.update.UpdateParameterDTO;
-import com.luizmedeirosn.futs3.dto.response.ParameterDTO;
 import com.luizmedeirosn.futs3.entities.Parameter;
 import com.luizmedeirosn.futs3.projections.player.PlayerParameterProjection;
 import com.luizmedeirosn.futs3.repositories.ParameterRepository;
+import com.luizmedeirosn.futs3.shared.dto.request.post.PostParameterDTO;
+import com.luizmedeirosn.futs3.shared.dto.request.update.UpdateParameterDTO;
+import com.luizmedeirosn.futs3.shared.dto.response.ParameterDTO;
 import com.luizmedeirosn.futs3.shared.exceptions.DatabaseException;
 import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
 

@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.luizmedeirosn.futs3.dto.request.post.PostPlayerDTO;
-import com.luizmedeirosn.futs3.dto.request.update.UpdatePlayerDTO;
-import com.luizmedeirosn.futs3.dto.response.PlayerDTO;
-import com.luizmedeirosn.futs3.dto.response.min.PlayerMinDTO;
 import com.luizmedeirosn.futs3.projections.player.AllPlayersParametersProjection;
 import com.luizmedeirosn.futs3.services.PlayerService;
+import com.luizmedeirosn.futs3.shared.dto.request.post.PostPlayerDTO;
+import com.luizmedeirosn.futs3.shared.dto.request.update.UpdatePlayerDTO;
+import com.luizmedeirosn.futs3.shared.dto.response.PlayerDTO;
+import com.luizmedeirosn.futs3.shared.dto.response.min.PlayerMinDTO;
 
 @RestController
 @RequestMapping(value = "/players")
