@@ -1,6 +1,5 @@
 package com.luizmedeirosn.futs3.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +15,14 @@ import com.luizmedeirosn.futs3.entities.PlayerPicture;
 import com.luizmedeirosn.futs3.services.PlayerPictureService;
 import com.luizmedeirosn.futs3.shared.dto.response.PlayerPictureDTO;
 
+import lombok.RequiredArgsConstructor;
+
 @RestController
 @RequestMapping(value = "/playerspictures")
+@RequiredArgsConstructor
 public class PlayerPictureController {
 
-    @Autowired
-    private PlayerPictureService playerPictureService;
+    private final PlayerPictureService playerPictureService;
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<ByteArrayResource> findById(@PathVariable Long id) {

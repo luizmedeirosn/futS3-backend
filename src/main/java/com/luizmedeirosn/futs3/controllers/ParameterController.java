@@ -3,7 +3,6 @@ package com.luizmedeirosn.futs3.controllers;
 import java.net.URI;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,12 +19,14 @@ import com.luizmedeirosn.futs3.shared.dto.request.post.PostParameterDTO;
 import com.luizmedeirosn.futs3.shared.dto.request.update.UpdateParameterDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.ParameterDTO;
 
+import lombok.RequiredArgsConstructor;
+
 @RestController
 @RequestMapping(value = "/parameters")
+@RequiredArgsConstructor
 public class ParameterController {
 
-    @Autowired
-    private ParameterSerivce parameterSerivce;
+    private final ParameterSerivce parameterSerivce;
 
     @GetMapping
     public ResponseEntity<List<ParameterDTO>> findAll() {

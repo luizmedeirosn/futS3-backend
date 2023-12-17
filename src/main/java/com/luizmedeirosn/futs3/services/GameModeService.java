@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.domain.Sort;
@@ -30,20 +29,19 @@ import com.luizmedeirosn.futs3.shared.dto.response.min.GameModeMinDTO;
 import com.luizmedeirosn.futs3.shared.exceptions.DatabaseException;
 import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class GameModeService {
 
-    @Autowired
-    private GameModeRepository gameModeRepository;
+    private final GameModeRepository gameModeRepository;
 
-    @Autowired
-    private PositionRepository positionRepository;
+    private final PositionRepository positionRepository;
 
-    @Autowired
-    private ParameterRepository parameterRepository;
+    private final ParameterRepository parameterRepository;
 
-    @Autowired
-    PositionParameterRepository positionParameterRepository;
+    private final PositionParameterRepository positionParameterRepository;
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public List<GameModeMinDTO> findAll() {

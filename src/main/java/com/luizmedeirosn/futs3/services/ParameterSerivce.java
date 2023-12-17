@@ -3,7 +3,6 @@ package com.luizmedeirosn.futs3.services;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.domain.Sort;
@@ -21,11 +20,13 @@ import com.luizmedeirosn.futs3.shared.dto.response.ParameterDTO;
 import com.luizmedeirosn.futs3.shared.exceptions.DatabaseException;
 import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class ParameterSerivce {
 
-    @Autowired
-    private ParameterRepository parameterRepository;
+    private final ParameterRepository parameterRepository;
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public List<ParameterDTO> findAll() {

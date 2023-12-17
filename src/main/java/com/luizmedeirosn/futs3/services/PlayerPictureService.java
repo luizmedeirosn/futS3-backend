@@ -2,7 +2,6 @@ package com.luizmedeirosn.futs3.services;
 
 import java.io.IOException;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -12,11 +11,13 @@ import com.luizmedeirosn.futs3.repositories.PlayerPictureRepository;
 import com.luizmedeirosn.futs3.shared.exceptions.DatabaseException;
 import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class PlayerPictureService {
 
-    @Autowired
-    private PlayerPictureRepository playerPictureRepository;
+    private final PlayerPictureRepository playerPictureRepository;
 
     public static String createPictureLink(Long id) {
         return ServletUriComponentsBuilder.fromCurrentRequest().replacePath("/playerspictures/" + id).replaceQuery(null)

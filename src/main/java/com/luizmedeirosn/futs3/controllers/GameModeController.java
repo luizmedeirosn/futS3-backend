@@ -3,7 +3,6 @@ package com.luizmedeirosn.futs3.controllers;
 import java.net.URI;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,12 +24,14 @@ import com.luizmedeirosn.futs3.shared.dto.response.GameModeDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.PlayerFullScoreDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.min.GameModeMinDTO;
 
+import lombok.RequiredArgsConstructor;
+
 @RestController
 @RequestMapping(value = "/gamemodes")
+@RequiredArgsConstructor
 public class GameModeController {
 
-    @Autowired
-    private GameModeService gameModeService;
+    private final GameModeService gameModeService;
 
     @GetMapping
     public ResponseEntity<List<GameModeMinDTO>> findAll() {

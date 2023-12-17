@@ -3,7 +3,6 @@ package com.luizmedeirosn.futs3.services;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.stereotype.Service;
@@ -26,20 +25,19 @@ import com.luizmedeirosn.futs3.shared.dto.response.min.PlayerMinDTO;
 import com.luizmedeirosn.futs3.shared.exceptions.DatabaseException;
 import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class PlayerService {
 
-    @Autowired
-    private PlayerRepository playerRepository;
+    private final PlayerRepository playerRepository;
 
-    @Autowired
-    private ParameterRepository parameterRepository;
+    private final ParameterRepository parameterRepository;
 
-    @Autowired
-    private PlayerParameterRepository playerParameterRepository;
+    private final PlayerParameterRepository playerParameterRepository;
 
-    @Autowired
-    private PositionRepository positionRepository;
+    private final PositionRepository positionRepository;
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public List<PlayerMinDTO> findAll() {

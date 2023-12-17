@@ -3,7 +3,6 @@ package com.luizmedeirosn.futs3.controllers;
 import java.net.URI;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,12 +20,14 @@ import com.luizmedeirosn.futs3.shared.dto.request.post.PostPositionDTO;
 import com.luizmedeirosn.futs3.shared.dto.request.update.UpdatePositionDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.min.PositionMinDTO;
 
+import lombok.RequiredArgsConstructor;
+
 @RestController
 @RequestMapping(value = "/positions")
+@RequiredArgsConstructor
 public class PositionController {
 
-    @Autowired
-    private PositionService positionService;
+    private final PositionService positionService;
 
     @GetMapping
     public ResponseEntity<List<PositionMinDTO>> findAll() {

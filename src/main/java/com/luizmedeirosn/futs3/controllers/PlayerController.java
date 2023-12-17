@@ -3,7 +3,6 @@ package com.luizmedeirosn.futs3.controllers;
 import java.net.URI;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,12 +21,14 @@ import com.luizmedeirosn.futs3.shared.dto.request.update.UpdatePlayerDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.PlayerDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.min.PlayerMinDTO;
 
+import lombok.RequiredArgsConstructor;
+
 @RestController
 @RequestMapping(value = "/players")
+@RequiredArgsConstructor
 public class PlayerController {
 
-    @Autowired
-    private PlayerService playerService;
+    private final PlayerService playerService;
 
     @GetMapping
     public ResponseEntity<List<PlayerMinDTO>> findAll() {
