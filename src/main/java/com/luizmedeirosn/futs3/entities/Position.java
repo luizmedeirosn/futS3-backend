@@ -19,7 +19,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "tb_position")
 public class Position implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -29,10 +29,10 @@ public class Position implements Serializable {
     @Nonnull
     @Column(nullable = false, unique = true)
     private String name;
-    
+
     @Column(columnDefinition = "TEXT")
     private String description;
-    
+
     @OneToMany(mappedBy = "position")
     private Set<Player> players = new HashSet<>();
 
@@ -42,7 +42,7 @@ public class Position implements Serializable {
     @OneToMany(mappedBy = "id.position")
     private Set<PositionParameter> positionParameters = new HashSet<>();
 
-    public Position(){
+    public Position() {
     }
 
     public Position(String name, String description) {

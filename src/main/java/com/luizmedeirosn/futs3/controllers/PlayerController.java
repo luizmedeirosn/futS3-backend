@@ -25,7 +25,7 @@ import com.luizmedeirosn.futs3.services.PlayerService;
 @RestController
 @RequestMapping(value = "/players")
 public class PlayerController {
-    
+
     @Autowired
     private PlayerService playerService;
 
@@ -52,12 +52,11 @@ public class PlayerController {
     @PostMapping
     public ResponseEntity<PlayerDTO> save(@RequestBody PostPlayerDTO postPlayerDTO) {
         PlayerDTO playerDTO = playerService.save(postPlayerDTO);
-        URI uri = 
-            ServletUriComponentsBuilder
-            .fromCurrentRequest()
-            .path("/{id}")
-            .buildAndExpand(playerDTO.getId())
-            .toUri();
+        URI uri = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(playerDTO.getId())
+                .toUri();
         return ResponseEntity.created(uri).body(playerDTO);
     }
 
@@ -65,7 +64,6 @@ public class PlayerController {
     public ResponseEntity<PlayerMinDTO> update(@PathVariable Long id, @RequestBody UpdatePlayerDTO updatePlayerDTO) {
         return ResponseEntity.ok().body(playerService.update(id, updatePlayerDTO));
     }
-
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {

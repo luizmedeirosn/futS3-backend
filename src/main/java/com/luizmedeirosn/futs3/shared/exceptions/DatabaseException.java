@@ -1,4 +1,4 @@
-package com.luizmedeirosn.futs3.services.exceptions;
+package com.luizmedeirosn.futs3.shared.exceptions;
 
 public class DatabaseException extends RuntimeException {
 
@@ -7,5 +7,5 @@ public class DatabaseException extends RuntimeException {
     public DatabaseException(String messageError) {
         super(messageError);
     }
-    
+
 }

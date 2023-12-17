@@ -18,13 +18,13 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "tb_parameter")
 public class Parameter implements Serializable, Comparable<Parameter> {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @Nonnull
     @Column(nullable = false, unique = true)
     private String name;
@@ -75,7 +75,7 @@ public class Parameter implements Serializable, Comparable<Parameter> {
         positionParameters.forEach(x -> set.add(x.getPosition()));
         return set;
     }
-    
+
     public Set<Player> getPlayers() {
         Set<Player> set = new HashSet<>();
         playerParameters.forEach(x -> set.add(x.getPlayer()));

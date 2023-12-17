@@ -24,7 +24,7 @@ import com.luizmedeirosn.futs3.services.PositionService;
 @RestController
 @RequestMapping(value = "/positions")
 public class PositionController {
-    
+
     @Autowired
     private PositionService positionService;
 
@@ -46,17 +46,17 @@ public class PositionController {
     @PostMapping
     public ResponseEntity<PositionMinDTO> save(@RequestBody PostPositionDTO postPositionDTO) {
         PositionMinDTO positionDTO = positionService.save(postPositionDTO);
-        URI uri = 
-            ServletUriComponentsBuilder
-            .fromCurrentRequest()
-            .path("/{id}")
-            .buildAndExpand(positionDTO.getId())
-            .toUri();
+        URI uri = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(positionDTO.getId())
+                .toUri();
         return ResponseEntity.created(uri).body(positionDTO);
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<PositionMinDTO> updateById(@PathVariable Long id, @RequestBody UpdatePositionDTO updatePositionDTO) {
+    public ResponseEntity<PositionMinDTO> updateById(@PathVariable Long id,
+            @RequestBody UpdatePositionDTO updatePositionDTO) {
         return ResponseEntity.ok().body(positionService.update(id, updatePositionDTO));
     }
 

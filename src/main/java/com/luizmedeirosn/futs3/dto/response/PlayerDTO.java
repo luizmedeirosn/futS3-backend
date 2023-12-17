@@ -11,11 +11,11 @@ import com.luizmedeirosn.futs3.entities.PlayerPicture;
 import com.luizmedeirosn.futs3.projections.player.PlayerParameterProjection;
 import com.luizmedeirosn.futs3.services.PlayerPictureService;
 
-@JsonPropertyOrder( { "id", "name", "age", "height", "position", "team", "profilePictureLink", "parameters" } )
+@JsonPropertyOrder({ "id", "name", "age", "height", "position", "team", "profilePictureLink", "parameters" })
 public class PlayerDTO implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     private Long id;
     private String name;
     private Integer age;
@@ -27,10 +27,10 @@ public class PlayerDTO implements Serializable {
     private String team;
     private String profilePictureLink;
     private List<PlayerParameterProjection> parameters;
-    
+
     public PlayerDTO() {
     }
-    
+
     public PlayerDTO(Player player, List<PlayerParameterProjection> parameters) {
         id = player.getId();
         name = player.getName();
@@ -40,10 +40,11 @@ public class PlayerDTO implements Serializable {
         positionDTO = new PositionMinDTO(player.getPosition());
 
         PlayerPicture playerPicture = player.getPlayerPicture();
-        profilePictureLink = playerPicture == null ? null: PlayerPictureService.createPictureLink(playerPicture.getId());
-        
+        profilePictureLink = playerPicture == null ? null
+                : PlayerPictureService.createPictureLink(playerPicture.getId());
+
         team = player.getTeam();
-        
+
         this.parameters = parameters;
     }
 

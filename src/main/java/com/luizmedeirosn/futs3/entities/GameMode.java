@@ -20,7 +20,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "tb_gamemode")
 public class GameMode implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -35,11 +35,7 @@ public class GameMode implements Serializable {
     private String description;
 
     @ManyToMany
-    @JoinTable(
-        name = "tb_gamemode_position",
-        joinColumns = @JoinColumn(name = "gamemode_id"),
-        inverseJoinColumns = @JoinColumn(name = "position_id")
-    )
+    @JoinTable(name = "tb_gamemode_position", joinColumns = @JoinColumn(name = "gamemode_id"), inverseJoinColumns = @JoinColumn(name = "position_id"))
     private Set<Position> positions = new HashSet<>();
 
     public GameMode() {

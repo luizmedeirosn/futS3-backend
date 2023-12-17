@@ -23,7 +23,7 @@ import com.luizmedeirosn.futs3.services.ParameterSerivce;
 @RestController
 @RequestMapping(value = "/parameters")
 public class ParameterController {
-    
+
     @Autowired
     private ParameterSerivce parameterSerivce;
 
@@ -34,26 +34,25 @@ public class ParameterController {
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<ParameterDTO> findById(@PathVariable Long id) {
-        return  ResponseEntity.ok().body(parameterSerivce.findById(id));
+        return ResponseEntity.ok().body(parameterSerivce.findById(id));
     }
 
     @PostMapping
     public ResponseEntity<ParameterDTO> save(@RequestBody PostParameterDTO postParameterDTO) {
         ParameterDTO parameterDTO = parameterSerivce.save(postParameterDTO);
-        URI uri = 
-            ServletUriComponentsBuilder
-            .fromCurrentRequest()
-            .path("/{id}")
-            .buildAndExpand(parameterDTO.getId())
-            .toUri();
+        URI uri = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(parameterDTO.getId())
+                .toUri();
         return ResponseEntity.created(uri).body(parameterDTO);
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<ParameterDTO> updateById(@PathVariable Long id, @RequestBody UpdateParameterDTO updateParameterDTO) {
+    public ResponseEntity<ParameterDTO> updateById(@PathVariable Long id,
+            @RequestBody UpdateParameterDTO updateParameterDTO) {
         return ResponseEntity.ok().body(parameterSerivce.update(id, updateParameterDTO));
     }
-
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {

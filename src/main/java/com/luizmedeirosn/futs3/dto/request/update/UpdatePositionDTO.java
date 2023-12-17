@@ -8,7 +8,7 @@ public class UpdatePositionDTO implements Serializable {
 
     private String name;
     private String description;
-    
+
     public String getName() {
         return name;
     }

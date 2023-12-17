@@ -4,13 +4,13 @@ import java.io.Serializable;
 import java.util.List;
 
 public class PostPlayerDTO implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     private String name;
     private Long positionId;
     private List<ParameterPlayerScoreDTO> parameters;
-    
+
     public PostPlayerDTO() {
     }
 
@@ -31,5 +31,5 @@ public class PostPlayerDTO implements Serializable {
     public List<ParameterPlayerScoreDTO> getParameters() {
         return parameters;
     }
-    
+
 }

@@ -28,7 +28,7 @@ import com.luizmedeirosn.futs3.services.GameModeService;
 @RestController
 @RequestMapping(value = "/gamemodes")
 public class GameModeController {
-    
+
     @Autowired
     private GameModeService gameModeService;
 
@@ -58,10 +58,9 @@ public class GameModeController {
     }
 
     @GetMapping("/ranking")
-    public ResponseEntity<List<PlayerFullScoreDTO>> getPlayersRanking (
-        @RequestParam("gameModeId") Long gameModeId,
-        @RequestParam("positionId") Long positionId
-    ) {
+    public ResponseEntity<List<PlayerFullScoreDTO>> getPlayersRanking(
+            @RequestParam("gameModeId") Long gameModeId,
+            @RequestParam("positionId") Long positionId) {
         try {
             Thread.sleep(0);
         } catch (InterruptedException e) {
@@ -73,12 +72,11 @@ public class GameModeController {
     @PostMapping
     public ResponseEntity<GameModeDTO> save(@RequestBody PostGameModeDTO postGameModeDTO) {
         GameModeDTO gameModeDTO = gameModeService.save(postGameModeDTO);
-        URI uri = 
-            ServletUriComponentsBuilder
-            .fromCurrentRequest()
-            .path("/{id}")
-            .buildAndExpand(gameModeDTO.getId())
-            .toUri();
+        URI uri = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(gameModeDTO.getId())
+                .toUri();
         return ResponseEntity.created(uri).body(gameModeDTO);
     }
 
@@ -86,7 +84,6 @@ public class GameModeController {
     public ResponseEntity<GameModeMinDTO> updateById(@PathVariable Long id, @RequestBody UpdateGameModeDTO obj) {
         return ResponseEntity.ok().body(gameModeService.update(id, obj));
     }
-
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {

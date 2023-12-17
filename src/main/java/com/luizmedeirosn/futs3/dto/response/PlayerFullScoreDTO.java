@@ -9,9 +9,7 @@ import com.luizmedeirosn.futs3.projections.gamemode.PlayerFullScoreProjection;
 import com.luizmedeirosn.futs3.projections.player.PlayerParameterProjection;
 import com.luizmedeirosn.futs3.services.PlayerPictureService;
 
-@JsonPropertyOrder(
-    { "id", "name", "profilePictureLink", "age", "height", "team", "totalScore", "parameters" }
-)
+@JsonPropertyOrder({ "id", "name", "profilePictureLink", "age", "height", "team", "totalScore", "parameters" })
 public class PlayerFullScoreDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -35,7 +33,8 @@ public class PlayerFullScoreDTO implements Serializable {
         this.parameters = parameters;
 
         Blob playerPicture = player.getPlayerProfilePicture();
-        profilePictureLink = playerPicture == null ? null: PlayerPictureService.createPictureLink(player.getPlayerId());
+        profilePictureLink = playerPicture == null ? null
+                : PlayerPictureService.createPictureLink(player.getPlayerId());
     }
 
     public Long getId() {

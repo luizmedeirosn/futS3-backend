@@ -26,5 +26,5 @@ public class PostParameterDTO implements Serializable {
     public String getDescription() {
         return description;
     }
-    
+
 }

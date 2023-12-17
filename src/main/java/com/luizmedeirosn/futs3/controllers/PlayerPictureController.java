@@ -19,7 +19,7 @@ import com.luizmedeirosn.futs3.services.PlayerPictureService;
 @RestController
 @RequestMapping(value = "/playerspictures")
 public class PlayerPictureController {
-    
+
     @Autowired
     private PlayerPictureService playerPictureService;
 
@@ -34,7 +34,7 @@ public class PlayerPictureController {
     @PostMapping
     public PlayerPictureDTO save(@RequestPart MultipartFile file) {
         PlayerPicture playerPicture = playerPictureService.save(file);
-        String pictureLink =  PlayerPictureService.createPictureLink(playerPicture.getId());
+        String pictureLink = PlayerPictureService.createPictureLink(playerPicture.getId());
         return new PlayerPictureDTO(file.getOriginalFilename(), pictureLink);
     }
 

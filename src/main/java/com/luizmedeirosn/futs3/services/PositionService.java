@@ -19,8 +19,8 @@ import com.luizmedeirosn.futs3.entities.Position;
 import com.luizmedeirosn.futs3.projections.postition.PositionParametersProjection;
 import com.luizmedeirosn.futs3.repositories.PositionParameterRepository;
 import com.luizmedeirosn.futs3.repositories.PositionRepository;
-import com.luizmedeirosn.futs3.services.exceptions.DatabaseException;
-import com.luizmedeirosn.futs3.services.exceptions.EntityNotFoundException;
+import com.luizmedeirosn.futs3.shared.exceptions.DatabaseException;
+import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
 
 @Service
 public class PositionService {
@@ -34,10 +34,10 @@ public class PositionService {
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public List<PositionMinDTO> findAll() {
         return positionRepository
-            .findAll(Sort.by("id"))
-            .stream()
-            .map( PositionMinDTO::new )
-            .toList();
+                .findAll(Sort.by("id"))
+                .stream()
+                .map(PositionMinDTO::new)
+                .toList();
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
@@ -59,11 +59,12 @@ public class PositionService {
             throw new EntityNotFoundException("Position ID not found");
         }
     }
-    
+
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public PositionMinDTO save(PostPositionDTO postPositionDTO) {
         try {
-            Position position = positionRepository.save(new Position(postPositionDTO.getName(), postPositionDTO.getDescription()));
+            Position position = positionRepository
+                    .save(new Position(postPositionDTO.getName(), postPositionDTO.getDescription()));
             return new PositionMinDTO(position);
 
         } catch (NoSuchElementException e) {
@@ -71,12 +72,12 @@ public class PositionService {
 
         } catch (InvalidDataAccessApiUsageException e) {
             throw new EntityNotFoundException("Position request. The given IDs must not be null");
-        
+
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException("Position request. Unique index, check index or primary key violation");
         }
     }
-    
+
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public PositionMinDTO update(Long id, UpdatePositionDTO updatePositionDTO) {
         try {
@@ -87,7 +88,7 @@ public class PositionService {
 
         } catch (jakarta.persistence.EntityNotFoundException e) {
             throw new EntityNotFoundException("Position request. ID not found");
-        
+
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException("Position request. Unique index, check index or primary key violation");
         }
@@ -105,5 +106,5 @@ public class PositionService {
             throw new DatabaseException("Position request. Database integrity reference constraint error");
         }
     }
-    
+
 }
