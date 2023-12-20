@@ -50,7 +50,7 @@ public class ParameterSerivce {
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public List<PlayerParameterProjection> findByPlayerId(Long id) {
         try {
-            return parameterRepository.findByPlayerId(id);
+            return parameterRepository.findParametsByPlayerId(id);
 
         } catch (NoSuchElementException e) {
             throw new EntityNotFoundException("Parameter ID not found");

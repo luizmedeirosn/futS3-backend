@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -21,6 +22,7 @@ import com.luizmedeirosn.futs3.shared.dto.request.update.UpdatePlayerDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.PlayerDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.min.PlayerMinDTO;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -51,7 +53,7 @@ public class PlayerController {
     }
 
     @PostMapping
-    public ResponseEntity<PlayerDTO> save(@RequestBody PostPlayerDTO postPlayerDTO) {
+    public ResponseEntity<PlayerDTO> save(@ModelAttribute @Valid PostPlayerDTO postPlayerDTO) {
         PlayerDTO playerDTO = playerService.save(postPlayerDTO);
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()

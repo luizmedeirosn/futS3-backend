@@ -88,7 +88,8 @@ public class GameModeService {
         return gameModeRepository.getPlayersRanking(gameModeId, positionId)
                 .orElseThrow(() -> new DatabaseException("Error getting the ranking"))
                 .stream()
-                .map(player -> new PlayerFullScoreDTO(player, parameterRepository.findByPlayerId(player.getPlayerId())))
+                .map(player -> new PlayerFullScoreDTO(player,
+                        parameterRepository.findParametsByPlayerId(player.getPlayerId())))
                 .toList();
     }
 

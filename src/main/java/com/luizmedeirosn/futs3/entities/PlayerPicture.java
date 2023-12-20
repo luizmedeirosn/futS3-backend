@@ -1,5 +1,11 @@
 package com.luizmedeirosn.futs3.entities;
 
+import java.io.IOException;
+
+import org.springframework.web.multipart.MultipartFile;
+
+import com.luizmedeirosn.futs3.shared.exceptions.DatabaseException;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,7 +30,6 @@ public class PlayerPicture {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
     private String filename;
 
     @Column(name = "content_type")
@@ -42,6 +47,27 @@ public class PlayerPicture {
         this.contentType = contentType;
         this.content = content;
         this.player = player;
+    }
+
+    public PlayerPicture(Player player, MultipartFile playerPicture) {
+        try {
+            filename = playerPicture.getOriginalFilename();
+            contentType = playerPicture.getContentType();
+            content = playerPicture.getBytes();
+            this.player = player;
+        } catch (IOException e) {
+            throw new DatabaseException(e.getMessage());
+        }
+    }
+
+    public void updateData(MultipartFile playerPicture) {
+        try {
+            filename = playerPicture.getOriginalFilename();
+            contentType = playerPicture.getContentType();
+            content = playerPicture.getBytes();
+        } catch (IOException e) {
+            throw new DatabaseException(e.getMessage());
+        }
     }
 
 }

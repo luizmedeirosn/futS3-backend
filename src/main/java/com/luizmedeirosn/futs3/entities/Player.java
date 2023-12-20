@@ -6,6 +6,8 @@ import java.util.Set;
 
 import org.hibernate.annotations.Check;
 
+import com.luizmedeirosn.futs3.shared.dto.request.post.PostPlayerDTO;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -35,7 +37,7 @@ public class Player implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String name;
 
     @Check(constraints = "age >= 1 AND age <= 150")
@@ -64,6 +66,13 @@ public class Player implements Serializable {
         this.height = height;
         this.team = team;
         this.position = position;
+    }
+
+    public Player(PostPlayerDTO postPlayerDTO) {
+        name = postPlayerDTO.name();
+        age = postPlayerDTO.age();
+        height = postPlayerDTO.height();
+        team = postPlayerDTO.team();
     }
 
     public void updateData(String name, Position position) {

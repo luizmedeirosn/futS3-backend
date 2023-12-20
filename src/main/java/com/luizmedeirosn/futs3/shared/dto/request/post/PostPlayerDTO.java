@@ -1,35 +1,25 @@
 package com.luizmedeirosn.futs3.shared.dto.request.post;
 
 import java.io.Serializable;
-import java.util.List;
 
-public class PostPlayerDTO implements Serializable {
+import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
+public record PostPlayerDTO(
+
+        @NotNull @NotBlank @Size(min = 3, max = 30, message = "Enter a title between 3 and 50 characters") String name,
+        @NotNull @NotBlank @Size(min = 3, max = 30, message = "Enter a title between 3 and 50 characters") String team,
+        @NotNull @Min(1) @Max(150) Integer age,
+        @Min(65) @Max(250) Integer height,
+        @NotNull Long positionId,
+        @NotNull MultipartFile playerPicture,
+        @NotNull String parameters
+
+) implements Serializable {
     private static final long serialVersionUID = 1L;
-
-    private String name;
-    private Long positionId;
-    private List<ParameterPlayerScoreDTO> parameters;
-
-    public PostPlayerDTO() {
-    }
-
-    public PostPlayerDTO(String name, Long positionId, List<ParameterPlayerScoreDTO> parameters) {
-        this.name = name;
-        this.positionId = positionId;
-        this.parameters = parameters;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Long getPositionId() {
-        return positionId;
-    }
-
-    public List<ParameterPlayerScoreDTO> getParameters() {
-        return parameters;
-    }
-
 }
