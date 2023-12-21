@@ -83,7 +83,7 @@ public class PlayerService {
 
             playerRepository.save(newPlayer);
 
-            if (postPlayerDTO.parameters().length() > 2) {
+            if (postPlayerDTO.parameters().length() > 3) {
                 List<String> parametersSTR = Arrays.asList(postPlayerDTO.parameters().split(","));
                 List<PlayerParameterScoreDTO> parameters = parametersSTR.stream()
                         .map(x -> new PlayerParameterScoreDTO(Long.parseLong(x.split(" ")[0]),
