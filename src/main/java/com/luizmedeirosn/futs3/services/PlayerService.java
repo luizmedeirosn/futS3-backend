@@ -134,7 +134,8 @@ public class PlayerService {
         if (!playerRepository.existsById(id)) {
             throw new EntityNotFoundException("Player request. ID not found");
         }
-        playerRepository.deleteById(id);
+        Player player = playerRepository.getReferenceById(id);
+        playerRepository.deleteByIdWithParameters(player.getId());
     }
 
 }

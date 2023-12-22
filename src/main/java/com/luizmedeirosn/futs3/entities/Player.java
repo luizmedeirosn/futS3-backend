@@ -22,7 +22,6 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Singular;
 
 @Entity
 @Table(name = "tb_player")
@@ -53,8 +52,7 @@ public class Player implements Serializable {
     @JoinColumn(name = "position_id")
     private Position position;
 
-    @OneToMany(mappedBy = "id.player", cascade = CascadeType.REMOVE)
-    @Singular
+    @OneToMany(mappedBy = "id.player", cascade = CascadeType.ALL)
     private Set<PlayerParameter> playerParameters = new HashSet<>();
 
     @OneToOne(mappedBy = "player", cascade = CascadeType.ALL)

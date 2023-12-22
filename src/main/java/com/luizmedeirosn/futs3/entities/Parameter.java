@@ -17,7 +17,6 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Singular;
 
 @Entity
 @Table(name = "tb_parameter")
@@ -40,11 +39,9 @@ public class Parameter implements Serializable {
     private String description;
 
     @OneToMany(mappedBy = "id.parameter")
-    @Singular
     private Set<PositionParameter> positionParameters;
 
     @OneToMany(mappedBy = "id.parameter")
-    @Singular
     private Set<PlayerParameter> playerParameters = new HashSet<>();
 
     public Parameter(String name, String description) {

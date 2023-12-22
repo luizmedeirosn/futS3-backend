@@ -19,7 +19,6 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Singular;
 
 @Entity
 @Table(name = "tb_gamemode")
@@ -42,7 +41,6 @@ public class GameMode implements Serializable {
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "tb_gamemode_position", joinColumns = @JoinColumn(name = "gamemode_id"), inverseJoinColumns = @JoinColumn(name = "position_id"))
-    @Singular
     private Set<Position> positions = new HashSet<>();
 
     public GameMode(String formationName, String description) {

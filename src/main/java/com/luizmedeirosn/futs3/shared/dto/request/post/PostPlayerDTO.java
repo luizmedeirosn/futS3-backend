@@ -14,7 +14,7 @@ public record PostPlayerDTO(
 
         @NotNull @NotBlank @Size(min = 3, max = 30, message = "Enter a title between 3 and 50 characters") String name,
         @NotNull @NotBlank @Size(min = 3, max = 30, message = "Enter a title between 3 and 50 characters") String team,
-        @NotNull @Min(1) @Max(150) Integer age,
+        @Min(1) @Max(150) Integer age,
         @Min(65) @Max(250) Integer height,
         @NotNull Long positionId,
         @NotNull MultipartFile playerPicture,

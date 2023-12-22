@@ -17,7 +17,6 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Singular;
 
 @Entity
 @Table(name = "tb_position")
@@ -39,15 +38,12 @@ public class Position implements Serializable {
     private String description;
 
     @OneToMany(mappedBy = "position")
-    @Singular
     private Set<Player> players = new HashSet<>();
 
     @ManyToMany(mappedBy = "positions")
-    @Singular
     private Set<GameMode> gameModes = new HashSet<>();
 
     @OneToMany(mappedBy = "id.position")
-    @Singular
     private Set<PositionParameter> positionParameters = new HashSet<>();
 
     public Position(String name, String description) {
