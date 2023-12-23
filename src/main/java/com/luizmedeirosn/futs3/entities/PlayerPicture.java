@@ -55,10 +55,13 @@ public class PlayerPicture {
 
     public PlayerPicture(Player player, MultipartFile playerPicture) {
         try {
-            filename = playerPicture.getOriginalFilename();
-            contentType = playerPicture.getContentType();
-            content = playerPicture.getBytes();
+            if (playerPicture != null) {
+                filename = playerPicture.getOriginalFilename();
+                contentType = playerPicture.getContentType();
+                content = playerPicture.getBytes();
+            }
             this.player = player;
+
         } catch (IOException e) {
             throw new DatabaseException(e.getMessage());
         }

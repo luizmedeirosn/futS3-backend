@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.luizmedeirosn.futs3.entities.Player;
-import com.luizmedeirosn.futs3.entities.PlayerParameter;
 import com.luizmedeirosn.futs3.entities.PlayerPicture;
+import com.luizmedeirosn.futs3.projections.player.PlayerParameterProjection;
 import com.luizmedeirosn.futs3.services.PlayerPictureService;
 import com.luizmedeirosn.futs3.shared.dto.response.min.PositionMinDTO;
 
@@ -31,21 +31,21 @@ public class PlayerResponseDTO implements Serializable {
 
     private String team;
     private String profilePictureLink;
-    private List<PlayerParameter> parameters;
+    private List<PlayerParameterProjection> parameters;
 
-    public PlayerResponseDTO(Player player) {
+    public PlayerResponseDTO(Player player, List<PlayerParameterProjection> parameters) {
         id = player.getId();
         name = player.getName();
         age = player.getAge();
         height = player.getHeight();
         team = player.getTeam();
 
-        this.parameters = player.getPlayerParameters().stream().toList();
+        this.parameters = parameters;
 
         position = new PositionMinDTO(player.getPosition());
 
         PlayerPicture playerPicture = player.getPlayerPicture();
-        profilePictureLink = playerPicture == null ? null
+        profilePictureLink = (playerPicture == null || playerPicture.getContent() == null) ? null
                 : PlayerPictureService.createPictureLink(playerPicture.getId());
     }
 

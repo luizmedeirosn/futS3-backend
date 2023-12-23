@@ -23,7 +23,6 @@ import com.luizmedeirosn.futs3.repositories.PositionRepository;
 import com.luizmedeirosn.futs3.shared.dto.request.PlayerRequestDTO;
 import com.luizmedeirosn.futs3.shared.dto.request.aux.PlayerParameterScoreDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.PlayerResponseDTO;
-import com.luizmedeirosn.futs3.shared.dto.response.PlayerWithProjectionResponseDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.min.PlayerMinResponseDTO;
 import com.luizmedeirosn.futs3.shared.exceptions.DatabaseException;
 import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
@@ -58,10 +57,14 @@ public class PlayerService {
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public PlayerWithProjectionResponseDTO findFullById(Long id) {
-        Player player = playerRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Player ID not found"));
-        return new PlayerWithProjectionResponseDTO(player, parameterRepository.findParametersByPlayerId(id));
+    public PlayerResponseDTO findFullById(Long id) {
+        try {
+            return new PlayerResponseDTO(playerRepository.findById(id).get(),
+                    parameterRepository.findParametersByPlayerId(id));
+
+        } catch (NoSuchElementException e) {
+            throw new EntityNotFoundException("Player ID not found");
+        }
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
@@ -83,7 +86,6 @@ public class PlayerService {
                         Parameter parameter = parameterRepository.findById(parameterScore.id()).get();
                         PlayerParameter playerParameter = new PlayerParameter(player, parameter,
                                 parameterScore.score());
-
                         playerParameterRepository.save(playerParameter);
                     });
         }
@@ -93,17 +95,15 @@ public class PlayerService {
     public PlayerResponseDTO save(PlayerRequestDTO playerRequestDTO) {
         try {
             Player newPlayer = new Player(playerRequestDTO);
-            newPlayer.setPosition(positionRepository.findById(playerRequestDTO.positionId()).get());
+            PlayerPicture playerPicture = new PlayerPicture(newPlayer, playerRequestDTO.playerPicture());
 
-            if (playerRequestDTO.playerPicture() != null) {
-                PlayerPicture playerPicture = new PlayerPicture(newPlayer, playerRequestDTO.playerPicture());
-                newPlayer.setPlayerPicture(playerPicture);
-            }
+            newPlayer.setPosition(positionRepository.findById(playerRequestDTO.positionId()).get());
+            newPlayer.setPlayerPicture(playerPicture);
 
             playerRepository.save(newPlayer);
             savePlayerParameters(newPlayer, playerRequestDTO.parameters());
 
-            return new PlayerResponseDTO(newPlayer);
+            return new PlayerResponseDTO(newPlayer, parameterRepository.findParametersByPlayerId(newPlayer.getId()));
 
         } catch (NoSuchElementException e) {
             throw new EntityNotFoundException("Player request. IDs not found");
@@ -117,27 +117,22 @@ public class PlayerService {
     }
 
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-    public PlayerResponseDTO update(Long id, PlayerRequestDTO playerRequestDTO) {
+    public PlayerMinResponseDTO update(Long id, PlayerRequestDTO playerRequestDTO) {
         try {
-            Player player = playerRepository.findById(id).get();
+            Player player = playerRepository.getReferenceById(id);
 
             player.updateData(playerRequestDTO);
             player.setPosition(positionRepository.findById(playerRequestDTO.positionId()).get());
 
-            player.getPlayerParameters().clear();
-            playerParameterRepository.deleteAllById(
-                    player.getPlayerParameters().stream().map(p -> p.getId().getPlayer().getId()).toList());
-
-            savePlayerParameters(player, playerRequestDTO.parameters());
             player = playerRepository.save(player);
 
-            return new PlayerResponseDTO(player);
+            return new PlayerMinResponseDTO(player);
 
         } catch (jakarta.persistence.EntityNotFoundException e) {
             throw new EntityNotFoundException("Player request. ID not found");
 
         } catch (DataIntegrityViolationException e) {
-            throw new DatabaseException(e.getMessage());
+            throw new DatabaseException("Player request. Unique index, check index or primary key violation");
         }
     }
 

@@ -18,7 +18,6 @@ import com.luizmedeirosn.futs3.projections.player.AllPlayersParametersProjection
 import com.luizmedeirosn.futs3.services.PlayerService;
 import com.luizmedeirosn.futs3.shared.dto.request.PlayerRequestDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.PlayerResponseDTO;
-import com.luizmedeirosn.futs3.shared.dto.response.PlayerWithProjectionResponseDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.min.PlayerMinResponseDTO;
 
 import jakarta.validation.Valid;
@@ -47,7 +46,7 @@ public class PlayerController {
     }
 
     @GetMapping("/{id}/full")
-    public ResponseEntity<PlayerWithProjectionResponseDTO> findFullById(@PathVariable Long id) {
+    public ResponseEntity<PlayerResponseDTO> findFullById(@PathVariable Long id) {
         return ResponseEntity.ok().body(playerService.findFullById(id));
     }
 
@@ -63,7 +62,7 @@ public class PlayerController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<PlayerResponseDTO> update(@PathVariable Long id,
+    public ResponseEntity<PlayerMinResponseDTO> update(@PathVariable Long id,
             @ModelAttribute @Valid PlayerRequestDTO playerRequestDTO) {
         System.out.println(playerRequestDTO);
         return ResponseEntity.ok().body(playerService.update(id, playerRequestDTO));
