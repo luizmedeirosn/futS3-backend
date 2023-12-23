@@ -124,8 +124,10 @@ public class PlayerService {
             player.updateData(playerRequestDTO);
             player.setPosition(positionRepository.findById(playerRequestDTO.positionId()).get());
 
-            player = playerRepository.save(player);
+            playerParameterRepository.deleteByIdPlayerId(player.getId());
+            savePlayerParameters(player, playerRequestDTO.parameters());
 
+            player = playerRepository.save(player);
             return new PlayerMinResponseDTO(player);
 
         } catch (jakarta.persistence.EntityNotFoundException e) {

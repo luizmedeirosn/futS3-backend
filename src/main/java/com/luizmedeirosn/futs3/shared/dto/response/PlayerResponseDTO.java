@@ -31,7 +31,7 @@ public class PlayerResponseDTO implements Serializable {
 
     private String team;
     private String profilePictureLink;
-    private List<PlayerParameterProjection> parameters;
+    private List<?> parameters;
 
     public PlayerResponseDTO(Player player, List<PlayerParameterProjection> parameters) {
         id = player.getId();
