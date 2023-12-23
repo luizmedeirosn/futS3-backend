@@ -56,7 +56,7 @@ public class PlayerController {
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(playerResponseDTO.getId())
+                .buildAndExpand(playerResponseDTO.id())
                 .toUri();
         return ResponseEntity.created(uri).body(playerResponseDTO);
     }
