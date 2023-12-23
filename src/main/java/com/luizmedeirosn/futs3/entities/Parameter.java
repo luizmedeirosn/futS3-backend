@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.luizmedeirosn.futs3.shared.dto.request.update.UpdateParameterDTO;
+import com.luizmedeirosn.futs3.shared.dto.request.ParameterRequestDTO;
 
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.Column;
@@ -15,14 +15,18 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "tb_parameter")
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode(of = "id")
 public class Parameter implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -49,9 +53,9 @@ public class Parameter implements Serializable {
         this.description = description;
     }
 
-    public void updateData(UpdateParameterDTO updateParameterDTO) {
-        name = updateParameterDTO.getName();
-        description = updateParameterDTO.getDescription();
+    public void updateData(ParameterRequestDTO parameterRequestDTO) {
+        name = parameterRequestDTO.getName();
+        description = parameterRequestDTO.getDescription();
     }
 
 }

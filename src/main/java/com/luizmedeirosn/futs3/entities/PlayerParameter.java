@@ -11,14 +11,18 @@ import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "tb_player_parameter")
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode(of = "id")
 public class PlayerParameter implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -35,22 +39,6 @@ public class PlayerParameter implements Serializable {
         id.setPlayer(player);
         id.setParameter(parameter);
         this.score = score;
-    }
-
-    public Player getPlayer() {
-        return id.getPlayer();
-    }
-
-    public void setPlayer(Player player) {
-        id.setPlayer(player);
-    }
-
-    public Parameter getParameter() {
-        return id.getParameter();
-    }
-
-    public void setParameter(Parameter parameter) {
-        id.setParameter(parameter);
     }
 
 }

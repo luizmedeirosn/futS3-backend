@@ -1,20 +1,20 @@
-package com.luizmedeirosn.futs3.shared.dto.request.post;
+package com.luizmedeirosn.futs3.shared.dto.request;
 
 import java.io.Serializable;
 
 import com.luizmedeirosn.futs3.entities.Position;
 
-public class PostPositionDTO implements Serializable {
+public class PositionRequestDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     private String name;
     private String description;
 
-    public PostPositionDTO() {
+    public PositionRequestDTO() {
     }
 
-    public PostPositionDTO(Position entity) {
+    public PositionRequestDTO(Position entity) {
         name = entity.getName();
         description = entity.getDescription();
     }

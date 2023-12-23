@@ -1,4 +1,4 @@
-package com.luizmedeirosn.futs3.shared.dto.request.post;
+package com.luizmedeirosn.futs3.shared.dto.request;
 
 import java.io.Serializable;
 
@@ -10,14 +10,14 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public record PostPlayerDTO(
+public record PlayerRequestDTO(
 
         @NotNull @NotBlank @Size(min = 3, max = 30, message = "Enter a title between 3 and 50 characters") String name,
         @NotNull @NotBlank @Size(min = 3, max = 30, message = "Enter a title between 3 and 50 characters") String team,
         @Min(1) @Max(150) Integer age,
         @Min(65) @Max(250) Integer height,
         @NotNull Long positionId,
-        @NotNull MultipartFile playerPicture,
+        MultipartFile playerPicture,
         @NotNull String parameters
 
 ) implements Serializable {

@@ -18,11 +18,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.luizmedeirosn.futs3.projections.gamemode.AllGameModesProjection;
 import com.luizmedeirosn.futs3.projections.gamemode.GameModePositionProjection;
 import com.luizmedeirosn.futs3.services.GameModeService;
-import com.luizmedeirosn.futs3.shared.dto.request.post.PostGameModeDTO;
-import com.luizmedeirosn.futs3.shared.dto.request.update.UpdateGameModeDTO;
-import com.luizmedeirosn.futs3.shared.dto.response.GameModeDTO;
-import com.luizmedeirosn.futs3.shared.dto.response.PlayerFullScoreDTO;
-import com.luizmedeirosn.futs3.shared.dto.response.min.GameModeMinDTO;
+import com.luizmedeirosn.futs3.shared.dto.request.GameModeRequestDTO;
+import com.luizmedeirosn.futs3.shared.dto.response.GameModeResponseDTO;
+import com.luizmedeirosn.futs3.shared.dto.response.PlayerFullScoreResponseDTO;
+import com.luizmedeirosn.futs3.shared.dto.response.min.GameModeMinResponseDTO;
 
 import lombok.RequiredArgsConstructor;
 
@@ -34,12 +33,12 @@ public class GameModeController {
     private final GameModeService gameModeService;
 
     @GetMapping
-    public ResponseEntity<List<GameModeMinDTO>> findAll() {
+    public ResponseEntity<List<GameModeMinResponseDTO>> findAll() {
         return ResponseEntity.ok().body(gameModeService.findAll());
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<GameModeMinDTO> findById(@PathVariable Long id) {
+    public ResponseEntity<GameModeMinResponseDTO> findById(@PathVariable Long id) {
         return ResponseEntity.ok().body(gameModeService.findById(id));
     }
 
@@ -49,7 +48,7 @@ public class GameModeController {
     }
 
     @GetMapping(value = "/{id}/full")
-    public ResponseEntity<GameModeDTO> findFullById(@PathVariable Long id) {
+    public ResponseEntity<GameModeResponseDTO> findFullById(@PathVariable Long id) {
         return ResponseEntity.ok().body(gameModeService.findFullById(id));
     }
 
@@ -59,7 +58,7 @@ public class GameModeController {
     }
 
     @GetMapping("/ranking")
-    public ResponseEntity<List<PlayerFullScoreDTO>> getPlayersRanking(
+    public ResponseEntity<List<PlayerFullScoreResponseDTO>> getPlayersRanking(
             @RequestParam("gameModeId") Long gameModeId,
             @RequestParam("positionId") Long positionId) {
         try {
@@ -71,19 +70,20 @@ public class GameModeController {
     }
 
     @PostMapping
-    public ResponseEntity<GameModeDTO> save(@RequestBody PostGameModeDTO postGameModeDTO) {
-        GameModeDTO gameModeDTO = gameModeService.save(postGameModeDTO);
+    public ResponseEntity<GameModeResponseDTO> save(@RequestBody GameModeRequestDTO gameModeRequestDTO) {
+        GameModeResponseDTO gameModeResponseDTO = gameModeService.save(gameModeRequestDTO);
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(gameModeDTO.getId())
+                .buildAndExpand(gameModeResponseDTO.getId())
                 .toUri();
-        return ResponseEntity.created(uri).body(gameModeDTO);
+        return ResponseEntity.created(uri).body(gameModeResponseDTO);
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<GameModeMinDTO> updateById(@PathVariable Long id, @RequestBody UpdateGameModeDTO obj) {
-        return ResponseEntity.ok().body(gameModeService.update(id, obj));
+    public ResponseEntity<GameModeMinResponseDTO> updateById(@PathVariable Long id,
+            @RequestBody GameModeRequestDTO gameModeRequestDTO) {
+        return ResponseEntity.ok().body(gameModeService.update(id, gameModeRequestDTO));
     }
 
     @DeleteMapping(value = "/{id}")

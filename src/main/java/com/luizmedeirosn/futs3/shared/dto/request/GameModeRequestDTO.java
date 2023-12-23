@@ -1,9 +1,11 @@
-package com.luizmedeirosn.futs3.shared.dto.request.post;
+package com.luizmedeirosn.futs3.shared.dto.request;
 
 import java.io.Serializable;
 import java.util.List;
 
-public class PostGameModeDTO implements Serializable {
+import com.luizmedeirosn.futs3.shared.dto.request.aux.PositionParametersDTO;
+
+public class GameModeRequestDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

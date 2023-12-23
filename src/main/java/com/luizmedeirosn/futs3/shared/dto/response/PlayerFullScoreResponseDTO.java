@@ -10,7 +10,7 @@ import com.luizmedeirosn.futs3.projections.player.PlayerParameterProjection;
 import com.luizmedeirosn.futs3.services.PlayerPictureService;
 
 @JsonPropertyOrder({ "id", "name", "profilePictureLink", "age", "height", "team", "totalScore", "parameters" })
-public class PlayerFullScoreDTO implements Serializable {
+public class PlayerFullScoreResponseDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -23,7 +23,7 @@ public class PlayerFullScoreDTO implements Serializable {
     private Integer totalScore;
     private List<PlayerParameterProjection> parameters;
 
-    public PlayerFullScoreDTO(PlayerFullScoreProjection player, List<PlayerParameterProjection> parameters) {
+    public PlayerFullScoreResponseDTO(PlayerFullScoreProjection player, List<PlayerParameterProjection> parameters) {
         id = player.getPlayerId();
         name = player.getPlayerName();
         age = player.getPlayerAge();

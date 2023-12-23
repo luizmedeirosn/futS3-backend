@@ -1,30 +1,22 @@
-package com.luizmedeirosn.futs3.shared.dto.response;
+package com.luizmedeirosn.futs3.shared.dto.request;
 
 import java.io.Serializable;
 
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.luizmedeirosn.futs3.entities.Parameter;
 
-@JsonPropertyOrder({ "id", "name", "position" })
-public class ParameterDTO implements Serializable {
+public class ParameterRequestDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Long id;
     private String name;
     private String description;
 
-    public ParameterDTO() {
+    public ParameterRequestDTO() {
     }
 
-    public ParameterDTO(Parameter parameter) {
-        id = parameter.getId();
+    public ParameterRequestDTO(Parameter parameter) {
         name = parameter.getName();
         description = parameter.getDescription();
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public String getName() {

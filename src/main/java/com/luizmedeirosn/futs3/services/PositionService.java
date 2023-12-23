@@ -15,8 +15,7 @@ import com.luizmedeirosn.futs3.entities.Position;
 import com.luizmedeirosn.futs3.projections.postition.PositionParametersProjection;
 import com.luizmedeirosn.futs3.repositories.PositionParameterRepository;
 import com.luizmedeirosn.futs3.repositories.PositionRepository;
-import com.luizmedeirosn.futs3.shared.dto.request.post.PostPositionDTO;
-import com.luizmedeirosn.futs3.shared.dto.request.update.UpdatePositionDTO;
+import com.luizmedeirosn.futs3.shared.dto.request.PositionRequestDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.min.PositionMinDTO;
 import com.luizmedeirosn.futs3.shared.exceptions.DatabaseException;
 import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
@@ -61,10 +60,10 @@ public class PositionService {
     }
 
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-    public PositionMinDTO save(PostPositionDTO postPositionDTO) {
+    public PositionMinDTO save(PositionRequestDTO positionRequestDTO) {
         try {
             Position position = positionRepository
-                    .save(new Position(postPositionDTO.getName(), postPositionDTO.getDescription()));
+                    .save(new Position(positionRequestDTO.getName(), positionRequestDTO.getDescription()));
             return new PositionMinDTO(position);
 
         } catch (NoSuchElementException e) {
@@ -79,10 +78,10 @@ public class PositionService {
     }
 
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-    public PositionMinDTO update(Long id, UpdatePositionDTO updatePositionDTO) {
+    public PositionMinDTO update(Long id, PositionRequestDTO positionRequestDTO) {
         try {
             Position position = positionRepository.getReferenceById(id);
-            position.updateData(updatePositionDTO);
+            position.updateData(positionRequestDTO);
             position = positionRepository.save(position);
             return new PositionMinDTO(position);
 

@@ -16,8 +16,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.luizmedeirosn.futs3.projections.postition.PositionParametersProjection;
 import com.luizmedeirosn.futs3.services.PositionService;
-import com.luizmedeirosn.futs3.shared.dto.request.post.PostPositionDTO;
-import com.luizmedeirosn.futs3.shared.dto.request.update.UpdatePositionDTO;
+import com.luizmedeirosn.futs3.shared.dto.request.PositionRequestDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.min.PositionMinDTO;
 
 import lombok.RequiredArgsConstructor;
@@ -45,7 +44,7 @@ public class PositionController {
     }
 
     @PostMapping
-    public ResponseEntity<PositionMinDTO> save(@RequestBody PostPositionDTO postPositionDTO) {
+    public ResponseEntity<PositionMinDTO> save(@RequestBody PositionRequestDTO postPositionDTO) {
         PositionMinDTO positionDTO = positionService.save(postPositionDTO);
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -57,8 +56,8 @@ public class PositionController {
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<PositionMinDTO> updateById(@PathVariable Long id,
-            @RequestBody UpdatePositionDTO updatePositionDTO) {
-        return ResponseEntity.ok().body(positionService.update(id, updatePositionDTO));
+            @RequestBody PositionRequestDTO positionRequestDTO) {
+        return ResponseEntity.ok().body(positionService.update(id, positionRequestDTO));
     }
 
     @DeleteMapping(value = "/{id}")

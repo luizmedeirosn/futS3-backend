@@ -6,7 +6,7 @@ import java.util.Set;
 
 import org.hibernate.annotations.Check;
 
-import com.luizmedeirosn.futs3.shared.dto.request.post.PostPlayerDTO;
+import com.luizmedeirosn.futs3.shared.dto.request.PlayerRequestDTO;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -20,14 +20,18 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "tb_player")
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode(of = "id")
 public class Player implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -66,16 +70,25 @@ public class Player implements Serializable {
         this.position = position;
     }
 
-    public Player(PostPlayerDTO postPlayerDTO) {
-        name = postPlayerDTO.name();
-        age = postPlayerDTO.age();
-        height = postPlayerDTO.height();
-        team = postPlayerDTO.team();
+    public Player(PlayerRequestDTO playerRequestDTO) {
+        name = playerRequestDTO.name();
+        age = playerRequestDTO.age();
+        height = playerRequestDTO.height();
+        team = playerRequestDTO.team();
     }
 
-    public void updateData(String name, Position position) {
-        this.name = name;
-        this.position = position;
+    public void updateData(PlayerRequestDTO playerRequestDTO) {
+        name = playerRequestDTO.name();
+        age = playerRequestDTO.age();
+        height = playerRequestDTO.height();
+        team = playerRequestDTO.team();
+        if (playerRequestDTO.playerPicture() != null) {
+            if (playerPicture == null) {
+                setPlayerPicture(new PlayerPicture(this, playerRequestDTO.playerPicture()));
+            } else {
+                playerPicture.updateData(playerRequestDTO.playerPicture());
+            }
+        }
     }
 
 }
