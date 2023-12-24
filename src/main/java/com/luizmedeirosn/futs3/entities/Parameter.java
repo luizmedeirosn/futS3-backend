@@ -54,8 +54,8 @@ public class Parameter implements Serializable {
     }
 
     public void updateData(ParameterRequestDTO parameterRequestDTO) {
-        name = parameterRequestDTO.getName();
-        description = parameterRequestDTO.getDescription();
+        name = parameterRequestDTO.name();
+        description = parameterRequestDTO.description();
     }
 
 }

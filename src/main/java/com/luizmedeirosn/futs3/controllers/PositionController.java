@@ -49,7 +49,7 @@ public class PositionController {
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(positionDTO.getId())
+                .buildAndExpand(positionDTO.id())
                 .toUri();
         return ResponseEntity.created(uri).body(positionDTO);
     }

@@ -52,8 +52,8 @@ public class Position implements Serializable {
     }
 
     public void updateData(PositionRequestDTO positionRequestDTO) {
-        name = positionRequestDTO.getName();
-        description = positionRequestDTO.getDescription();
+        name = positionRequestDTO.name();
+        description = positionRequestDTO.description();
     }
 
 }

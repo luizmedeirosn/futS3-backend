@@ -49,8 +49,8 @@ public class GameMode implements Serializable {
     }
 
     public void updateData(GameModeRequestDTO gameModeRequestDTO) {
-        formationName = gameModeRequestDTO.getFormationName();
-        description = gameModeRequestDTO.getDescription();
+        formationName = gameModeRequestDTO.formationName();
+        description = gameModeRequestDTO.description();
     }
 
 }

@@ -8,39 +8,23 @@ import com.luizmedeirosn.futs3.entities.GameMode;
 import com.luizmedeirosn.futs3.projections.gamemode.GameModeProjection;
 
 @JsonPropertyOrder({ "id", "formationName", "description", "fields" })
-public class GameModeResponseDTO implements Serializable {
+public record GameModeResponseDTO(
+
+        Long id,
+        String formationName,
+        String description,
+        List<GameModeProjection> fields
+
+) implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Long id;
-    private String formationName;
-    private String description;
-    private List<GameModeProjection> fields;
-
-    public GameModeResponseDTO() {
-    }
-
     public GameModeResponseDTO(GameMode gameMode, List<GameModeProjection> fields) {
-        id = gameMode.getId();
-        formationName = gameMode.getFormationName();
-        description = gameMode.getDescription();
-        this.fields = fields;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getFormationName() {
-        return formationName;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public List<GameModeProjection> getFields() {
-        return fields;
+        this(
+                gameMode.getId(),
+                gameMode.getFormationName(),
+                gameMode.getDescription(),
+                fields);
     }
 
 }

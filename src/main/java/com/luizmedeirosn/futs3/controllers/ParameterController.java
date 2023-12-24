@@ -43,7 +43,7 @@ public class ParameterController {
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(parameterDTO.getId())
+                .buildAndExpand(parameterDTO.id())
                 .toUri();
         return ResponseEntity.created(uri).body(parameterDTO);
     }

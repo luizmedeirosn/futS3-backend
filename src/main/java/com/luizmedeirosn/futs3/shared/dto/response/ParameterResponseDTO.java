@@ -6,33 +6,21 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.luizmedeirosn.futs3.entities.Parameter;
 
 @JsonPropertyOrder({ "id", "name", "position" })
-public class ParameterResponseDTO implements Serializable {
+public record ParameterResponseDTO(
+
+        Long id,
+        String name,
+        String description
+
+) implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Long id;
-    private String name;
-    private String description;
-
-    public ParameterResponseDTO() {
-    }
-
     public ParameterResponseDTO(Parameter parameter) {
-        id = parameter.getId();
-        name = parameter.getName();
-        description = parameter.getDescription();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
+        this(
+                parameter.getId(),
+                parameter.getName(),
+                parameter.getDescription());
     }
 
 }

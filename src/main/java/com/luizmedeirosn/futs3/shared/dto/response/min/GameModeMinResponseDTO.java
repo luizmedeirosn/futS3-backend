@@ -6,33 +6,21 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.luizmedeirosn.futs3.entities.GameMode;
 
 @JsonPropertyOrder({ "id", "formationName", "description" })
-public class GameModeMinResponseDTO implements Serializable {
+public record GameModeMinResponseDTO(
+
+        Long id,
+        String formationName,
+        String description
+
+) implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Long id;
-    private String formationName;
-    private String description;
-
-    public GameModeMinResponseDTO() {
-    }
-
     public GameModeMinResponseDTO(GameMode gameMode) {
-        id = gameMode.getId();
-        formationName = gameMode.getFormationName();
-        description = gameMode.getDescription();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getFormationName() {
-        return formationName;
-    }
-
-    public String getDescription() {
-        return description;
+        this(
+                gameMode.getId(),
+                gameMode.getFormationName(),
+                gameMode.getDescription());
     }
 
 }

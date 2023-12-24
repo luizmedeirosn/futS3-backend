@@ -75,7 +75,7 @@ public class GameModeController {
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(gameModeResponseDTO.getId())
+                .buildAndExpand(gameModeResponseDTO.id())
                 .toUri();
         return ResponseEntity.created(uri).body(gameModeResponseDTO);
     }

@@ -60,8 +60,8 @@ public class ParameterSerivce {
     public ParameterResponseDTO save(ParameterRequestDTO parameterRequestDTO) {
         try {
             Parameter parameter = new Parameter();
-            parameter.setName(parameterRequestDTO.getName());
-            parameter.setDescription(parameterRequestDTO.getDescription());
+            parameter.setName(parameterRequestDTO.name());
+            parameter.setDescription(parameterRequestDTO.description());
             parameter = parameterRepository.save(parameter);
             return new ParameterResponseDTO(parameter);
 

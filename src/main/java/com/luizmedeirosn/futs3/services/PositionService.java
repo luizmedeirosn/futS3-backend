@@ -63,7 +63,7 @@ public class PositionService {
     public PositionMinDTO save(PositionRequestDTO positionRequestDTO) {
         try {
             Position position = positionRepository
-                    .save(new Position(positionRequestDTO.getName(), positionRequestDTO.getDescription()));
+                    .save(new Position(positionRequestDTO.name(), positionRequestDTO.description()));
             return new PositionMinDTO(position);
 
         } catch (NoSuchElementException e) {

@@ -3,27 +3,13 @@ package com.luizmedeirosn.futs3.shared.dto.request.aux;
 import java.io.Serializable;
 import java.util.List;
 
-public class PositionParametersDTO implements Serializable {
+public record PositionParametersDTO(
+
+        Long positionId,
+        List<ParameterWeightDTO> parameters
+
+) implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    private Long positionId;
-    private List<ParameterWeightDTO> parameters;
-
-    public PositionParametersDTO() {
-    }
-
-    public PositionParametersDTO(Long positionId, List<ParameterWeightDTO> parameters) {
-        this.positionId = positionId;
-        this.parameters = parameters;
-    }
-
-    public Long getPositionId() {
-        return positionId;
-    }
-
-    public List<ParameterWeightDTO> getParameters() {
-        return parameters;
-    }
 
 }

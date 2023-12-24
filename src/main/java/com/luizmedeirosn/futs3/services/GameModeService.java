@@ -96,23 +96,23 @@ public class GameModeService {
     public GameModeResponseDTO save(GameModeRequestDTO gameMode) {
         try {
             GameMode newGameMode = new GameMode();
-            newGameMode.setFormationName(gameMode.getFormationName());
-            newGameMode.setDescription(gameMode.getDescription());
+            newGameMode.setFormationName(gameMode.formationName());
+            newGameMode.setDescription(gameMode.description());
 
             Set<Position> positions = newGameMode.getPositions();
             gameMode
-                    .getPositionsParameters()
+                    .positionsParameters()
                     .forEach(
                             positionParameters -> {
-                                Position pos = positionRepository.findById(positionParameters.getPositionId()).get();
+                                Position pos = positionRepository.findById(positionParameters.positionId()).get();
                                 positions.add(pos);
                                 positionParameters
-                                        .getParameters()
+                                        .parameters()
                                         .forEach(
                                                 parameterWeight -> positionParameterRepository.save(
                                                         new PositionParameter(pos, parameterRepository
-                                                                .findById(parameterWeight.getParameterId()).get(),
-                                                                parameterWeight.getWeight())));
+                                                                .findById(parameterWeight.parameterId()).get(),
+                                                                parameterWeight.weight())));
                             });
             gameModeRepository.save(newGameMode);
             return findFullById(newGameMode.getId());
