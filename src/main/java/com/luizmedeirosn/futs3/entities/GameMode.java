@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.luizmedeirosn.futs3.shared.dto.request.update.UpdateGameModeDTO;
+import com.luizmedeirosn.futs3.shared.dto.request.GameModeRequestDTO;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,7 +19,6 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Singular;
 
 @Entity
 @Table(name = "tb_gamemode")
@@ -42,7 +41,6 @@ public class GameMode implements Serializable {
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "tb_gamemode_position", joinColumns = @JoinColumn(name = "gamemode_id"), inverseJoinColumns = @JoinColumn(name = "position_id"))
-    @Singular
     private Set<Position> positions = new HashSet<>();
 
     public GameMode(String formationName, String description) {
@@ -50,9 +48,9 @@ public class GameMode implements Serializable {
         this.description = description;
     }
 
-    public void updateData(UpdateGameModeDTO updateGameModeDTO) {
-        formationName = updateGameModeDTO.getFormationName();
-        description = updateGameModeDTO.getDescription();
+    public void updateData(GameModeRequestDTO gameModeRequestDTO) {
+        formationName = gameModeRequestDTO.formationName();
+        description = gameModeRequestDTO.description();
     }
 
 }

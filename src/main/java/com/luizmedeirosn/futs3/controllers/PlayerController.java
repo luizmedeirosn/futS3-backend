@@ -6,21 +6,21 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.luizmedeirosn.futs3.projections.player.AllPlayersParametersProjection;
 import com.luizmedeirosn.futs3.services.PlayerService;
-import com.luizmedeirosn.futs3.shared.dto.request.post.PostPlayerDTO;
-import com.luizmedeirosn.futs3.shared.dto.request.update.UpdatePlayerDTO;
-import com.luizmedeirosn.futs3.shared.dto.response.PlayerDTO;
-import com.luizmedeirosn.futs3.shared.dto.response.min.PlayerMinDTO;
+import com.luizmedeirosn.futs3.shared.dto.request.PlayerRequestDTO;
+import com.luizmedeirosn.futs3.shared.dto.response.PlayerResponseDTO;
+import com.luizmedeirosn.futs3.shared.dto.response.min.PlayerMinResponseDTO;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -31,12 +31,12 @@ public class PlayerController {
     private final PlayerService playerService;
 
     @GetMapping
-    public ResponseEntity<List<PlayerMinDTO>> findAll() {
+    public ResponseEntity<List<PlayerMinResponseDTO>> findAll() {
         return ResponseEntity.ok().body(playerService.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PlayerMinDTO> findById(@PathVariable Long id) {
+    public ResponseEntity<PlayerMinResponseDTO> findById(@PathVariable Long id) {
         return ResponseEntity.ok().body(playerService.findById(id));
     }
 
@@ -46,24 +46,26 @@ public class PlayerController {
     }
 
     @GetMapping("/{id}/full")
-    public ResponseEntity<PlayerDTO> findFullById(@PathVariable Long id) {
+    public ResponseEntity<PlayerResponseDTO> findFullById(@PathVariable Long id) {
         return ResponseEntity.ok().body(playerService.findFullById(id));
     }
 
     @PostMapping
-    public ResponseEntity<PlayerDTO> save(@RequestBody PostPlayerDTO postPlayerDTO) {
-        PlayerDTO playerDTO = playerService.save(postPlayerDTO);
+    public ResponseEntity<PlayerResponseDTO> save(@ModelAttribute @Valid PlayerRequestDTO playerRequestDTO) {
+        PlayerResponseDTO playerResponseDTO = playerService.save(playerRequestDTO);
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(playerDTO.getId())
+                .buildAndExpand(playerResponseDTO.id())
                 .toUri();
-        return ResponseEntity.created(uri).body(playerDTO);
+        return ResponseEntity.created(uri).body(playerResponseDTO);
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<PlayerMinDTO> update(@PathVariable Long id, @RequestBody UpdatePlayerDTO updatePlayerDTO) {
-        return ResponseEntity.ok().body(playerService.update(id, updatePlayerDTO));
+    public ResponseEntity<PlayerMinResponseDTO> update(@PathVariable Long id,
+            @ModelAttribute @Valid PlayerRequestDTO playerRequestDTO) {
+        System.out.println(playerRequestDTO);
+        return ResponseEntity.ok().body(playerService.update(id, playerRequestDTO));
     }
 
     @DeleteMapping(value = "/{id}")

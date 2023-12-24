@@ -14,9 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.luizmedeirosn.futs3.entities.Parameter;
 import com.luizmedeirosn.futs3.projections.player.PlayerParameterProjection;
 import com.luizmedeirosn.futs3.repositories.ParameterRepository;
-import com.luizmedeirosn.futs3.shared.dto.request.post.PostParameterDTO;
-import com.luizmedeirosn.futs3.shared.dto.request.update.UpdateParameterDTO;
-import com.luizmedeirosn.futs3.shared.dto.response.ParameterDTO;
+import com.luizmedeirosn.futs3.shared.dto.request.ParameterRequestDTO;
+import com.luizmedeirosn.futs3.shared.dto.response.ParameterResponseDTO;
 import com.luizmedeirosn.futs3.shared.exceptions.DatabaseException;
 import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
 
@@ -29,18 +28,18 @@ public class ParameterSerivce {
     private final ParameterRepository parameterRepository;
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public List<ParameterDTO> findAll() {
+    public List<ParameterResponseDTO> findAll() {
         return parameterRepository
                 .findAll(Sort.by("name"))
                 .stream()
-                .map(ParameterDTO::new)
+                .map(ParameterResponseDTO::new)
                 .toList();
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public ParameterDTO findById(Long id) {
+    public ParameterResponseDTO findById(Long id) {
         try {
-            return new ParameterDTO(parameterRepository.findById(id).get());
+            return new ParameterResponseDTO(parameterRepository.findById(id).get());
 
         } catch (NoSuchElementException e) {
             throw new EntityNotFoundException("Parameter ID not found");
@@ -50,7 +49,7 @@ public class ParameterSerivce {
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public List<PlayerParameterProjection> findByPlayerId(Long id) {
         try {
-            return parameterRepository.findByPlayerId(id);
+            return parameterRepository.findParametersByPlayerId(id);
 
         } catch (NoSuchElementException e) {
             throw new EntityNotFoundException("Parameter ID not found");
@@ -58,13 +57,13 @@ public class ParameterSerivce {
     }
 
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-    public ParameterDTO save(PostParameterDTO parameterInputDTO) {
+    public ParameterResponseDTO save(ParameterRequestDTO parameterRequestDTO) {
         try {
             Parameter parameter = new Parameter();
-            parameter.setName(parameterInputDTO.getName());
-            parameter.setDescription(parameterInputDTO.getDescription());
+            parameter.setName(parameterRequestDTO.name());
+            parameter.setDescription(parameterRequestDTO.description());
             parameter = parameterRepository.save(parameter);
-            return new ParameterDTO(parameter);
+            return new ParameterResponseDTO(parameter);
 
         } catch (NoSuchElementException e) {
             throw new EntityNotFoundException("Parameter request. IDs not found");
@@ -79,12 +78,12 @@ public class ParameterSerivce {
     }
 
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-    public ParameterDTO update(Long id, UpdateParameterDTO updateParameterDTO) {
+    public ParameterResponseDTO update(Long id, ParameterRequestDTO parameterRequestDTO) {
         try {
             Parameter parameter = parameterRepository.getReferenceById(id);
-            parameter.updateData(updateParameterDTO);
+            parameter.updateData(parameterRequestDTO);
             parameter = parameterRepository.save(parameter);
-            return new ParameterDTO(parameter);
+            return new ParameterResponseDTO(parameter);
         } catch (jakarta.persistence.EntityNotFoundException e) {
             throw new EntityNotFoundException("Parameter request. ID not found");
 

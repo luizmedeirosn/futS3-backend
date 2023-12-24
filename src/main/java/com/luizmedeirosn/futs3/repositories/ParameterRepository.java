@@ -26,6 +26,6 @@ public interface ParameterRepository extends JpaRepository<Parameter, Long> {
                 WHERE play.id = :playerId
                 ORDER BY param.name;
             """)
-    List<PlayerParameterProjection> findByPlayerId(Long playerId);
+    List<PlayerParameterProjection> findParametersByPlayerId(Long playerId);
 
 }

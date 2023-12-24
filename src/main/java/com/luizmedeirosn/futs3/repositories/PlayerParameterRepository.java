@@ -7,10 +7,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.luizmedeirosn.futs3.entities.PlayerParameter;
+import com.luizmedeirosn.futs3.entities.pks.PlayerParameterPK;
 import com.luizmedeirosn.futs3.projections.player.AllPlayersParametersProjection;
 
 @Repository
-public interface PlayerParameterRepository extends JpaRepository<PlayerParameter, Long> {
+public interface PlayerParameterRepository extends JpaRepository<PlayerParameter, PlayerParameterPK> {
+
+    void deleteByIdPlayerId(Long playerId);
 
     @Query(nativeQuery = true, value = """
                 SELECT

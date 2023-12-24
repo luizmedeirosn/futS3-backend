@@ -3,6 +3,7 @@ package com.luizmedeirosn.futs3.repositories;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -11,6 +12,14 @@ import com.luizmedeirosn.futs3.projections.player.PlayerProjection;
 
 @Repository
 public interface PlayerRepository extends JpaRepository<Player, Long> {
+
+    @Modifying
+    @Query(nativeQuery = true, value = """
+                delete from tb_player_parameter where player_id = :id ;
+                delete from tb_player_picture where player_id = :id ;
+                delete from tb_player where id = :id ;
+            """)
+    void deleteByIdWithParameters(Long id);
 
     @Query(nativeQuery = true, value = """
                 SELECT
@@ -25,7 +34,7 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
                         ON PLAY.position_id = POS.id
                     LEFT JOIN tb_player_picture AS PLAYPIC
                         ON PLAY.id = PLAYPIC.player_id
-                ORDER BY PLAY.name DESC;
+                ORDER BY PLAY.name ASC;
             """)
     List<PlayerProjection> findAllOptimized();
 

@@ -6,6 +6,8 @@ import java.util.Set;
 
 import org.hibernate.annotations.Check;
 
+import com.luizmedeirosn.futs3.shared.dto.request.PlayerRequestDTO;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,15 +20,18 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Singular;
+import lombok.Setter;
 
 @Entity
 @Table(name = "tb_player")
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode(of = "id")
 public class Player implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -35,7 +40,7 @@ public class Player implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String name;
 
     @Check(constraints = "age >= 1 AND age <= 150")
@@ -51,8 +56,7 @@ public class Player implements Serializable {
     @JoinColumn(name = "position_id")
     private Position position;
 
-    @OneToMany(mappedBy = "id.player", cascade = CascadeType.REMOVE)
-    @Singular
+    @OneToMany(mappedBy = "id.player", cascade = CascadeType.ALL)
     private Set<PlayerParameter> playerParameters = new HashSet<>();
 
     @OneToOne(mappedBy = "player", cascade = CascadeType.ALL)
@@ -66,9 +70,25 @@ public class Player implements Serializable {
         this.position = position;
     }
 
-    public void updateData(String name, Position position) {
-        this.name = name;
-        this.position = position;
+    public Player(PlayerRequestDTO playerRequestDTO) {
+        name = playerRequestDTO.name();
+        age = playerRequestDTO.age();
+        height = playerRequestDTO.height();
+        team = playerRequestDTO.team();
+    }
+
+    public void updateData(PlayerRequestDTO playerRequestDTO) {
+        name = playerRequestDTO.name();
+        age = playerRequestDTO.age();
+        height = playerRequestDTO.height();
+        team = playerRequestDTO.team();
+        if (playerRequestDTO.playerPicture() != null) {
+            if (playerPicture == null) {
+                setPlayerPicture(new PlayerPicture(this, playerRequestDTO.playerPicture()));
+            } else {
+                playerPicture.updateData(playerRequestDTO.playerPicture());
+            }
+        }
     }
 
 }
