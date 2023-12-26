@@ -9,8 +9,8 @@ import jakarta.validation.constraints.Size;
 
 public record PositionRequestDTO(
 
-        @NotNull @Size(min = 3, max = 20, message = "Enter a title between 3 and 20 characters") String name,
-        @NotNull @Size(min = 3, max = 20, message = "Enter a title between 3 and 20 characters") String description
+        @NotNull @Size(min = 3, max = 20, message = "Enter a name between 3 and 20 characters") String name,
+        @Size(max = 2000, message = "Enter a description with a maximum of 2000 characters") String description
 
 ) implements Serializable {
 
