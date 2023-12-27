@@ -11,8 +11,8 @@ import jakarta.validation.constraints.Size;
 
 public record PlayerRequestDTO(
 
-        @NotNull @Size(min = 3, max = 30, message = "Enter a title between 3 and 50 characters") String name,
-        @NotNull @Size(min = 3, max = 30, message = "Enter a title between 3 and 50 characters") String team,
+        @NotNull @Size(min = 3, max = 30, message = "Enter a name between 3 and 30 characters") String name,
+        @NotNull @Size(min = 3, max = 30, message = "Enter a team between 3 and 30 characters") String team,
         @Min(1) @Max(150) Integer age,
         @Min(65) @Max(250) Integer height,
         @NotNull Long positionId,

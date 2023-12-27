@@ -12,6 +12,8 @@ import com.luizmedeirosn.futs3.projections.postition.PositionParametersProjectio
 @Repository
 public interface PositionParameterRepository extends JpaRepository<PositionParameter, Long> {
 
+    void deleteByIdParameterId(Long parameterId);
+
     @Query(nativeQuery = true, value = """
                 SELECT
                     param.id AS parameterId,

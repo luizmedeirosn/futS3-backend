@@ -15,6 +15,8 @@ public interface PlayerParameterRepository extends JpaRepository<PlayerParameter
 
     void deleteByIdPlayerId(Long playerId);
 
+    void deleteByIdParameterId(Long parameterId);
+
     @Query(nativeQuery = true, value = """
                 SELECT
                     play.id AS playerId,
