@@ -14,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.luizmedeirosn.futs3.entities.Parameter;
 import com.luizmedeirosn.futs3.projections.player.PlayerParameterProjection;
 import com.luizmedeirosn.futs3.repositories.ParameterRepository;
+import com.luizmedeirosn.futs3.repositories.PlayerParameterRepository;
+import com.luizmedeirosn.futs3.repositories.PositionParameterRepository;
 import com.luizmedeirosn.futs3.shared.dto.request.ParameterRequestDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.ParameterResponseDTO;
 import com.luizmedeirosn.futs3.shared.exceptions.DatabaseException;
@@ -25,6 +27,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ParameterSerivce {
 
+    private final PositionParameterRepository positionParameterRepository;
+    private final PlayerParameterRepository playerParameterRepository;
     private final ParameterRepository parameterRepository;
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
@@ -98,6 +102,9 @@ public class ParameterSerivce {
             if (!parameterRepository.existsById(id)) {
                 throw new EntityNotFoundException("Parameter request. ID not found");
             }
+
+            positionParameterRepository.deleteByIdParameterId(id);
+            playerParameterRepository.deleteByIdParameterId(id);
             parameterRepository.deleteById(id);
 
         } catch (DataIntegrityViolationException e) {
