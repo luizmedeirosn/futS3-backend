@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.luizmedeirosn.futs3.shared.dto.request.PositionRequestDTO;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -49,11 +47,6 @@ public class Position implements Serializable {
     public Position(String name, String description) {
         this.name = name;
         this.description = description;
-    }
-
-    public void updateData(PositionRequestDTO positionRequestDTO) {
-        name = positionRequestDTO.name();
-        description = positionRequestDTO.description();
     }
 
 }

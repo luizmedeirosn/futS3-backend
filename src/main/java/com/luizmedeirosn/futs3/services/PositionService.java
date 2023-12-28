@@ -12,10 +12,13 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.luizmedeirosn.futs3.entities.Position;
-import com.luizmedeirosn.futs3.projections.postition.PositionParametersProjection;
+import com.luizmedeirosn.futs3.entities.PositionParameter;
+import com.luizmedeirosn.futs3.repositories.ParameterRepository;
 import com.luizmedeirosn.futs3.repositories.PositionParameterRepository;
 import com.luizmedeirosn.futs3.repositories.PositionRepository;
 import com.luizmedeirosn.futs3.shared.dto.request.PositionRequestDTO;
+import com.luizmedeirosn.futs3.shared.dto.request.aux.ParameterWeightDTO;
+import com.luizmedeirosn.futs3.shared.dto.response.PositionResponseDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.min.PositionMinDTO;
 import com.luizmedeirosn.futs3.shared.exceptions.DatabaseException;
 import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
@@ -27,7 +30,7 @@ import lombok.RequiredArgsConstructor;
 public class PositionService {
 
     private final PositionRepository positionRepository;
-
+    private final ParameterRepository parameterRepository;
     private final PositionParameterRepository positionParameterRepository;
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
@@ -50,9 +53,14 @@ public class PositionService {
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public List<PositionParametersProjection> findAllPositionParameters(Long id) {
+    public PositionResponseDTO findByIdPositionParameters(Long id) {
         try {
-            return positionParameterRepository.findAllPositionParameters(id);
+            if (!positionRepository.existsById(id)) {
+                throw new NoSuchElementException();
+            }
+            Position position = positionRepository.getReferenceById(id);
+            return new PositionResponseDTO(position.getId(), position.getName(), position.getDescription(),
+                    positionParameterRepository.findByIdPositionParameters(id));
 
         } catch (NoSuchElementException e) {
             throw new EntityNotFoundException("Position ID not found");
@@ -64,6 +72,16 @@ public class PositionService {
         try {
             Position position = positionRepository
                     .save(new Position(positionRequestDTO.name(), positionRequestDTO.description()));
+
+            positionRequestDTO.parameters().forEach(parameterWeight -> {
+                PositionParameter positionParameter = new PositionParameter();
+                positionParameter.setPosition(position);
+                positionParameter.setParameter(parameterRepository.findById(parameterWeight.parameterId())
+                        .orElseThrow(NoSuchElementException::new));
+                positionParameter.setWeight(parameterWeight.weight());
+
+                positionParameterRepository.save(positionParameter);
+            });
             return new PositionMinDTO(position);
 
         } catch (NoSuchElementException e) {
@@ -81,7 +99,21 @@ public class PositionService {
     public PositionMinDTO update(Long id, PositionRequestDTO positionRequestDTO) {
         try {
             Position position = positionRepository.getReferenceById(id);
-            position.updateData(positionRequestDTO);
+            position.setName(positionRequestDTO.name());
+            position.setDescription(positionRequestDTO.description());
+
+            positionParameterRepository.deleteByIdPositionId(id);
+
+            for (ParameterWeightDTO parameterWeight : positionRequestDTO.parameters()) {
+                PositionParameter positionParameter = new PositionParameter();
+                positionParameter.setPosition(position);
+                positionParameter.setParameter(parameterRepository.findById(parameterWeight.parameterId())
+                        .orElseThrow(NoSuchElementException::new));
+                positionParameter.setWeight(parameterWeight.weight());
+
+                positionParameterRepository.save(positionParameter);
+            }
+
             position = positionRepository.save(position);
             return new PositionMinDTO(position);
 
@@ -102,7 +134,7 @@ public class PositionService {
             positionRepository.deleteById(id);
 
         } catch (DataIntegrityViolationException e) {
-            throw new DatabaseException("Position request. Database integrity reference constraint error");
+            throw new DatabaseException(e.getMessage());
         }
     }
 

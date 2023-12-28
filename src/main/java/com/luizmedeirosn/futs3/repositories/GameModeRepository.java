@@ -25,7 +25,7 @@ public interface GameModeRepository extends JpaRepository<GameMode, Long> {
                         INNER JOIN tb_position AS POS
                             ON GAMEPOS.position_id = POS.id
                 WHERE
-                    GAMEPOS.gamemode_id = :id ;
+                    GAMEPOS.gamemode_id = :id\\;
             """)
     Optional<List<GameModePositionProjection>> findGameModePositions(Long id);
 
