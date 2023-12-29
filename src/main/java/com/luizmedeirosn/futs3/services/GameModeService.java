@@ -111,7 +111,7 @@ public class GameModeService {
                                         .forEach(
                                                 parameterWeight -> positionParameterRepository.save(
                                                         new PositionParameter(pos, parameterRepository
-                                                                .findById(parameterWeight.parameterId()).get(),
+                                                                .findById(parameterWeight.id()).get(),
                                                                 parameterWeight.weight())));
                             });
             gameModeRepository.save(newGameMode);

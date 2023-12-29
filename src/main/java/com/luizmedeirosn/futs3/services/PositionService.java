@@ -1,5 +1,6 @@
 package com.luizmedeirosn.futs3.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -53,6 +54,15 @@ public class PositionService {
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+    public List<PositionResponseDTO> findAllWithParameters() {
+        List<PositionResponseDTO> result = new ArrayList<>();
+        positionRepository.findAll().forEach(position -> result.add(new PositionResponseDTO(position,
+                positionParameterRepository.findByIdPositionParameters(position.getId()))));
+
+        return result;
+    }
+
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public PositionResponseDTO findByIdPositionParameters(Long id) {
         try {
             if (!positionRepository.existsById(id)) {
@@ -76,7 +86,7 @@ public class PositionService {
             positionRequestDTO.parameters().forEach(parameterWeight -> {
                 PositionParameter positionParameter = new PositionParameter();
                 positionParameter.setPosition(position);
-                positionParameter.setParameter(parameterRepository.findById(parameterWeight.parameterId())
+                positionParameter.setParameter(parameterRepository.findById(parameterWeight.id())
                         .orElseThrow(NoSuchElementException::new));
                 positionParameter.setWeight(parameterWeight.weight());
 
@@ -99,15 +109,14 @@ public class PositionService {
     public PositionMinDTO update(Long id, PositionRequestDTO positionRequestDTO) {
         try {
             Position position = positionRepository.getReferenceById(id);
-            position.setName(positionRequestDTO.name());
-            position.setDescription(positionRequestDTO.description());
+            position.updateData(positionRequestDTO);
 
             positionParameterRepository.deleteByIdPositionId(id);
 
             for (ParameterWeightDTO parameterWeight : positionRequestDTO.parameters()) {
                 PositionParameter positionParameter = new PositionParameter();
                 positionParameter.setPosition(position);
-                positionParameter.setParameter(parameterRepository.findById(parameterWeight.parameterId())
+                positionParameter.setParameter(parameterRepository.findById(parameterWeight.id())
                         .orElseThrow(NoSuchElementException::new));
                 positionParameter.setWeight(parameterWeight.weight());
 

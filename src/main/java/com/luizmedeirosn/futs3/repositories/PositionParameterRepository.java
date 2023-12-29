@@ -18,9 +18,9 @@ public interface PositionParameterRepository extends JpaRepository<PositionParam
 
     @Query(nativeQuery = true, value = """
                 SELECT
-                    param.id AS parameterId,
-                    param.name AS parameterName,
-                    posparam.weight AS parameterWeight
+                    param.id AS id,
+                    param.name AS name,
+                    posparam.weight AS weight
                 FROM
                     tb_position_parameter as posparam
                         INNER JOIN tb_position AS pos

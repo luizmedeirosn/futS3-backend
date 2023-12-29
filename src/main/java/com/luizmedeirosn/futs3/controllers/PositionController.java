@@ -38,6 +38,11 @@ public class PositionController {
         return ResponseEntity.ok().body(positionService.findById(id));
     }
 
+    @GetMapping(value = "/parameters")
+    public ResponseEntity<List<PositionResponseDTO>> findAllWithParameters() {
+        return ResponseEntity.ok().body(positionService.findAllWithParameters());
+    }
+
     @GetMapping(value = "/{id}/parameters")
     public ResponseEntity<PositionResponseDTO> findPositionParametersById(@PathVariable Long id) {
         return ResponseEntity.ok().body(positionService.findByIdPositionParameters(id));
