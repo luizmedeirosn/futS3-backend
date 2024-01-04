@@ -129,6 +129,9 @@ public class PositionService {
         } catch (jakarta.persistence.EntityNotFoundException e) {
             throw new EntityNotFoundException("Position request. ID not found");
 
+        } catch (InvalidDataAccessApiUsageException e) {
+            throw new EntityNotFoundException("Position request. The given IDs must not be null");
+
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException("Position request. Unique index, check index or primary key violation");
         }

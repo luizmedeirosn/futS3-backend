@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.luizmedeirosn.futs3.entities.GameMode;
 import com.luizmedeirosn.futs3.projections.gamemode.AllGameModesProjection;
 import com.luizmedeirosn.futs3.projections.gamemode.GameModePositionProjection;
-import com.luizmedeirosn.futs3.projections.gamemode.GameModeProjection;
+import com.luizmedeirosn.futs3.projections.gamemode.GameModePositionsParametersProjection;
 import com.luizmedeirosn.futs3.projections.gamemode.PlayerFullScoreProjection;
 
 @Repository
@@ -85,7 +85,7 @@ public interface GameModeRepository extends JpaRepository<GameMode, Long> {
                         INNER JOIN tb_parameter AS param
                             ON posparam.parameter_id = param.id;
             """)
-    List<GameModeProjection> findFullById(Long gameModeId);
+    List<GameModePositionsParametersProjection> findByIdWithPositionsParameters(Long gameModeId);
 
     @Query(nativeQuery = true, value = """
                     SELECT
