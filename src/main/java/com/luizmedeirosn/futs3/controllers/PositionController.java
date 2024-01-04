@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.luizmedeirosn.futs3.projections.postition.PositionParametersProjection;
 import com.luizmedeirosn.futs3.services.PositionService;
 import com.luizmedeirosn.futs3.shared.dto.request.PositionRequestDTO;
+import com.luizmedeirosn.futs3.shared.dto.response.PositionResponseDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.min.PositionMinDTO;
 
 import lombok.RequiredArgsConstructor;
@@ -38,9 +38,14 @@ public class PositionController {
         return ResponseEntity.ok().body(positionService.findById(id));
     }
 
+    @GetMapping(value = "/parameters")
+    public ResponseEntity<List<PositionResponseDTO>> findAllWithParameters() {
+        return ResponseEntity.ok().body(positionService.findAllWithParameters());
+    }
+
     @GetMapping(value = "/{id}/parameters")
-    public ResponseEntity<List<PositionParametersProjection>> findAllPositionParameters(@PathVariable Long id) {
-        return ResponseEntity.ok().body(positionService.findAllPositionParameters(id));
+    public ResponseEntity<PositionResponseDTO> findPositionParametersById(@PathVariable Long id) {
+        return ResponseEntity.ok().body(positionService.findByIdPositionParameters(id));
     }
 
     @PostMapping

@@ -12,13 +12,15 @@ import com.luizmedeirosn.futs3.projections.postition.PositionParametersProjectio
 @Repository
 public interface PositionParameterRepository extends JpaRepository<PositionParameter, Long> {
 
+    void deleteByIdPositionId(Long positionId);
+
     void deleteByIdParameterId(Long parameterId);
 
     @Query(nativeQuery = true, value = """
                 SELECT
-                    param.id AS parameterId,
-                    param.name AS parameterName,
-                    posparam.weight AS parameterWeight
+                    param.id AS id,
+                    param.name AS name,
+                    posparam.weight AS weight
                 FROM
                     tb_position_parameter as posparam
                         INNER JOIN tb_position AS pos
@@ -28,6 +30,6 @@ public interface PositionParameterRepository extends JpaRepository<PositionParam
                 WHERE
                     pos.id = :positionId\\;
             """)
-    List<PositionParametersProjection> findAllPositionParameters(Long positionId);
+    List<PositionParametersProjection> findByIdPositionParameters(Long positionId);
 
 }
