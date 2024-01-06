@@ -37,7 +37,7 @@ public class PositionService {
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public List<PositionMinDTO> findAll() {
         return positionRepository
-                .findAll(Sort.by("id"))
+                .findAll(Sort.by("name"))
                 .stream()
                 .map(PositionMinDTO::new)
                 .toList();
@@ -56,7 +56,7 @@ public class PositionService {
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public List<PositionResponseDTO> findAllWithParameters() {
         List<PositionResponseDTO> result = new ArrayList<>();
-        positionRepository.findAll().forEach(position -> result.add(new PositionResponseDTO(position,
+        positionRepository.findAll(Sort.by("name")).forEach(position -> result.add(new PositionResponseDTO(position,
                 positionParameterRepository.findByIdPositionParameters(position.getId()))));
 
         return result;

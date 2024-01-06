@@ -45,7 +45,7 @@ public class GameModeService {
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public List<GameModeMinResponseDTO> findAll() {
         return gameModeRepository
-                .findAll(Sort.by("id"))
+                .findAll(Sort.by("formationName"))
                 .stream()
                 .map(GameModeMinResponseDTO::new)
                 .toList();
