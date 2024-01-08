@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -15,6 +16,10 @@ import com.luizmedeirosn.futs3.projections.gamemode.PlayerFullScoreProjection;
 
 @Repository
 public interface GameModeRepository extends JpaRepository<GameMode, Long> {
+
+    @Modifying
+    @Query(nativeQuery = true, value = "DELETE FROM tb_gamemode_position WHERE gamemode_id = :id\\;")
+    void deleteByIdFromTbGameModePosition(Long id);
 
     @Query(nativeQuery = true, value = """
                 SELECT

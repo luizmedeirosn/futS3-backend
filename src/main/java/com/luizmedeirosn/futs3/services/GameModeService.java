@@ -100,6 +100,10 @@ public class GameModeService {
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public List<GameModePositionProjection> findGameModePositions(Long id) {
+        if (!gameModeRepository.existsById(id)) {
+            throw new EntityNotFoundException("GameMode request. ID not found");
+        }
+
         return gameModeRepository.findGameModePositions(id)
                 .orElseThrow(() -> new DatabaseException("GameMode ID not found"));
     }
@@ -141,10 +145,17 @@ public class GameModeService {
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public GameModeMinResponseDTO update(Long id, GameModeRequestDTO gameModeRequestDTO) {
         try {
-            GameMode gameModeResponseDTO = gameModeRepository.getReferenceById(id);
-            gameModeResponseDTO.updateData(gameModeRequestDTO);
-            gameModeResponseDTO = gameModeRepository.save(gameModeResponseDTO);
-            return new GameModeMinResponseDTO(gameModeResponseDTO);
+            GameMode gameMode = gameModeRepository.getReferenceById(id);
+            gameMode.updateData(gameModeRequestDTO);
+
+            gameModeRepository.deleteByIdFromTbGameModePosition(id);
+            Set<Position> positions = gameMode.getPositions();
+
+            gameModeRequestDTO.positions()
+                    .forEach(positionId -> positions.add(positionRepository.findById(positionId).get()));
+
+            gameMode = gameModeRepository.save(gameMode);
+            return new GameModeMinResponseDTO(gameMode);
 
         } catch (jakarta.persistence.EntityNotFoundException e) {
             // jakarta.persistence.EntityNotFoundException: Unable to find
