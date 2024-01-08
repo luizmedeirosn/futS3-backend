@@ -4,17 +4,22 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.luizmedeirosn.futs3.entities.GameMode;
 import com.luizmedeirosn.futs3.projections.gamemode.AllGameModesProjection;
 import com.luizmedeirosn.futs3.projections.gamemode.GameModePositionProjection;
-import com.luizmedeirosn.futs3.projections.gamemode.GameModeProjection;
+import com.luizmedeirosn.futs3.projections.gamemode.GameModePositionsParametersProjection;
 import com.luizmedeirosn.futs3.projections.gamemode.PlayerFullScoreProjection;
 
 @Repository
 public interface GameModeRepository extends JpaRepository<GameMode, Long> {
+
+    @Modifying
+    @Query(nativeQuery = true, value = "DELETE FROM tb_gamemode_position WHERE gamemode_id = :id\\;")
+    void deleteByIdFromTbGameModePosition(Long id);
 
     @Query(nativeQuery = true, value = """
                 SELECT
@@ -85,7 +90,7 @@ public interface GameModeRepository extends JpaRepository<GameMode, Long> {
                         INNER JOIN tb_parameter AS param
                             ON posparam.parameter_id = param.id;
             """)
-    List<GameModeProjection> findFullById(Long gameModeId);
+    List<GameModePositionsParametersProjection> findByIdWithPositionsParameters(Long gameModeId);
 
     @Query(nativeQuery = true, value = """
                     SELECT

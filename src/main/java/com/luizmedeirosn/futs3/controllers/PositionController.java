@@ -19,6 +19,7 @@ import com.luizmedeirosn.futs3.shared.dto.request.PositionRequestDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.PositionResponseDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.min.PositionMinDTO;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -49,7 +50,7 @@ public class PositionController {
     }
 
     @PostMapping
-    public ResponseEntity<PositionMinDTO> save(@RequestBody PositionRequestDTO postPositionDTO) {
+    public ResponseEntity<PositionMinDTO> save(@RequestBody @Valid PositionRequestDTO postPositionDTO) {
         PositionMinDTO positionDTO = positionService.save(postPositionDTO);
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -61,7 +62,7 @@ public class PositionController {
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<PositionMinDTO> updateById(@PathVariable Long id,
-            @RequestBody PositionRequestDTO positionRequestDTO) {
+            @RequestBody @Valid PositionRequestDTO positionRequestDTO) {
         return ResponseEntity.ok().body(positionService.update(id, positionRequestDTO));
     }
 

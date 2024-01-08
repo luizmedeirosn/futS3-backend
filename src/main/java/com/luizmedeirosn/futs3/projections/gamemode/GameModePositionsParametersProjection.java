@@ -3,7 +3,7 @@ package com.luizmedeirosn.futs3.projections.gamemode;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonPropertyOrder({ "positionId", "positionName", "parameterId", "parameterName", "parameterWeight" })
-public interface GameModeProjection {
+public interface GameModePositionsParametersProjection {
 
     Long getPositionId();
 

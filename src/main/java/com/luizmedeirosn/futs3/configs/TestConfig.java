@@ -103,7 +103,7 @@ public class TestConfig implements CommandLineRunner {
         Position pos10 = new Position("MEIA ESQUERDO",
                 "Similar ao meia direito, concentra-se na criação de jogadas, explorando oportunidades de ataque pelo lado esquerdo.");
 
-        Position pos11 = new Position("MEIA-ATACANTE",
+        Position pos11 = new Position("MEIA ATACANTE",
                 "Atua tanto na criação quanto na finalização das jogadas, sendo uma peça-chave na articulação do jogo.");
 
         Position pos12 = new Position("PONTA DIREIRA",

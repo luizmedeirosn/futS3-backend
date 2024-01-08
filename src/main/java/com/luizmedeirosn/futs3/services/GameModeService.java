@@ -1,7 +1,9 @@
 package com.luizmedeirosn.futs3.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Set;
 
 import org.springframework.dao.DataIntegrityViolationException;
@@ -14,16 +16,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.luizmedeirosn.futs3.entities.GameMode;
 import com.luizmedeirosn.futs3.entities.Position;
-import com.luizmedeirosn.futs3.entities.PositionParameter;
 import com.luizmedeirosn.futs3.projections.gamemode.AllGameModesProjection;
 import com.luizmedeirosn.futs3.projections.gamemode.GameModePositionProjection;
+import com.luizmedeirosn.futs3.projections.gamemode.GameModePositionsParametersProjection;
 import com.luizmedeirosn.futs3.repositories.GameModeRepository;
 import com.luizmedeirosn.futs3.repositories.ParameterRepository;
-import com.luizmedeirosn.futs3.repositories.PositionParameterRepository;
 import com.luizmedeirosn.futs3.repositories.PositionRepository;
 import com.luizmedeirosn.futs3.shared.dto.request.GameModeRequestDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.GameModeResponseDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.PlayerFullScoreResponseDTO;
+import com.luizmedeirosn.futs3.shared.dto.response.aux.GameModePositionParameterDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.min.GameModeMinResponseDTO;
 import com.luizmedeirosn.futs3.shared.exceptions.DatabaseException;
 import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
@@ -40,12 +42,10 @@ public class GameModeService {
 
     private final ParameterRepository parameterRepository;
 
-    private final PositionParameterRepository positionParameterRepository;
-
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public List<GameModeMinResponseDTO> findAll() {
         return gameModeRepository
-                .findAll(Sort.by("id"))
+                .findAll(Sort.by("formationName"))
                 .stream()
                 .map(GameModeMinResponseDTO::new)
                 .toList();
@@ -69,7 +69,29 @@ public class GameModeService {
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public GameModeResponseDTO findFullById(Long id) {
         try {
-            return new GameModeResponseDTO(gameModeRepository.findById(id).get(), gameModeRepository.findFullById(id));
+
+            List<GameModePositionProjection> positions = gameModeRepository.findGameModePositions(id).get();
+            List<GameModePositionsParametersProjection> positionsParameters = gameModeRepository
+                    .findByIdWithPositionsParameters(id);
+
+            List<GameModePositionParameterDTO> fields = new ArrayList<>();
+
+            for (GameModePositionsParametersProjection positionParameter : positionsParameters) {
+                fields.add(new GameModePositionParameterDTO(
+                        positionParameter.getPositionId(),
+                        positionParameter.getPositionName(),
+                        positionParameter.getParameterId(),
+                        positionParameter.getParameterName(),
+                        positionParameter.getParameterWeight()));
+
+                positions.removeIf(
+                        position -> Objects.equals(position.getPositionId(), positionParameter.getPositionId()));
+            }
+
+            positions.forEach(position -> fields.add(new GameModePositionParameterDTO(position.getPositionId(),
+                    position.getPositionName(), null, null, null)));
+
+            return new GameModeResponseDTO(gameModeRepository.findById(id).get(), fields);
 
         } catch (NoSuchElementException e) {
             throw new EntityNotFoundException("GameMode ID not found");
@@ -78,6 +100,10 @@ public class GameModeService {
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public List<GameModePositionProjection> findGameModePositions(Long id) {
+        if (!gameModeRepository.existsById(id)) {
+            throw new EntityNotFoundException("GameMode request. ID not found");
+        }
+
         return gameModeRepository.findGameModePositions(id)
                 .orElseThrow(() -> new DatabaseException("GameMode ID not found"));
     }
@@ -100,20 +126,8 @@ public class GameModeService {
             newGameMode.setDescription(gameMode.description());
 
             Set<Position> positions = newGameMode.getPositions();
-            gameMode
-                    .positionsParameters()
-                    .forEach(
-                            positionParameters -> {
-                                Position pos = positionRepository.findById(positionParameters.positionId()).get();
-                                positions.add(pos);
-                                positionParameters
-                                        .parameters()
-                                        .forEach(
-                                                parameterWeight -> positionParameterRepository.save(
-                                                        new PositionParameter(pos, parameterRepository
-                                                                .findById(parameterWeight.id()).get(),
-                                                                parameterWeight.weight())));
-                            });
+            gameMode.positions().forEach(positionId -> positions.add(positionRepository.findById(positionId).get()));
+
             gameModeRepository.save(newGameMode);
             return findFullById(newGameMode.getId());
 
@@ -131,10 +145,20 @@ public class GameModeService {
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public GameModeMinResponseDTO update(Long id, GameModeRequestDTO gameModeRequestDTO) {
         try {
-            GameMode gameModeResponseDTO = gameModeRepository.getReferenceById(id);
-            gameModeResponseDTO.updateData(gameModeRequestDTO);
-            gameModeResponseDTO = gameModeRepository.save(gameModeResponseDTO);
-            return new GameModeMinResponseDTO(gameModeResponseDTO);
+            GameMode gameMode = gameModeRepository.getReferenceById(id);
+            gameMode.updateData(gameModeRequestDTO);
+
+            gameModeRepository.deleteByIdFromTbGameModePosition(id);
+            Set<Position> positions = gameMode.getPositions();
+
+            gameModeRequestDTO.positions()
+                    .forEach(positionId -> positions.add(positionRepository.findById(positionId).get()));
+
+            gameMode = gameModeRepository.save(gameMode);
+            return new GameModeMinResponseDTO(gameMode);
+
+        } catch (NullPointerException e) {
+            throw new EntityNotFoundException("GameMode request. The given IDs must not be null");
 
         } catch (jakarta.persistence.EntityNotFoundException e) {
             // jakarta.persistence.EntityNotFoundException: Unable to find
