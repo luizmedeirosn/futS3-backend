@@ -23,6 +23,7 @@ import com.luizmedeirosn.futs3.shared.dto.response.GameModeResponseDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.PlayerFullScoreResponseDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.min.GameModeMinResponseDTO;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -70,7 +71,7 @@ public class GameModeController {
     }
 
     @PostMapping
-    public ResponseEntity<GameModeResponseDTO> save(@RequestBody GameModeRequestDTO gameModeRequestDTO) {
+    public ResponseEntity<GameModeResponseDTO> save(@RequestBody @Valid GameModeRequestDTO gameModeRequestDTO) {
         GameModeResponseDTO gameModeResponseDTO = gameModeService.save(gameModeRequestDTO);
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -82,7 +83,7 @@ public class GameModeController {
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<GameModeMinResponseDTO> updateById(@PathVariable Long id,
-            @RequestBody GameModeRequestDTO gameModeRequestDTO) {
+            @RequestBody @Valid GameModeRequestDTO gameModeRequestDTO) {
         return ResponseEntity.ok().body(gameModeService.update(id, gameModeRequestDTO));
     }
 

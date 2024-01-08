@@ -18,6 +18,7 @@ import com.luizmedeirosn.futs3.services.ParameterSerivce;
 import com.luizmedeirosn.futs3.shared.dto.request.ParameterRequestDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.ParameterResponseDTO;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -38,7 +39,7 @@ public class ParameterController {
     }
 
     @PostMapping
-    public ResponseEntity<ParameterResponseDTO> save(@RequestBody ParameterRequestDTO parameterRequestDTO) {
+    public ResponseEntity<ParameterResponseDTO> save(@RequestBody @Valid ParameterRequestDTO parameterRequestDTO) {
         ParameterResponseDTO parameterDTO = parameterSerivce.save(parameterRequestDTO);
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -50,7 +51,7 @@ public class ParameterController {
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<ParameterResponseDTO> updateById(@PathVariable Long id,
-            @RequestBody ParameterRequestDTO parameterRequestDTO) {
+            @RequestBody @Valid ParameterRequestDTO parameterRequestDTO) {
         return ResponseEntity.ok().body(parameterSerivce.update(id, parameterRequestDTO));
     }
 

@@ -13,7 +13,7 @@ public record PositionRequestDTO(
 
         @NotNull @Size(min = 3, max = 50, message = "Enter a name between 3 and 50 characters") String name,
         @Size(max = 2000, message = "Enter a description with a maximum of 2000 characters") String description,
-        @Valid List<ParameterWeightDTO> parameters
+        @NotNull @Valid List<ParameterWeightDTO> parameters
 
 ) implements Serializable {
 

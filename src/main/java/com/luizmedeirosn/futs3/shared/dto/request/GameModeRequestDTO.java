@@ -11,7 +11,7 @@ public record GameModeRequestDTO(
 
         @NotNull @Size(min = 3, max = 50, message = "Enter a formation name between 3 and 20 characters") String formationName,
         @Size(max = 2000, message = "Enter a description with a maximum of 2000 characters") String description,
-        @Valid List<Long> positions
+        @NotNull @Valid List<Long> positions
 
 ) implements Serializable {
 

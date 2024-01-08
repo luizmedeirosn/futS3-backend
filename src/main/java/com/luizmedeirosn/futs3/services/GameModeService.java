@@ -157,6 +157,9 @@ public class GameModeService {
             gameMode = gameModeRepository.save(gameMode);
             return new GameModeMinResponseDTO(gameMode);
 
+        } catch (NullPointerException e) {
+            throw new EntityNotFoundException("GameMode request. The given IDs must not be null");
+
         } catch (jakarta.persistence.EntityNotFoundException e) {
             // jakarta.persistence.EntityNotFoundException: Unable to find
             // com.luizmedeirosn.futs3.entities.GameMode with id 10
