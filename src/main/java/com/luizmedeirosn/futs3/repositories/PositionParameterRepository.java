@@ -28,7 +28,8 @@ public interface PositionParameterRepository extends JpaRepository<PositionParam
                         INNER JOIN tb_parameter AS param
                             ON posparam.parameter_id = param.id
                 WHERE
-                    pos.id = :positionId\\;
+                    pos.id = :positionId
+                ORDER BY name;
             """)
     List<PositionParametersProjection> findByIdPositionParameters(Long positionId);
 

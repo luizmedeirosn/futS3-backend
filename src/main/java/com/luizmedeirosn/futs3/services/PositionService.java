@@ -7,11 +7,13 @@ import java.util.NoSuchElementException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.domain.Sort;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.luizmedeirosn.futs3.entities.Parameter;
 import com.luizmedeirosn.futs3.entities.Position;
 import com.luizmedeirosn.futs3.entities.PositionParameter;
 import com.luizmedeirosn.futs3.repositories.ParameterRepository;
@@ -44,7 +46,7 @@ public class PositionService {
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public PositionMinDTO findById(Long id) {
+    public PositionMinDTO findById(@NonNull Long id) {
         try {
             return new PositionMinDTO(positionRepository.findById(id).get());
 
@@ -63,7 +65,7 @@ public class PositionService {
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public PositionResponseDTO findByIdPositionParameters(Long id) {
+    public PositionResponseDTO findByIdPositionParameters(@NonNull Long id) {
         try {
             if (!positionRepository.existsById(id)) {
                 throw new NoSuchElementException();
@@ -84,13 +86,19 @@ public class PositionService {
                     .save(new Position(positionRequestDTO.name(), positionRequestDTO.description()));
 
             positionRequestDTO.parameters().forEach(parameterWeight -> {
-                PositionParameter positionParameter = new PositionParameter();
-                positionParameter.setPosition(position);
-                positionParameter.setParameter(parameterRepository.findById(parameterWeight.id())
-                        .orElseThrow(NoSuchElementException::new));
-                positionParameter.setWeight(parameterWeight.weight());
+                Long parameterId = parameterWeight.id();
+                if (parameterId != null) {
+                    PositionParameter positionParameter = new PositionParameter();
 
-                positionParameterRepository.save(positionParameter);
+                    positionParameter.setPosition(position);
+                    positionParameter.setParameter(parameterRepository.findById(parameterId)
+                            .orElseThrow(NoSuchElementException::new));
+                    positionParameter.setWeight(parameterWeight.weight());
+
+                    positionParameterRepository.save(positionParameter);
+                } else {
+                    throw new InvalidDataAccessApiUsageException("");
+                }
             });
             return new PositionMinDTO(position);
 
@@ -105,8 +113,9 @@ public class PositionService {
         }
     }
 
+    @SuppressWarnings("java:S2583")
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-    public PositionMinDTO update(Long id, PositionRequestDTO positionRequestDTO) {
+    public PositionMinDTO update(@NonNull Long id, PositionRequestDTO positionRequestDTO) {
         try {
             Position position = positionRepository.getReferenceById(id);
             position.updateData(positionRequestDTO);
@@ -114,13 +123,21 @@ public class PositionService {
             positionParameterRepository.deleteByIdPositionId(id);
 
             for (ParameterWeightDTO parameterWeight : positionRequestDTO.parameters()) {
-                PositionParameter positionParameter = new PositionParameter();
-                positionParameter.setPosition(position);
-                positionParameter.setParameter(parameterRepository.findById(parameterWeight.id())
-                        .orElseThrow(NoSuchElementException::new));
-                positionParameter.setWeight(parameterWeight.weight());
+                Long parameterId = parameterWeight.id();
+                if (parameterId != null) {
+                    PositionParameter positionParameter = new PositionParameter();
+                    positionParameter.setPosition(position);
 
-                positionParameterRepository.save(positionParameter);
+                    Parameter parameter = parameterRepository.findById(parameterId)
+                            .orElseThrow(NoSuchElementException::new);
+
+                    positionParameter.setParameter(parameter);
+                    positionParameter.setWeight(parameterWeight.weight());
+
+                    positionParameterRepository.save(positionParameter);
+                } else {
+                    throw new InvalidDataAccessApiUsageException("");
+                }
             }
 
             position = positionRepository.save(position);
@@ -130,15 +147,15 @@ public class PositionService {
             throw new EntityNotFoundException("Position request. ID not found");
 
         } catch (InvalidDataAccessApiUsageException e) {
-            throw new EntityNotFoundException("Position request. The given IDs must not be null");
+            throw new EntityNotFoundException("Position request. The given ID must not be null");
 
         } catch (DataIntegrityViolationException e) {
-            throw new DatabaseException("Position request. Unique index, check index or primary key violation");
+            throw new DatabaseException("Position request. Unique index, check index, or primary key violation");
         }
     }
 
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-    public void deleteById(Long id) {
+    public void deleteById(@NonNull Long id) {
         try {
             if (!positionRepository.existsById(id)) {
                 throw new EntityNotFoundException("Position request. ID not found");
