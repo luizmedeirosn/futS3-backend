@@ -32,7 +32,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-@SuppressWarnings({ "java:S2589" })
+@SuppressWarnings({ "java:S2583" })
 public class PlayerService {
 
     private final PlayerRepository playerRepository;
@@ -107,6 +107,8 @@ public class PlayerService {
             Long positionId = playerRequestDTO.positionId();
             if (positionId != null) {
                 newPlayer.setPosition(positionRepository.findById(positionId).get());
+            } else {
+                throw new NullPointerException();
             }
 
             newPlayer.setPlayerPicture(playerPicture);
@@ -116,11 +118,11 @@ public class PlayerService {
 
             return new PlayerResponseDTO(newPlayer, parameterRepository.findParametersByPlayerId(newPlayer.getId()));
 
+        } catch (NullPointerException | InvalidDataAccessApiUsageException e) {
+            throw new EntityNotFoundException("Player request. The given IDs must not be null");
+
         } catch (NoSuchElementException e) {
             throw new EntityNotFoundException("Player request. IDs not found");
-
-        } catch (InvalidDataAccessApiUsageException e) {
-            throw new EntityNotFoundException("Player request. The given IDs must not be null");
 
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException("Player request. Unique index, check index or primary key violation");
@@ -137,6 +139,8 @@ public class PlayerService {
             Long positionId = playerRequestDTO.positionId();
             if (positionId != null) {
                 player.setPosition(positionRepository.findById(positionId).get());
+            } else {
+                throw new NullPointerException();
             }
 
             playerParameterRepository.deleteByIdPlayerId(player.getId());
@@ -144,6 +148,9 @@ public class PlayerService {
 
             player = playerRepository.save(player);
             return new PlayerMinResponseDTO(player);
+
+        } catch (NullPointerException | InvalidDataAccessApiUsageException e) {
+            throw new EntityNotFoundException("Player request. The given ID must not be null");
 
         } catch (jakarta.persistence.EntityNotFoundException e) {
             throw new EntityNotFoundException("Player request. ID not found");

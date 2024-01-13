@@ -98,19 +98,20 @@ public class PositionService {
 
                     positionParameterRepository.save(positionParameter);
                 } else {
-                    throw new InvalidDataAccessApiUsageException("");
+                    throw new NullPointerException();
                 }
             });
+
             return new PositionMinDTO(position);
 
-        } catch (NoSuchElementException e) {
-            throw new EntityNotFoundException("Position request. IDs not found");
+        } catch (NullPointerException | InvalidDataAccessApiUsageException e) {
+            throw new EntityNotFoundException("Position request. The given ID must not be null");
 
-        } catch (InvalidDataAccessApiUsageException e) {
-            throw new EntityNotFoundException("Position request. The given IDs must not be null");
+        } catch (jakarta.persistence.EntityNotFoundException e) {
+            throw new EntityNotFoundException("Position request. ID not found");
 
         } catch (DataIntegrityViolationException e) {
-            throw new DatabaseException("Position request. Unique index, check index or primary key violation");
+            throw new DatabaseException("Position request. Unique index, check index, or primary key violation");
         }
     }
 
@@ -136,18 +137,18 @@ public class PositionService {
 
                     positionParameterRepository.save(positionParameter);
                 } else {
-                    throw new InvalidDataAccessApiUsageException("");
+                    throw new NullPointerException();
                 }
             }
 
             position = positionRepository.save(position);
             return new PositionMinDTO(position);
 
+        } catch (NullPointerException | InvalidDataAccessApiUsageException e) {
+            throw new EntityNotFoundException("Position request. The given ID must not be null");
+
         } catch (jakarta.persistence.EntityNotFoundException e) {
             throw new EntityNotFoundException("Position request. ID not found");
-
-        } catch (InvalidDataAccessApiUsageException e) {
-            throw new EntityNotFoundException("Position request. The given ID must not be null");
 
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException("Position request. Unique index, check index, or primary key violation");
