@@ -30,6 +30,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@SuppressWarnings({ "java:S2583" })
 public class PositionService {
 
     private final PositionRepository positionRepository;
@@ -113,7 +114,6 @@ public class PositionService {
         }
     }
 
-    @SuppressWarnings("java:S2583")
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public PositionMinDTO update(@NonNull Long id, PositionRequestDTO positionRequestDTO) {
         try {
