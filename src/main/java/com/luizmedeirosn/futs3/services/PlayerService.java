@@ -36,11 +36,8 @@ import lombok.RequiredArgsConstructor;
 public class PlayerService {
 
     private final PlayerRepository playerRepository;
-
     private final ParameterRepository parameterRepository;
-
     private final PlayerParameterRepository playerParameterRepository;
-
     private final PositionRepository positionRepository;
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)

@@ -38,9 +38,7 @@ import lombok.RequiredArgsConstructor;
 public class GameModeService {
 
     private final GameModeRepository gameModeRepository;
-
     private final PositionRepository positionRepository;
-
     private final ParameterRepository parameterRepository;
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)

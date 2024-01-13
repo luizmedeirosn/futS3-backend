@@ -6,6 +6,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 import org.springframework.boot.CommandLineRunner;
@@ -34,18 +35,13 @@ import lombok.RequiredArgsConstructor;
 public class TestConfig implements CommandLineRunner {
 
     private final GameModeRepository gameModeRepository;
-
     private final PositionRepository positionRepository;
-
     private final ParameterRepository parameterRepository;
-
     private final PlayerRepository playerRepository;
-
     private final PositionParameterRepository positionParameterRepository;
-
     private final PlayerParameterRepository playerParameterRepository;
 
-    private Random random = new Random();
+    private final Random random = new Random();
 
     @Override
     public void run(String... args) throws Exception {
@@ -69,9 +65,12 @@ public class TestConfig implements CommandLineRunner {
         GameMode gm9 = new GameMode("4-4-2",
                 "Uma clássica e equilibrada formação, pois permite uma grande variação de posicionamento. Aqui, você terá 4 jogadores na defesa, 4 no meio de campo e 2 atacantes. E torna-se um esquema difícil de enfrentar, visto que você pode usar seus atacantes, as alas ou até mesmo seu meia-central para lançar sequencias de ataque.");
 
-        gameModeRepository.saveAll(
-                Arrays.asList(
-                        gm1, gm2, gm3, gm4, gm5, gm6, gm7, gm8, gm9));
+        List<GameMode> gameModes = Arrays.asList(gm1, gm2, gm3, gm4, gm5, gm6, gm7, gm8, gm9);
+        if (gameModes.stream().noneMatch(Objects::isNull)) {
+            gameModeRepository.saveAll(gameModes);
+        } else {
+            throw new NullPointerException();
+        }
 
         Position pos1 = new Position("GOLEIRO",
                 "Defensor do gol, responsável por proteger a meta e realizar defesas fundamentais para a equipe.");
@@ -118,10 +117,13 @@ public class TestConfig implements CommandLineRunner {
         Position pos15 = new Position("CENTROAVANTE",
                 "Jogador que atua próximo à área adversária, responsável por finalizar jogadas com gols, sendo a referência principal do ataque.");
 
-        positionRepository.saveAll(
-                Arrays.asList(
-                        pos1, pos2, pos3, pos4, pos5, pos6, pos7, pos8, pos9, pos10, pos11, pos12, pos13, pos14,
-                        pos15));
+        List<Position> positions = Arrays.asList(
+                pos1, pos2, pos3, pos4, pos5, pos6, pos7, pos8, pos9, pos10, pos11, pos12, pos13, pos14, pos15);
+        if (positions.stream().noneMatch(Objects::isNull)) {
+            positionRepository.saveAll(positions);
+        } else {
+            throw new NullPointerException();
+        }
 
         gm1.getPositions().addAll(Arrays.asList(pos5, pos11, pos14));
         gameModeRepository.save(gm1);
@@ -152,11 +154,10 @@ public class TestConfig implements CommandLineRunner {
         Parameter prmt24 = new Parameter("VELOCIDADE", null);
         Parameter prmt25 = new Parameter("FINALIZAÇÃO", null);
 
-        parameterRepository.saveAll(
-                Arrays.asList(
-                        prmt1, prmt2, prmt3, prmt4, prmt5, prmt6, prmt7, prmt8, prmt9, prmt10, prmt11, prmt12, prmt13,
-                        prmt14, prmt15, prmt16, prmt17, prmt18, prmt19, prmt20, prmt21, prmt22, prmt23, prmt24,
-                        prmt25));
+        List<Parameter> parameters = new ArrayList<>(Arrays.asList(
+                prmt1, prmt2, prmt3, prmt4, prmt5, prmt6, prmt7, prmt8, prmt9, prmt10, prmt11, prmt12, prmt13,
+                prmt14, prmt15, prmt16, prmt17, prmt18, prmt19, prmt20, prmt21, prmt22, prmt23, prmt24, prmt25));
+        parameterRepository.saveAll(parameters);
 
         /*--!> OS JOGADORES ESTÃO ESCALADOS COM POSIÇÕES NO GERAL PARA FACILITAR A MOCKAGEM E PUXAR O RANKING, MAS NÃO SÃO DADOS REAIS */
         /* GOLEIROS */
@@ -255,8 +256,9 @@ public class TestConfig implements CommandLineRunner {
         PositionParameter pp12 = new PositionParameter(pos14, prmt19, 20);
         PositionParameter pp13 = new PositionParameter(pos14, prmt20, 20);
 
-        positionParameterRepository
-                .saveAll(Arrays.asList(pp1, pp2, pp3, pp4, pp5, pp6, pp7, pp8, pp9, pp10, pp11, pp12, pp13));
+        List<PositionParameter> positionParameters = new ArrayList<>(
+                Arrays.asList(pp1, pp2, pp3, pp4, pp5, pp6, pp7, pp8, pp9, pp10, pp11, pp12, pp13));
+        positionParameterRepository.saveAll(positionParameters);
 
         /* ESTATÍSTICA DOS ATACANTES */
         // PlayerParameter pylp2 = new PlayerParameter( player28, prmt21, 30 );
@@ -382,14 +384,13 @@ public class TestConfig implements CommandLineRunner {
         PlayerParameter pylp54 = new PlayerParameter(player38, prmt19, random.nextInt(30, 100));
         PlayerParameter pylp55 = new PlayerParameter(player38, prmt20, random.nextInt(30, 100));
 
-        playerParameterRepository.saveAll(
-                Arrays.asList(
-                        pylp1, pylp2, pylp3, pylp4, pylp5, pylp6, pylp7, pylp8, pylp9, pylp10, pylp11, pylp12, pylp13,
-                        pylp14, pylp15, pylp16, pylp17, pylp18, pylp19, pylp20, pylp21, pylp22, pylp23, pylp24, pylp25,
-                        pylp26, pylp27, pylp28, pylp29, pylp30, pylp31, pylp32, pylp33, pylp34, pylp35, pylp36, pylp37,
-                        pylp38, pylp39, pylp40,
-                        pylp41, pylp42, pylp43, pylp44, pylp45, pylp46, pylp47, pylp48, pylp49, pylp50, pylp51, pylp52,
-                        pylp53, pylp54, pylp55));
+        List<PlayerParameter> playerParameters = new ArrayList<>(Arrays.asList(
+                pylp1, pylp2, pylp3, pylp4, pylp5, pylp6, pylp7, pylp8, pylp9, pylp10, pylp11, pylp12, pylp13,
+                pylp14, pylp15, pylp16, pylp17, pylp18, pylp19, pylp20, pylp21, pylp22, pylp23, pylp24, pylp25,
+                pylp26, pylp27, pylp28, pylp29, pylp30, pylp31, pylp32, pylp33, pylp34, pylp35, pylp36, pylp37,
+                pylp38, pylp39, pylp40, pylp41, pylp42, pylp43, pylp44, pylp45, pylp46, pylp47, pylp48, pylp49,
+                pylp50, pylp51, pylp52, pylp53, pylp54, pylp55));
+        playerParameterRepository.saveAll(playerParameters);
 
     }
 
