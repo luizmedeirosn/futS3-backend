@@ -6,6 +6,7 @@ import java.util.NoSuchElementException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.domain.Sort;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -25,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@SuppressWarnings({ "java:S2589" })
 public class ParameterSerivce {
 
     private final PositionParameterRepository positionParameterRepository;
@@ -41,7 +43,7 @@ public class ParameterSerivce {
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public ParameterResponseDTO findById(Long id) {
+    public ParameterResponseDTO findById(@NonNull Long id) {
         try {
             return new ParameterResponseDTO(parameterRepository.findById(id).get());
 
@@ -51,7 +53,7 @@ public class ParameterSerivce {
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public List<PlayerParameterProjection> findByPlayerId(Long id) {
+    public List<PlayerParameterProjection> findByPlayerId(@NonNull Long id) {
         try {
             return parameterRepository.findParametersByPlayerId(id);
 
@@ -82,7 +84,7 @@ public class ParameterSerivce {
     }
 
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-    public ParameterResponseDTO update(Long id, ParameterRequestDTO parameterRequestDTO) {
+    public ParameterResponseDTO update(@NonNull Long id, ParameterRequestDTO parameterRequestDTO) {
         try {
             Parameter parameter = parameterRepository.getReferenceById(id);
             parameter.updateData(parameterRequestDTO);
@@ -97,7 +99,7 @@ public class ParameterSerivce {
     }
 
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-    public void deleteById(Long id) {
+    public void deleteById(@NonNull Long id) {
         try {
             if (!parameterRepository.existsById(id)) {
                 throw new EntityNotFoundException("Parameter request. ID not found");
