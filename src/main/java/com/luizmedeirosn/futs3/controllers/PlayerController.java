@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -36,7 +37,7 @@ public class PlayerController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PlayerMinResponseDTO> findById(@PathVariable Long id) {
+    public ResponseEntity<PlayerMinResponseDTO> findById(@PathVariable @NonNull Long id) {
         return ResponseEntity.ok().body(playerService.findById(id));
     }
 
@@ -46,7 +47,7 @@ public class PlayerController {
     }
 
     @GetMapping("/{id}/full")
-    public ResponseEntity<PlayerResponseDTO> findFullById(@PathVariable Long id) {
+    public ResponseEntity<PlayerResponseDTO> findFullById(@PathVariable @NonNull Long id) {
         return ResponseEntity.ok().body(playerService.findFullById(id));
     }
 
@@ -62,14 +63,14 @@ public class PlayerController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<PlayerMinResponseDTO> update(@PathVariable Long id,
+    public ResponseEntity<PlayerMinResponseDTO> update(@PathVariable @NonNull Long id,
             @ModelAttribute @Valid PlayerRequestDTO playerRequestDTO) {
         System.out.println(playerRequestDTO);
         return ResponseEntity.ok().body(playerService.update(id, playerRequestDTO));
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteById(@PathVariable @NonNull Long id) {
         playerService.deleteById(id);
         return ResponseEntity.noContent().build();
     }

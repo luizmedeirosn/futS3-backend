@@ -88,7 +88,8 @@ public interface GameModeRepository extends JpaRepository<GameMode, Long> {
                         ) AS gamemodepos
                             ON posparam.position_id = gamemodepos.position_id
                         INNER JOIN tb_parameter AS param
-                            ON posparam.parameter_id = param.id;
+                            ON posparam.parameter_id = param.id
+                ORDER BY positionName, parameterName;
             """)
     List<GameModePositionsParametersProjection> findByIdWithPositionsParameters(Long gameModeId);
 

@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,7 +40,7 @@ public class GameModeController {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<GameModeMinResponseDTO> findById(@PathVariable Long id) {
+    public ResponseEntity<GameModeMinResponseDTO> findById(@PathVariable @NonNull Long id) {
         return ResponseEntity.ok().body(gameModeService.findById(id));
     }
 
@@ -49,19 +50,19 @@ public class GameModeController {
     }
 
     @GetMapping(value = "/{id}/full")
-    public ResponseEntity<GameModeResponseDTO> findFullById(@PathVariable Long id) {
+    public ResponseEntity<GameModeResponseDTO> findFullById(@PathVariable @NonNull Long id) {
         return ResponseEntity.ok().body(gameModeService.findFullById(id));
     }
 
     @GetMapping(value = "/{id}/positions")
-    public ResponseEntity<List<GameModePositionProjection>> findGameModePositions(@PathVariable Long id) {
+    public ResponseEntity<List<GameModePositionProjection>> findGameModePositions(@PathVariable @NonNull Long id) {
         return ResponseEntity.ok().body(gameModeService.findGameModePositions(id));
     }
 
     @GetMapping("/ranking")
     public ResponseEntity<List<PlayerFullScoreResponseDTO>> getPlayersRanking(
-            @RequestParam("gameModeId") Long gameModeId,
-            @RequestParam("positionId") Long positionId) {
+            @RequestParam("gameModeId") @NonNull Long gameModeId,
+            @RequestParam("positionId") @NonNull Long positionId) {
         try {
             Thread.sleep(0);
         } catch (InterruptedException e) {
@@ -82,13 +83,13 @@ public class GameModeController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<GameModeMinResponseDTO> updateById(@PathVariable Long id,
+    public ResponseEntity<GameModeMinResponseDTO> updateById(@PathVariable @NonNull Long id,
             @RequestBody @Valid GameModeRequestDTO gameModeRequestDTO) {
         return ResponseEntity.ok().body(gameModeService.update(id, gameModeRequestDTO));
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteById(@PathVariable @NonNull Long id) {
         gameModeService.deleteById(id);
         return ResponseEntity.noContent().build();
     }

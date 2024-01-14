@@ -6,6 +6,7 @@ import java.util.NoSuchElementException;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -31,14 +32,12 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@SuppressWarnings({ "java:S2583" })
 public class PlayerService {
 
     private final PlayerRepository playerRepository;
-
     private final ParameterRepository parameterRepository;
-
     private final PlayerParameterRepository playerParameterRepository;
-
     private final PositionRepository positionRepository;
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
@@ -47,7 +46,7 @@ public class PlayerService {
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public PlayerMinResponseDTO findById(Long id) {
+    public PlayerMinResponseDTO findById(@NonNull Long id) {
         try {
             return new PlayerMinResponseDTO(playerRepository.findById(id).get());
 
@@ -57,7 +56,7 @@ public class PlayerService {
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public PlayerResponseDTO findFullById(Long id) {
+    public PlayerResponseDTO findFullById(@NonNull Long id) {
         try {
             return new PlayerResponseDTO(playerRepository.findById(id).get(),
                     parameterRepository.findParametersByPlayerId(id));
@@ -72,8 +71,7 @@ public class PlayerService {
         return playerParameterRepository.findAllPlayersParameters();
     }
 
-    @SuppressWarnings("java:S112")
-    private void savePlayerParameters(Player player, String parametersSTR) throws RuntimeException {
+    private void savePlayerParameters(Player player, String parametersSTR) {
         if (parametersSTR.length() > 3) {
             List<String> parametersSTRList = Arrays.asList(parametersSTR.split(","));
             List<PlayerParameterScoreDTO> parameters = parametersSTRList.stream()
@@ -83,10 +81,16 @@ public class PlayerService {
 
             parameters.forEach(
                     parameterScore -> {
-                        Parameter parameter = parameterRepository.findById(parameterScore.id()).get();
-                        PlayerParameter playerParameter = new PlayerParameter(player, parameter,
-                                parameterScore.score());
-                        playerParameterRepository.save(playerParameter);
+                        Long parameterScoreId = parameterScore.id();
+                        if (parameterScoreId != null) {
+                            Parameter parameter = parameterRepository.findById(parameterScoreId).get();
+                            PlayerParameter playerParameter = new PlayerParameter(player, parameter,
+                                    parameterScore.score());
+                            playerParameterRepository.save(playerParameter);
+
+                        } else {
+                            throw new EntityNotFoundException("Player request. The given ID must not be null");
+                        }
                     });
         }
     }
@@ -97,7 +101,13 @@ public class PlayerService {
             Player newPlayer = new Player(playerRequestDTO);
             PlayerPicture playerPicture = new PlayerPicture(newPlayer, playerRequestDTO.playerPicture());
 
-            newPlayer.setPosition(positionRepository.findById(playerRequestDTO.positionId()).get());
+            Long positionId = playerRequestDTO.positionId();
+            if (positionId != null) {
+                newPlayer.setPosition(positionRepository.findById(positionId).get());
+            } else {
+                throw new NullPointerException();
+            }
+
             newPlayer.setPlayerPicture(playerPicture);
 
             playerRepository.save(newPlayer);
@@ -105,11 +115,11 @@ public class PlayerService {
 
             return new PlayerResponseDTO(newPlayer, parameterRepository.findParametersByPlayerId(newPlayer.getId()));
 
+        } catch (NullPointerException | InvalidDataAccessApiUsageException e) {
+            throw new EntityNotFoundException("Player request. The given IDs must not be null");
+
         } catch (NoSuchElementException e) {
             throw new EntityNotFoundException("Player request. IDs not found");
-
-        } catch (InvalidDataAccessApiUsageException e) {
-            throw new EntityNotFoundException("Player request. The given IDs must not be null");
 
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException("Player request. Unique index, check index or primary key violation");
@@ -117,18 +127,27 @@ public class PlayerService {
     }
 
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-    public PlayerMinResponseDTO update(Long id, PlayerRequestDTO playerRequestDTO) {
+    public PlayerMinResponseDTO update(@NonNull Long id, PlayerRequestDTO playerRequestDTO) {
         try {
             Player player = playerRepository.getReferenceById(id);
 
             player.updateData(playerRequestDTO);
-            player.setPosition(positionRepository.findById(playerRequestDTO.positionId()).get());
+
+            Long positionId = playerRequestDTO.positionId();
+            if (positionId != null) {
+                player.setPosition(positionRepository.findById(positionId).get());
+            } else {
+                throw new NullPointerException();
+            }
 
             playerParameterRepository.deleteByIdPlayerId(player.getId());
             savePlayerParameters(player, playerRequestDTO.parameters());
 
             player = playerRepository.save(player);
             return new PlayerMinResponseDTO(player);
+
+        } catch (NullPointerException | InvalidDataAccessApiUsageException e) {
+            throw new EntityNotFoundException("Player request. The given ID must not be null");
 
         } catch (jakarta.persistence.EntityNotFoundException e) {
             throw new EntityNotFoundException("Player request. ID not found");
@@ -139,7 +158,7 @@ public class PlayerService {
     }
 
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-    public void deleteById(Long id) {
+    public void deleteById(@NonNull Long id) {
         if (!playerRepository.existsById(id)) {
             throw new EntityNotFoundException("Player request. ID not found");
         }

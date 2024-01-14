@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,7 +35,7 @@ public class ParameterController {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<ParameterResponseDTO> findById(@PathVariable Long id) {
+    public ResponseEntity<ParameterResponseDTO> findById(@PathVariable @NonNull Long id) {
         return ResponseEntity.ok().body(parameterSerivce.findById(id));
     }
 
@@ -50,13 +51,13 @@ public class ParameterController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<ParameterResponseDTO> updateById(@PathVariable Long id,
+    public ResponseEntity<ParameterResponseDTO> updateById(@PathVariable @NonNull Long id,
             @RequestBody @Valid ParameterRequestDTO parameterRequestDTO) {
         return ResponseEntity.ok().body(parameterSerivce.update(id, parameterRequestDTO));
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteById(@PathVariable @NonNull Long id) {
         parameterSerivce.deleteById(id);
         return ResponseEntity.noContent().build();
     }
