@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class JwtAuthService {
+public class JwtService {
 
     @Value("${secret.key}")
     private String secretKey;
@@ -42,8 +42,8 @@ public class JwtAuthService {
 
     public TokenDTO generateToken(String username) {
         Map<String, Object> claims = new HashMap<>();
-        Date acessTokenExpirationTime = new Date(System.currentTimeMillis() + (1000L * 10L));
-        Date refreshAcessTokenExpirationTime = new Date(System.currentTimeMillis() + (1000L * 30L));
+        Date acessTokenExpirationTime = new Date(System.currentTimeMillis() + (1000L * 60L * 30L));
+        Date refreshAcessTokenExpirationTime = new Date(System.currentTimeMillis() + (1000L * 60L * 60L * 3L));
 
         String accessToken = createToken(username, claims, acessTokenExpirationTime);
         String refreshToken = createToken(username, claims, refreshAcessTokenExpirationTime);
@@ -62,7 +62,7 @@ public class JwtAuthService {
                 String accessToken = createToken(
                         username,
                         claims,
-                        new Date(System.currentTimeMillis() + (1000L * 10L)));
+                        new Date(System.currentTimeMillis() + (1000L * 60L * 30L)));
 
                 return new TokenDTO(accessToken, refreshToken);
             }
@@ -97,10 +97,10 @@ public class JwtAuthService {
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
+
         } catch (MalformedJwtException | ExpiredJwtException e) {
             throw new JwtAuthException(e.getMessage());
         }
-
     }
 
     private Boolean isTokenExpired(String token) {
@@ -108,7 +108,7 @@ public class JwtAuthService {
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
+        String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
