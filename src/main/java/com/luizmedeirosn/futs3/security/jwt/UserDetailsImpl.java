@@ -11,24 +11,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.luizmedeirosn.futs3.entities.CustomUser;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Entity
-@Table(name = "tb_user")
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
-public class CustomUserDetails implements UserDetails {
+public class UserDetailsImpl implements UserDetails {
 
     private String username;
     private String password;
     private List<GrantedAuthority> authorities;
 
-    public CustomUserDetails(CustomUser customUser) {
+    public UserDetailsImpl(CustomUser customUser) {
         username = customUser.getUsername();
         password = customUser.getPassword();
         authorities = Arrays
