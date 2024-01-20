@@ -17,7 +17,6 @@ import com.luizmedeirosn.futs3.shared.dto.response.TokenResponseDTO;
 import com.luizmedeirosn.futs3.shared.exceptions.JwtAuthException;
 
 import lombok.RequiredArgsConstructor;
-import lombok.var;
 
 @Service
 @RequiredArgsConstructor
