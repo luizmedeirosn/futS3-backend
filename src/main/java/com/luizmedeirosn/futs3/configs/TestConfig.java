@@ -9,10 +9,13 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.luizmedeirosn.futs3.entities.CustomUser;
 import com.luizmedeirosn.futs3.entities.GameMode;
 import com.luizmedeirosn.futs3.entities.Parameter;
 import com.luizmedeirosn.futs3.entities.Player;
@@ -20,6 +23,7 @@ import com.luizmedeirosn.futs3.entities.PlayerParameter;
 import com.luizmedeirosn.futs3.entities.PlayerPicture;
 import com.luizmedeirosn.futs3.entities.Position;
 import com.luizmedeirosn.futs3.entities.PositionParameter;
+import com.luizmedeirosn.futs3.repositories.CustomUserRepository;
 import com.luizmedeirosn.futs3.repositories.GameModeRepository;
 import com.luizmedeirosn.futs3.repositories.ParameterRepository;
 import com.luizmedeirosn.futs3.repositories.PlayerParameterRepository;
@@ -34,6 +38,20 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TestConfig implements CommandLineRunner {
 
+    @Value("${admin.username}")
+    private String adminUsername;
+
+    @Value("${admin.password}")
+    private String adminPassword;
+
+    @Value("${userTest.username}")
+    private String userTestUsername;
+
+    @Value("${userTest.password}")
+    private String userTestPassword;
+
+    private final CustomUserRepository customUserRepository;
+    private final PasswordEncoder passwordEncoder;
     private final GameModeRepository gameModeRepository;
     private final PositionRepository positionRepository;
     private final ParameterRepository parameterRepository;
@@ -45,6 +63,23 @@ public class TestConfig implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+
+        CustomUser adminFutS3 = new CustomUser(
+                null,
+                adminUsername,
+                "admin@futS3.com",
+                passwordEncoder.encode(adminPassword),
+                "ROLE_ADMIN");
+
+        CustomUser userTestFutS3 = new CustomUser(
+                null,
+                userTestUsername,
+                "userTest@futS3.com",
+                passwordEncoder.encode(userTestPassword),
+                "ROLE_USER");
+
+        customUserRepository.save(adminFutS3);
+        customUserRepository.save(userTestFutS3);
 
         GameMode gm1 = new GameMode("4-3-3 (ofensivo)",
                 "O 4-3-3 é amplamente difundido por sua boa distribuição de espaço de jogo. Além disso, é uma formação extremamente flexível desde as fases iniciais da ação ofensiva da saída de bola.");
