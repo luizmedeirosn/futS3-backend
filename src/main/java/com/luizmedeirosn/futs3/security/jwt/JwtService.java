@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import com.luizmedeirosn.futs3.shared.dto.response.TokenDTO;
+import com.luizmedeirosn.futs3.shared.dto.response.TokenResponseDTO;
 import com.luizmedeirosn.futs3.shared.exceptions.JwtAuthException;
 
 import io.jsonwebtoken.Claims;
@@ -40,7 +40,7 @@ public class JwtService {
                 .compact();
     }
 
-    public TokenDTO generateToken(String username) {
+    public TokenResponseDTO generateToken(String username) {
         Map<String, Object> claims = new HashMap<>();
         Date acessTokenExpirationTime = new Date(System.currentTimeMillis() + (1000L * 60L * 30L));
         Date refreshAcessTokenExpirationTime = new Date(System.currentTimeMillis() + (1000L * 60L * 60L * 3L));
@@ -48,10 +48,10 @@ public class JwtService {
         String accessToken = createToken(username, claims, acessTokenExpirationTime);
         String refreshToken = createToken(username, claims, refreshAcessTokenExpirationTime);
 
-        return new TokenDTO(accessToken, refreshToken);
+        return new TokenResponseDTO(accessToken, refreshToken);
     }
 
-    public TokenDTO refreshAccessToken(String refreshToken) {
+    public TokenResponseDTO refreshAccessToken(String refreshToken) {
         if (refreshToken.contains("Bearer ")) {
             refreshToken = refreshToken.substring("Bearer ".length());
             String username = extractUsername(refreshToken);
@@ -64,7 +64,7 @@ public class JwtService {
                         claims,
                         new Date(System.currentTimeMillis() + (1000L * 60L * 30L)));
 
-                return new TokenDTO(accessToken, refreshToken);
+                return new TokenResponseDTO(accessToken, refreshToken);
             }
         }
 
