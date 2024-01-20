@@ -1,5 +1,7 @@
 package com.luizmedeirosn.futs3.entities;
 
+import com.luizmedeirosn.futs3.shared.dto.request.SignupRequestDTO;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -32,5 +34,12 @@ public class CustomUser {
 
     @Column(nullable = false)
     private String roles;
+
+    public CustomUser(SignupRequestDTO signupRequestDTO) {
+        username = signupRequestDTO.username();
+        email = signupRequestDTO.email();
+        password = signupRequestDTO.password();
+        roles = signupRequestDTO.roles();
+    }
 
 }
