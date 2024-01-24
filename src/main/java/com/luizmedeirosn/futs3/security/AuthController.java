@@ -4,7 +4,6 @@ import java.net.URI;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -45,14 +44,12 @@ public class AuthController {
         return authService.signin(signin);
     }
 
-    @PutMapping("/auth/refresh-token/{username}")
+    @PutMapping("/auth/refresh-token")
     public TokenResponseDTO refreshAccessToken(
-
-            @PathVariable @NotNull @NotBlank String username,
             @RequestHeader("Authorization") @NotNull @NotBlank String refreshAccessToken
 
     ) {
-        return authService.refreshAccessToken(username, refreshAccessToken);
+        return authService.refreshAccessToken(refreshAccessToken);
     }
 
 }

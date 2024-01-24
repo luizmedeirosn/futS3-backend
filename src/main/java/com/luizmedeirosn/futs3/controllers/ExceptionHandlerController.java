@@ -13,6 +13,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 import com.luizmedeirosn.futs3.shared.exceptions.DatabaseException;
 import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
+import com.luizmedeirosn.futs3.shared.exceptions.JwtAuthException;
 import com.luizmedeirosn.futs3.shared.exceptions.StandardError;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -72,6 +73,15 @@ public class ExceptionHandlerController {
     public ResponseEntity<StandardError> jsonParseError(HttpMessageNotReadableException e, HttpServletRequest request) {
         final String ERROR = "JSON PARSE ERROR";
         final HttpStatus STATUS = HttpStatus.BAD_REQUEST;
+        StandardError EXCEPTION = new StandardError(Instant.now(), STATUS.value(), ERROR, e.getMessage(),
+                request.getRequestURI());
+        return ResponseEntity.status(STATUS).body(EXCEPTION);
+    }
+
+    @ExceptionHandler(JwtAuthException.class)
+    public ResponseEntity<StandardError> authJwtTokenError(JwtAuthException e, HttpServletRequest request) {
+        final String ERROR = "AUTHENTICATE JWT TOKEN ERROR";
+        final HttpStatus STATUS = HttpStatus.UNAUTHORIZED;
         StandardError EXCEPTION = new StandardError(Instant.now(), STATUS.value(), ERROR, e.getMessage(),
                 request.getRequestURI());
         return ResponseEntity.status(STATUS).body(EXCEPTION);

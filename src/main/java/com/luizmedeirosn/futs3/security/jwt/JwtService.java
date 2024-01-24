@@ -42,8 +42,8 @@ public class JwtService {
 
     public TokenResponseDTO generateToken(String username) {
         Map<String, Object> claims = new HashMap<>();
-        Date acessTokenExpirationTime = new Date(System.currentTimeMillis() + (1000L * 60L * 30L));
-        Date refreshAcessTokenExpirationTime = new Date(System.currentTimeMillis() + (1000L * 60L * 60L * 3L));
+        Date acessTokenExpirationTime = new Date(System.currentTimeMillis() + (1000L * 10L * 1L));
+        Date refreshAcessTokenExpirationTime = new Date(System.currentTimeMillis() + (1000L * 30L * 1L * 1L));
 
         String accessToken = createToken(username, claims, acessTokenExpirationTime);
         String refreshToken = createToken(username, claims, refreshAcessTokenExpirationTime);
@@ -62,7 +62,7 @@ public class JwtService {
                 String accessToken = createToken(
                         username,
                         claims,
-                        new Date(System.currentTimeMillis() + (1000L * 60L * 30L)));
+                        new Date(System.currentTimeMillis() + (1000L * 10L * 1L)));
 
                 return new TokenResponseDTO(accessToken, refreshToken);
             }

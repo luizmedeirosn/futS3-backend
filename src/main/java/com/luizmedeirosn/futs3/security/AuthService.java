@@ -45,7 +45,7 @@ public class AuthService {
     }
 
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-    public TokenResponseDTO refreshAccessToken(String username, String refreshAccessToken) {
+    public TokenResponseDTO refreshAccessToken(String refreshAccessToken) {
         return jwtService.refreshAccessToken(refreshAccessToken);
     }
 
