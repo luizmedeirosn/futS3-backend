@@ -11,10 +11,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.luizmedeirosn.futs3.shared.dto.response.TokenResponseDTO;
-import com.luizmedeirosn.futs3.shared.exceptions.JwtAuthException;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.io.Decoders;
@@ -43,7 +41,7 @@ public class JwtService {
     public TokenResponseDTO generateToken(String username) {
         Map<String, Object> claims = new HashMap<>();
         Date acessTokenExpirationTime = new Date(System.currentTimeMillis() + (1000L * 10L * 1L));
-        Date refreshAcessTokenExpirationTime = new Date(System.currentTimeMillis() + (1000L * 30L * 1L * 1L));
+        Date refreshAcessTokenExpirationTime = new Date(System.currentTimeMillis() + (1000L * 10L * 1L * 1L));
 
         String accessToken = createToken(username, claims, acessTokenExpirationTime);
         String refreshToken = createToken(username, claims, refreshAcessTokenExpirationTime);
@@ -68,7 +66,7 @@ public class JwtService {
             }
         }
 
-        throw new JwtAuthException("Invalid refresh token");
+        throw new MalformedJwtException("Invalid JWT Signature");
     }
 
     private Key getSignKey() {
@@ -90,17 +88,12 @@ public class JwtService {
     }
 
     private Claims extractAllClaims(String token) {
-        try {
-            return Jwts
-                    .parserBuilder()
-                    .setSigningKey(getSignKey())
-                    .build()
-                    .parseClaimsJws(token)
-                    .getBody();
-
-        } catch (MalformedJwtException | ExpiredJwtException e) {
-            throw new JwtAuthException(e.getMessage());
-        }
+        return Jwts
+                .parserBuilder()
+                .setSigningKey(getSignKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 
     private Boolean isTokenExpired(String token) {

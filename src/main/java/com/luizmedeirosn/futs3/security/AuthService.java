@@ -1,6 +1,7 @@
 package com.luizmedeirosn.futs3.security;
 
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -14,7 +15,6 @@ import com.luizmedeirosn.futs3.shared.dto.request.SigninRequestDTO;
 import com.luizmedeirosn.futs3.shared.dto.request.SignupRequestDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.SignupResponseDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.TokenResponseDTO;
-import com.luizmedeirosn.futs3.shared.exceptions.JwtAuthException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -40,7 +40,7 @@ public class AuthService {
         if (authentication.isAuthenticated()) {
             return jwtService.generateToken(signinRequestDTO.username());
         } else {
-            throw new JwtAuthException("Invalid user request");
+            throw new BadCredentialsException("Authentication Failure");
         }
     }
 
