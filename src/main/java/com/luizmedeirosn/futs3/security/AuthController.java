@@ -45,11 +45,9 @@ public class AuthController {
     }
 
     @PutMapping("/auth/refresh-token")
-    public TokenResponseDTO refreshAccessToken(
-            @RequestHeader("Authorization") @NotNull @NotBlank String refreshAccessToken
-
-    ) {
-        return authService.refreshAccessToken(refreshAccessToken);
+    public TokenResponseDTO refreshToken(
+            @RequestHeader("Authorization") @NotNull @NotBlank String refreshToken) {
+        return authService.refreshToken(refreshToken);
     }
 
 }
