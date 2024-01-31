@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -22,6 +23,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 
 @RestController
+@RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
@@ -39,12 +41,12 @@ public class AuthController {
         return ResponseEntity.created(uri).body(response);
     }
 
-    @PostMapping("/auth/signin")
+    @PostMapping("/signin")
     public TokenResponseDTO signin(@RequestBody @Valid SigninRequestDTO signin) {
         return authService.signin(signin);
     }
 
-    @PutMapping("/auth/refresh-token")
+    @PutMapping("/refresh-token")
     public TokenResponseDTO refreshToken(
             @RequestHeader("Authorization") @NotNull @NotBlank String refreshToken) {
         return authService.refreshToken(refreshToken);
