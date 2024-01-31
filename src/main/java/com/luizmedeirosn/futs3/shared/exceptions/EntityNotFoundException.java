@@ -4,7 +4,7 @@ public class EntityNotFoundException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
-    public EntityNotFoundException(String messageEroor) {
-        super(messageEroor);
+    public EntityNotFoundException(String message) {
+        super(message);
     }
 }

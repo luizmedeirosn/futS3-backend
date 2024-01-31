@@ -4,8 +4,8 @@ public class DatabaseException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
-    public DatabaseException(String messageError) {
-        super(messageError);
+    public DatabaseException(String message) {
+        super(message);
     }
 
 }

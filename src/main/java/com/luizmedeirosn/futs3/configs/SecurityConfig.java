@@ -17,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import com.luizmedeirosn.futs3.security.jwt.JwtAuthFilter;
 import com.luizmedeirosn.futs3.security.jwt.UserDetailsServiceImpl;
@@ -33,19 +34,24 @@ public class SecurityConfig {
     private String secretKey;
 
     private final UserDetailsServiceImpl userDetailsServiceImpl;
-    private final JwtAuthFilter jwtAuthFilter;
+    private final HandlerExceptionResolver handlerExceptionResolver;
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.authorizeHttpRequests(
                 auth -> auth
-                        .requestMatchers("/auth/signin").permitAll()
+                        .requestMatchers("/auth/signin", "/playerspictures/**").permitAll()
                         .anyRequest().authenticated())
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .cors(Customizer.withDefaults())
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class)
                 .build();
+    }
+
+    @Bean
+    JwtAuthFilter jwtAuthFilter() {
+        return new JwtAuthFilter(handlerExceptionResolver);
     }
 
     @Bean

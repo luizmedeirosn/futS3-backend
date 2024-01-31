@@ -255,7 +255,7 @@ public class TestConfig implements CommandLineRunner {
                         player38));
         playerRepository.saveAll(players);
 
-        final String PICTURES_FOLDER_PATH = "/home/luizmedeirosn/Desktop/futS3-files/futS3-backend/src/main/java/com/luizmedeirosn/futs3/configs/data/sport-pictures";
+        final String PICTURES_FOLDER_PATH = "./src/main/java/com/luizmedeirosn/futs3/configs/data/sport-pictures";
         File picturesFolder = new File(PICTURES_FOLDER_PATH);
         File[] picturesArray = picturesFolder.listFiles(File::isFile);
 
