@@ -97,51 +97,36 @@ public class ExceptionHandlerController {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<StandardError> securityError(Exception e, HttpServletRequest request) {
         StandardError error = new StandardError();
+        error.setDetail(e.getMessage());
         error.setPath(request.getRequestURI());
         error.setTimestamp(Instant.now());
 
-        HttpStatus status = null;
+        HttpStatus status = HttpStatus.FORBIDDEN;
+        error.setStatus(status.value());
 
         if (e instanceof BadCredentialsException) {
-            status = HttpStatus.UNAUTHORIZED;
-            error.setStatus(status.value());
             error.setStatus(HttpStatus.UNAUTHORIZED.value());
             error.setError("Bad credentials");
             error.setDetail("Authentication failure");
 
         } else if (e instanceof AccessDeniedException) {
-            status = HttpStatus.FORBIDDEN;
-            error.setStatus(status.value());
             error.setError("Access denied");
             error.setDetail("Not authorized");
 
         } else if (e instanceof ExpiredJwtException) {
-            status = HttpStatus.FORBIDDEN;
-            error.setStatus(status.value());
             error.setError("JWT token expired");
-            error.setDetail(e.getMessage());
 
         } else if (e instanceof SignatureException) {
-            status = HttpStatus.FORBIDDEN;
-            error.setStatus(status.value());
             error.setError("JWT token signature invalid");
-            error.setDetail(e.getMessage());
 
         } else if (e instanceof MalformedJwtException) {
-            status = HttpStatus.FORBIDDEN;
-            error.setStatus(status.value());
             error.setError("Malformed JWT token");
-            error.setDetail(e.getMessage());
 
         } else if (e instanceof DecodingException) {
-            status = HttpStatus.FORBIDDEN;
-            error.setStatus(status.value());
             error.setError("Decoding failure");
-            error.setDetail(e.getMessage());
         }
 
-        return status != null ? ResponseEntity.status(status).body(error)
-                : ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
+        return ResponseEntity.status(status).body(error);
     }
 
 }
