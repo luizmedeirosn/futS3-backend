@@ -105,6 +105,7 @@ public class ExceptionHandlerController {
         error.setStatus(status.value());
 
         if (e instanceof BadCredentialsException) {
+            status = HttpStatus.UNAUTHORIZED;
             error.setStatus(HttpStatus.UNAUTHORIZED.value());
             error.setError("Bad credentials");
             error.setDetail("Authentication failure");
