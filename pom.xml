@@ -10,10 +10,10 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.luizmedeirosn</groupId>
-	<artifactId>futS3</artifactId>
+	<artifactId>futs3</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>futS3</name>
-	<description>FutS3 Back-end</description>
+	<name>futs3</name>
+	<description>futs3-api</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
