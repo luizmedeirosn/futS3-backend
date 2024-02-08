@@ -7,10 +7,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.luizmedeirosn.futs3.entities.PositionParameter;
+import com.luizmedeirosn.futs3.entities.pks.PositionParameterPK;
 import com.luizmedeirosn.futs3.projections.postition.PositionParametersProjection;
 
 @Repository
-public interface PositionParameterRepository extends JpaRepository<PositionParameter, Long> {
+public interface PositionParameterRepository extends JpaRepository<PositionParameter, PositionParameterPK> {
 
     void deleteByIdPositionId(Long positionId);
 
