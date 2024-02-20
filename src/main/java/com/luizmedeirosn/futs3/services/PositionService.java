@@ -67,17 +67,14 @@ public class PositionService {
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public PositionResponseDTO findByIdPositionParameters(@NonNull Long id) {
-        try {
-            if (!positionRepository.existsById(id)) {
-                throw new NoSuchElementException();
-            }
-            Position position = positionRepository.getReferenceById(id);
-            return new PositionResponseDTO(position.getId(), position.getName(), position.getDescription(),
-                    positionParameterRepository.findByIdPositionParameters(id));
+        Position position = positionRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Position ID not found: " + id));
 
-        } catch (NoSuchElementException e) {
-            throw new EntityNotFoundException("Position ID not found");
-        }
+        return new PositionResponseDTO(
+                position.getId(),
+                position.getName(),
+                position.getDescription(),
+                positionParameterRepository.findByIdPositionParameters(id));
     }
 
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
