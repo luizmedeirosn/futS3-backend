@@ -1,17 +1,5 @@
 package com.luizmedeirosn.futs3.services;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.NoSuchElementException;
-
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
-import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.luizmedeirosn.futs3.entities.Parameter;
 import com.luizmedeirosn.futs3.entities.Player;
 import com.luizmedeirosn.futs3.entities.PlayerParameter;
@@ -27,18 +15,38 @@ import com.luizmedeirosn.futs3.shared.dto.response.PlayerResponseDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.min.PlayerMinResponseDTO;
 import com.luizmedeirosn.futs3.shared.exceptions.DatabaseException;
 import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
+import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-import lombok.RequiredArgsConstructor;
+import java.util.Arrays;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
-@RequiredArgsConstructor
-@SuppressWarnings({ "java:S2583" })
+@SuppressWarnings({"java:S2583"})
 public class PlayerService {
 
     private final PlayerRepository playerRepository;
     private final ParameterRepository parameterRepository;
     private final PlayerParameterRepository playerParameterRepository;
     private final PositionRepository positionRepository;
+
+    public PlayerService(
+            PlayerRepository playerRepository,
+            ParameterRepository parameterRepository,
+            PlayerParameterRepository playerParameterRepository,
+            PositionRepository positionRepository
+    ) {
+        this.playerRepository = playerRepository;
+        this.parameterRepository = parameterRepository;
+        this.playerParameterRepository = playerParameterRepository;
+        this.positionRepository = positionRepository;
+    }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public List<PlayerMinResponseDTO> findAll() {

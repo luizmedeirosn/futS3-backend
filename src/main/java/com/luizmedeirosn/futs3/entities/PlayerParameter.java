@@ -1,28 +1,17 @@
 package com.luizmedeirosn.futs3.entities;
 
-import java.io.Serializable;
-
-import org.hibernate.annotations.Check;
-
 import com.luizmedeirosn.futs3.entities.pks.PlayerParameterPK;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import org.hibernate.annotations.Check;
+
+import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 @Table(name = "tb_player_parameter")
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
-@EqualsAndHashCode(of = "id")
 public class PlayerParameter implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -34,6 +23,9 @@ public class PlayerParameter implements Serializable {
     @Check(constraints = "score > 0 AND score <= 100")
     private Integer score;
 
+    public PlayerParameter() {
+    }
+
     public PlayerParameter(Player player, Parameter parameter, Integer score) {
         id = new PlayerParameterPK();
         id.setPlayer(player);
@@ -41,4 +33,31 @@ public class PlayerParameter implements Serializable {
         this.score = score;
     }
 
+    public PlayerParameterPK getId() {
+        return id;
+    }
+
+    public void setId(PlayerParameterPK id) {
+        this.id = id;
+    }
+
+    public Integer getScore() {
+        return score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PlayerParameter that)) return false;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

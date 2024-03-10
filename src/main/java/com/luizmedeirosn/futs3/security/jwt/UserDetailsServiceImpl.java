@@ -1,19 +1,19 @@
 package com.luizmedeirosn.futs3.security.jwt;
 
+import com.luizmedeirosn.futs3.repositories.CustomUserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.luizmedeirosn.futs3.repositories.CustomUserRepository;
-
-import lombok.RequiredArgsConstructor;
-
 @Service
-@RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final CustomUserRepository customUserRepository;
+
+    public UserDetailsServiceImpl(CustomUserRepository customUserRepository) {
+        this.customUserRepository = customUserRepository;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

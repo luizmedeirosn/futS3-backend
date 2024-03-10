@@ -1,17 +1,5 @@
 package com.luizmedeirosn.futs3.services;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
-import org.springframework.data.domain.Sort;
-import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.luizmedeirosn.futs3.entities.Parameter;
 import com.luizmedeirosn.futs3.projections.player.PlayerParameterProjection;
 import com.luizmedeirosn.futs3.repositories.ParameterRepository;
@@ -21,17 +9,35 @@ import com.luizmedeirosn.futs3.shared.dto.request.ParameterRequestDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.ParameterResponseDTO;
 import com.luizmedeirosn.futs3.shared.exceptions.DatabaseException;
 import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
+import org.springframework.data.domain.Sort;
+import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
-@RequiredArgsConstructor
-@SuppressWarnings({ "java:S2589" })
+@SuppressWarnings({"java:S2589"})
 public class ParameterSerivce {
 
     private final PositionParameterRepository positionParameterRepository;
     private final PlayerParameterRepository playerParameterRepository;
     private final ParameterRepository parameterRepository;
+
+    public ParameterSerivce(
+            PositionParameterRepository positionParameterRepository,
+            PlayerParameterRepository playerParameterRepository,
+            ParameterRepository parameterRepository
+    ) {
+        this.positionParameterRepository = positionParameterRepository;
+        this.playerParameterRepository = playerParameterRepository;
+        this.parameterRepository = parameterRepository;
+    }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public List<ParameterResponseDTO> findAll() {

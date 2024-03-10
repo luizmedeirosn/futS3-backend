@@ -1,5 +1,8 @@
 package com.luizmedeirosn.futs3.controllers;
 
+import com.luizmedeirosn.futs3.entities.PlayerPicture;
+import com.luizmedeirosn.futs3.services.PlayerPictureService;
+import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -9,18 +12,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.luizmedeirosn.futs3.entities.PlayerPicture;
-import com.luizmedeirosn.futs3.services.PlayerPictureService;
-import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
-
-import lombok.RequiredArgsConstructor;
-
 @RestController
 @RequestMapping(value = "/playerspictures")
-@RequiredArgsConstructor
 public class PlayerPictureController {
 
     private final PlayerPictureService playerPictureService;
+
+    public PlayerPictureController(PlayerPictureService playerPictureService) {
+        this.playerPictureService = playerPictureService;
+    }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<ByteArrayResource> findById(@PathVariable @NonNull Long id) {

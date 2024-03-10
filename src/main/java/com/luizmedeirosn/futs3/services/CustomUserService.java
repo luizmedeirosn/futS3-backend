@@ -12,13 +12,15 @@ import com.luizmedeirosn.futs3.entities.CustomUser;
 import com.luizmedeirosn.futs3.repositories.CustomUserRepository;
 import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
 
-import lombok.RequiredArgsConstructor;
 
 @Service
-@RequiredArgsConstructor
 public class CustomUserService {
 
     private final CustomUserRepository customUserRepository;
+
+    public CustomUserService(CustomUserRepository customUserRepository) {
+        this.customUserRepository = customUserRepository;
+    }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public List<CustomUser> findAll() {

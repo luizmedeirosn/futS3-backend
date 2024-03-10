@@ -1,32 +1,16 @@
 package com.luizmedeirosn.futs3.entities;
 
+import com.luizmedeirosn.futs3.shared.dto.request.ParameterRequestDTO;
+import jakarta.annotation.Nonnull;
+import jakarta.persistence.*;
+
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
-
-import com.luizmedeirosn.futs3.shared.dto.request.ParameterRequestDTO;
-
-import jakarta.annotation.Nonnull;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(name = "tb_parameter")
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
-@EqualsAndHashCode(of = "id")
 public class Parameter implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -35,7 +19,6 @@ public class Parameter implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Nonnull
     @Column(nullable = false, unique = true)
     private String name;
 
@@ -46,7 +29,10 @@ public class Parameter implements Serializable {
     private Set<PositionParameter> positionParameters;
 
     @OneToMany(mappedBy = "id.parameter")
-    private Set<PlayerParameter> playerParameters = new HashSet<>();
+    private final Set<PlayerParameter> playerParameters = new HashSet<>();
+
+    public Parameter() {
+    }
 
     public Parameter(String name, String description) {
         this.name = name;
@@ -58,4 +44,48 @@ public class Parameter implements Serializable {
         description = parameterRequestDTO.description();
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    @Nonnull
+    public String getName() {
+        return name;
+    }
+
+    public void setName(@Nonnull String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Set<PositionParameter> getPositionParameters() {
+        return positionParameters;
+    }
+
+    public Set<PlayerParameter> getPlayerParameters() {
+        return playerParameters;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Parameter parameter)) return false;
+        return Objects.equals(id, parameter.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

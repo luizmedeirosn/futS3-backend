@@ -1,5 +1,7 @@
 package com.luizmedeirosn.futs3.configs;
 
+import com.luizmedeirosn.futs3.security.jwt.JwtAuthFilter;
+import com.luizmedeirosn.futs3.security.jwt.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,29 +21,27 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
-import com.luizmedeirosn.futs3.security.jwt.JwtAuthFilter;
-import com.luizmedeirosn.futs3.security.jwt.UserDetailsServiceImpl;
-
-import lombok.RequiredArgsConstructor;
-
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-@RequiredArgsConstructor
 public class SecurityConfig {
-
-    @Value("${secret.key}")
-    private String secretKey;
 
     private final UserDetailsServiceImpl userDetailsServiceImpl;
     private final HandlerExceptionResolver handlerExceptionResolver;
+    @Value("${secret.key}")
+    private String secretKey;
+
+    public SecurityConfig(UserDetailsServiceImpl userDetailsServiceImpl, HandlerExceptionResolver handlerExceptionResolver) {
+        this.userDetailsServiceImpl = userDetailsServiceImpl;
+        this.handlerExceptionResolver = handlerExceptionResolver;
+    }
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.authorizeHttpRequests(
-                auth -> auth
-                        .requestMatchers("/auth/signin", "/playerspictures/**").permitAll()
-                        .anyRequest().authenticated())
+                        auth -> auth
+                                .requestMatchers("/auth/signin", "/playerspictures/**").permitAll()
+                                .anyRequest().authenticated())
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .cors(Customizer.withDefaults())

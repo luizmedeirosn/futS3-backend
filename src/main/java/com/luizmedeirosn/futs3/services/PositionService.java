@@ -1,18 +1,5 @@
 package com.luizmedeirosn.futs3.services;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
-import org.springframework.data.domain.Sort;
-import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.luizmedeirosn.futs3.entities.Parameter;
 import com.luizmedeirosn.futs3.entities.Position;
 import com.luizmedeirosn.futs3.entities.PositionParameter;
@@ -25,17 +12,32 @@ import com.luizmedeirosn.futs3.shared.dto.response.PositionResponseDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.min.PositionMinDTO;
 import com.luizmedeirosn.futs3.shared.exceptions.DatabaseException;
 import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
+import org.springframework.data.domain.Sort;
+import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-import lombok.RequiredArgsConstructor;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
-@RequiredArgsConstructor
-@SuppressWarnings({ "java:S2583" })
+@SuppressWarnings({"java:S2583"})
 public class PositionService {
 
     private final PositionRepository positionRepository;
     private final ParameterRepository parameterRepository;
     private final PositionParameterRepository positionParameterRepository;
+
+    public PositionService(PositionRepository positionRepository, ParameterRepository parameterRepository, PositionParameterRepository positionParameterRepository) {
+        this.positionRepository = positionRepository;
+        this.parameterRepository = parameterRepository;
+        this.positionParameterRepository = positionParameterRepository;
+    }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public List<PositionMinDTO> findAll() {

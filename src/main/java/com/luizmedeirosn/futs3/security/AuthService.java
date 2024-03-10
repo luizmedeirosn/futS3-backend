@@ -1,5 +1,12 @@
 package com.luizmedeirosn.futs3.security;
 
+import com.luizmedeirosn.futs3.entities.CustomUser;
+import com.luizmedeirosn.futs3.repositories.CustomUserRepository;
+import com.luizmedeirosn.futs3.security.jwt.JwtService;
+import com.luizmedeirosn.futs3.shared.dto.request.SigninRequestDTO;
+import com.luizmedeirosn.futs3.shared.dto.request.SignupRequestDTO;
+import com.luizmedeirosn.futs3.shared.dto.response.SignupResponseDTO;
+import com.luizmedeirosn.futs3.shared.dto.response.TokenResponseDTO;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -8,23 +15,21 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.luizmedeirosn.futs3.entities.CustomUser;
-import com.luizmedeirosn.futs3.repositories.CustomUserRepository;
-import com.luizmedeirosn.futs3.security.jwt.JwtService;
-import com.luizmedeirosn.futs3.shared.dto.request.SigninRequestDTO;
-import com.luizmedeirosn.futs3.shared.dto.request.SignupRequestDTO;
-import com.luizmedeirosn.futs3.shared.dto.response.SignupResponseDTO;
-import com.luizmedeirosn.futs3.shared.dto.response.TokenResponseDTO;
-
-import lombok.RequiredArgsConstructor;
-
 @Service
-@RequiredArgsConstructor
 public class AuthService {
 
     private final CustomUserRepository customUserRepository;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+
+    public AuthService(
+            CustomUserRepository customUserRepository,
+            JwtService jwtService,
+            AuthenticationManager authenticationManager) {
+        this.customUserRepository = customUserRepository;
+        this.jwtService = jwtService;
+        this.authenticationManager = authenticationManager;
+    }
 
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public SignupResponseDTO signup(SignupRequestDTO signup) {
