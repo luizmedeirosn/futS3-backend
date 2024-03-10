@@ -1,38 +1,30 @@
 package com.luizmedeirosn.futs3.entities;
 
-import java.io.Serializable;
-
-import org.hibernate.annotations.Check;
-
 import com.luizmedeirosn.futs3.entities.pks.PositionParameterPK;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import org.hibernate.annotations.Check;
+
+import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 @Table(name = "tb_position_parameter")
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
-@EqualsAndHashCode(of = "id")
 public class PositionParameter implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @EmbeddedId
-    private PositionParameterPK id = new PositionParameterPK();
+    private final PositionParameterPK id = new PositionParameterPK();
 
     @Column(nullable = false)
     @Check(constraints = "weight > 0 AND weight <= 100")
     private Integer weight;
+
+    public PositionParameter() {
+    }
 
     public PositionParameter(Position position, Parameter parameter, Integer weight) {
         id.setPosition(position);
@@ -56,4 +48,23 @@ public class PositionParameter implements Serializable {
         id.setParameter(parameter);
     }
 
+    public Integer getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Integer weight) {
+        this.weight = weight;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PositionParameter that)) return false;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

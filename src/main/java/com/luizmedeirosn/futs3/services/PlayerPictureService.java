@@ -1,20 +1,20 @@
 package com.luizmedeirosn.futs3.services;
 
+import com.luizmedeirosn.futs3.entities.PlayerPicture;
+import com.luizmedeirosn.futs3.repositories.PlayerPictureRepository;
+import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.luizmedeirosn.futs3.entities.PlayerPicture;
-import com.luizmedeirosn.futs3.repositories.PlayerPictureRepository;
-import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
-
-import lombok.RequiredArgsConstructor;
-
 @Service
-@RequiredArgsConstructor
 public class PlayerPictureService {
 
     private final PlayerPictureRepository playerPictureRepository;
+
+    public PlayerPictureService(PlayerPictureRepository playerPictureRepository) {
+        this.playerPictureRepository = playerPictureRepository;
+    }
 
     public static String createPictureLink(Long id) {
         return ServletUriComponentsBuilder.fromCurrentRequest().replacePath("/playerspictures/" + id).replaceQuery(null)

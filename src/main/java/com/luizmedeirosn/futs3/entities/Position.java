@@ -2,6 +2,7 @@ package com.luizmedeirosn.futs3.entities;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import com.luizmedeirosn.futs3.shared.dto.request.PositionRequestDTO;
@@ -15,19 +16,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(name = "tb_position")
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
-@EqualsAndHashCode(of = "id")
 public class Position implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -43,13 +34,16 @@ public class Position implements Serializable {
     private String description;
 
     @OneToMany(mappedBy = "position")
-    private Set<Player> players = new HashSet<>();
+    private final Set<Player> players = new HashSet<>();
 
     @ManyToMany(mappedBy = "positions")
-    private Set<GameMode> gameModes = new HashSet<>();
+    private final Set<GameMode> gameModes = new HashSet<>();
 
     @OneToMany(mappedBy = "id.position", cascade = CascadeType.ALL)
-    private Set<PositionParameter> positionParameters = new HashSet<>();
+    private final Set<PositionParameter> positionParameters = new HashSet<>();
+
+    public Position() {
+    }
 
     public Position(String name, String description) {
         this.name = name;
@@ -61,4 +55,51 @@ public class Position implements Serializable {
         description = positionRequestDTO.description();
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Set<Player> getPlayers() {
+        return players;
+    }
+
+    public Set<GameMode> getGameModes() {
+        return gameModes;
+    }
+
+    public Set<PositionParameter> getPositionParameters() {
+        return positionParameters;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Position position)) return false;
+        return Objects.equals(id, position.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

@@ -1,78 +1,87 @@
 package com.luizmedeirosn.futs3.configs;
 
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
-
+import com.luizmedeirosn.futs3.entities.*;
+import com.luizmedeirosn.futs3.repositories.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.luizmedeirosn.futs3.entities.CustomUser;
-import com.luizmedeirosn.futs3.entities.GameMode;
-import com.luizmedeirosn.futs3.entities.Parameter;
-import com.luizmedeirosn.futs3.entities.Player;
-import com.luizmedeirosn.futs3.entities.PlayerParameter;
-import com.luizmedeirosn.futs3.entities.PlayerPicture;
-import com.luizmedeirosn.futs3.entities.Position;
-import com.luizmedeirosn.futs3.entities.PositionParameter;
-import com.luizmedeirosn.futs3.repositories.CustomUserRepository;
-import com.luizmedeirosn.futs3.repositories.GameModeRepository;
-import com.luizmedeirosn.futs3.repositories.ParameterRepository;
-import com.luizmedeirosn.futs3.repositories.PlayerParameterRepository;
-import com.luizmedeirosn.futs3.repositories.PlayerRepository;
-import com.luizmedeirosn.futs3.repositories.PositionParameterRepository;
-import com.luizmedeirosn.futs3.repositories.PositionRepository;
-
-import lombok.RequiredArgsConstructor;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
 
 @Configuration
-@Profile("test")
-@RequiredArgsConstructor
 public class TestConfig implements CommandLineRunner {
+
+    @Autowired
+    private CustomUserRepository customUserRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private GameModeRepository gameModeRepository;
+
+    @Autowired
+    private PositionRepository positionRepository;
+
+    @Autowired
+    private ParameterRepository parameterRepository;
+
+    @Autowired
+    private PlayerRepository playerRepository;
+
+    @Autowired
+    private PositionParameterRepository positionParameterRepository;
+
+    @Autowired
+    private PlayerParameterRepository playerParameterRepository;
+
+    private final Random random = new Random();
 
     @Value("${admin.username}")
     private String adminUsername;
-
     @Value("${admin.password}")
     private String adminPassword;
-
     @Value("${userTest.username}")
     private String userTestUsername;
-
     @Value("${userTest.password}")
     private String userTestPassword;
 
-    private final CustomUserRepository customUserRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final GameModeRepository gameModeRepository;
-    private final PositionRepository positionRepository;
-    private final ParameterRepository parameterRepository;
-    private final PlayerRepository playerRepository;
-    private final PositionParameterRepository positionParameterRepository;
-    private final PlayerParameterRepository playerParameterRepository;
-
-    private final Random random = new Random();
+/*    public TestConfig(
+            CustomUserRepository customUserRepository,
+            PasswordEncoder passwordEncoder,
+            GameModeRepository gameModeRepository,
+            PositionRepository positionRepository,
+            ParameterRepository parameterRepository,
+            PlayerRepository playerRepository,
+            PositionParameterRepository positionParameterRepository,
+            PlayerParameterRepository playerParameterRepository
+    ) {
+        this.customUserRepository = customUserRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.gameModeRepository = gameModeRepository;
+        this.positionRepository = positionRepository;
+        this.parameterRepository = parameterRepository;
+        this.playerRepository = playerRepository;
+        this.positionParameterRepository = positionParameterRepository;
+        this.playerParameterRepository = playerParameterRepository;
+    }*/
 
     @Override
     public void run(String... args) throws Exception {
 
         CustomUser adminFutS3 = new CustomUser(
-                null,
                 adminUsername,
                 "admin@futS3.com",
                 passwordEncoder.encode(adminPassword),
                 "ROLE_ADMIN");
 
         CustomUser userTestFutS3 = new CustomUser(
-                null,
                 userTestUsername,
                 "userTest@futS3.com",
                 passwordEncoder.encode(userTestPassword),

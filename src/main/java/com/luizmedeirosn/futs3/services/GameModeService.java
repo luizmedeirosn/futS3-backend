@@ -1,20 +1,5 @@
 package com.luizmedeirosn.futs3.services;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.Set;
-
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
-import org.springframework.data.domain.Sort;
-import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.luizmedeirosn.futs3.entities.GameMode;
 import com.luizmedeirosn.futs3.entities.Position;
 import com.luizmedeirosn.futs3.projections.gamemode.AllGameModesProjection;
@@ -30,16 +15,29 @@ import com.luizmedeirosn.futs3.shared.dto.response.aux.GameModePositionParameter
 import com.luizmedeirosn.futs3.shared.dto.response.min.GameModeMinResponseDTO;
 import com.luizmedeirosn.futs3.shared.exceptions.DatabaseException;
 import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
+import org.springframework.data.domain.Sort;
+import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-import lombok.RequiredArgsConstructor;
+import java.util.*;
 
 @Service
-@RequiredArgsConstructor
 public class GameModeService {
 
     private final GameModeRepository gameModeRepository;
     private final PositionRepository positionRepository;
     private final ParameterRepository parameterRepository;
+
+    public GameModeService(GameModeRepository gameModeRepository, PositionRepository positionRepository, ParameterRepository parameterRepository) {
+        this.gameModeRepository = gameModeRepository;
+        this.positionRepository = positionRepository;
+        this.parameterRepository = parameterRepository;
+    }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public List<GameModeMinResponseDTO> findAll() {

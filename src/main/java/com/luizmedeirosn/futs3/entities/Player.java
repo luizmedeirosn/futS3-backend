@@ -1,37 +1,16 @@
 package com.luizmedeirosn.futs3.entities;
 
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
-
+import com.luizmedeirosn.futs3.shared.dto.request.PlayerRequestDTO;
+import jakarta.persistence.*;
 import org.hibernate.annotations.Check;
 
-import com.luizmedeirosn.futs3.shared.dto.request.PlayerRequestDTO;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "tb_player")
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
-@EqualsAndHashCode(of = "id")
 public class Player implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -57,10 +36,13 @@ public class Player implements Serializable {
     private Position position;
 
     @OneToMany(mappedBy = "id.player", cascade = CascadeType.ALL)
-    private Set<PlayerParameter> playerParameters = new HashSet<>();
+    private final Set<PlayerParameter> playerParameters = new HashSet<>();
 
     @OneToOne(mappedBy = "player", cascade = CascadeType.ALL)
     private PlayerPicture playerPicture;
+
+    public Player() {
+    }
 
     public Player(String name, Integer age, Integer height, String team, Position position) {
         this.name = name;
@@ -91,4 +73,76 @@ public class Player implements Serializable {
         }
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    public Integer getHeight() {
+        return height;
+    }
+
+    public void setHeight(Integer height) {
+        this.height = height;
+    }
+
+    public String getTeam() {
+        return team;
+    }
+
+    public void setTeam(String team) {
+        this.team = team;
+    }
+
+    public Position getPosition() {
+        return position;
+    }
+
+    public void setPosition(Position position) {
+        this.position = position;
+    }
+
+    public Set<PlayerParameter> getPlayerParameters() {
+        return playerParameters;
+    }
+
+    public PlayerPicture getPlayerPicture() {
+        return playerPicture;
+    }
+
+    public void setPlayerPicture(PlayerPicture playerPicture) {
+        this.playerPicture = playerPicture;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Player player = (Player) o;
+        return Objects.equals(id, player.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

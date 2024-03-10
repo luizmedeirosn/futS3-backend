@@ -1,7 +1,7 @@
 package com.luizmedeirosn.futs3.controllers;
 
-import java.util.List;
-
+import com.luizmedeirosn.futs3.entities.CustomUser;
+import com.luizmedeirosn.futs3.services.CustomUserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,17 +9,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.luizmedeirosn.futs3.entities.CustomUser;
-import com.luizmedeirosn.futs3.services.CustomUserService;
-
-import lombok.RequiredArgsConstructor;
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
-@RequiredArgsConstructor
 public class CustomUserController {
 
     private final CustomUserService customUserService;
+
+    public CustomUserController(CustomUserService customUserService) {
+        this.customUserService = customUserService;
+    }
 
     @GetMapping
     public ResponseEntity<List<CustomUser>> findAll() {

@@ -1,34 +1,15 @@
 package com.luizmedeirosn.futs3.entities;
 
+import com.luizmedeirosn.futs3.shared.dto.request.GameModeRequestDTO;
+import jakarta.persistence.*;
+
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
-
-import com.luizmedeirosn.futs3.shared.dto.request.GameModeRequestDTO;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(name = "tb_gamemode")
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
-@EqualsAndHashCode(of = "id")
 public class GameMode implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -45,11 +26,42 @@ public class GameMode implements Serializable {
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "tb_gamemode_position", joinColumns = @JoinColumn(name = "gamemode_id"), inverseJoinColumns = @JoinColumn(name = "position_id"))
-    private Set<Position> positions = new HashSet<>();
+    private final Set<Position> positions = new HashSet<>();
+
+    public GameMode() {
+    }
 
     public GameMode(String formationName, String description) {
         this.formationName = formationName;
         this.description = description;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getFormationName() {
+        return formationName;
+    }
+
+    public void setFormationName(String formationName) {
+        this.formationName = formationName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Set<Position> getPositions() {
+        return positions;
     }
 
     public void updateData(GameModeRequestDTO gameModeRequestDTO) {
@@ -57,4 +69,15 @@ public class GameMode implements Serializable {
         description = gameModeRequestDTO.description();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof GameMode gameMode)) return false;
+        return Objects.equals(id, gameMode.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }
