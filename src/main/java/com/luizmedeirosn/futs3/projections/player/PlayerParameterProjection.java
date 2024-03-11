@@ -2,13 +2,11 @@ package com.luizmedeirosn.futs3.projections.player;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-@JsonPropertyOrder({ "playerId", "playerScore", "name" })
+@JsonPropertyOrder({ "playerId", "name", "score" })
 public interface PlayerParameterProjection {
 
     Long getId();
-
-    Integer getPlayerScore();
-
     String getName();
+    Integer getScore();
 
 }

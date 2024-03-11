@@ -1,11 +1,10 @@
 package com.luizmedeirosn.futs3.shared.dto.request;
 
-import java.io.Serializable;
-
 import com.luizmedeirosn.futs3.entities.Parameter;
-
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
+import java.io.Serializable;
 
 public record ParameterRequestDTO(
 

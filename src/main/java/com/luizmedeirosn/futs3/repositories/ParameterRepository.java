@@ -16,7 +16,7 @@ public interface ParameterRepository extends JpaRepository<Parameter, Long> {
                 SELECT
                     param.id,
                     param.name,
-                    playparam.score AS playerScore
+                    playparam.score AS score
                 FROM
                     tb_player_parameter AS playparam
                     INNER JOIN tb_player AS play

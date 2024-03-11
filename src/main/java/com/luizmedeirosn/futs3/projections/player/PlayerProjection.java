@@ -9,19 +9,12 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 public interface PlayerProjection {
 
     Long getPlayerId();
-
     String getPlayerName();
-
     Integer getPlayerAge();
-
     Integer getPlayerHeight();
-
     Long getPositionId();
-
     String getPositionName();
-
     String getPlayerTeam();
-
     Blob getPlayerProfilePicture();
 
 }

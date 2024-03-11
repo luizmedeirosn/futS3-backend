@@ -2,11 +2,9 @@ package com.luizmedeirosn.futs3.configs;
 
 import com.luizmedeirosn.futs3.entities.*;
 import com.luizmedeirosn.futs3.repositories.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.io.File;
@@ -17,29 +15,21 @@ import java.util.*;
 @Configuration
 public class TestConfig implements CommandLineRunner {
 
-    @Autowired
-    private CustomUserRepository customUserRepository;
+    private final CustomUserRepository customUserRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private GameModeRepository gameModeRepository;
+    private final GameModeRepository gameModeRepository;
 
-    @Autowired
-    private PositionRepository positionRepository;
+    private final PositionRepository positionRepository;
 
-    @Autowired
-    private ParameterRepository parameterRepository;
+    private final ParameterRepository parameterRepository;
 
-    @Autowired
-    private PlayerRepository playerRepository;
+    private final PlayerRepository playerRepository;
 
-    @Autowired
-    private PositionParameterRepository positionParameterRepository;
+    private final PositionParameterRepository positionParameterRepository;
 
-    @Autowired
-    private PlayerParameterRepository playerParameterRepository;
+    private final PlayerParameterRepository playerParameterRepository;
 
     private final Random random = new Random();
 
@@ -52,7 +42,7 @@ public class TestConfig implements CommandLineRunner {
     @Value("${userTest.password}")
     private String userTestPassword;
 
-/*    public TestConfig(
+    public TestConfig(
             CustomUserRepository customUserRepository,
             PasswordEncoder passwordEncoder,
             GameModeRepository gameModeRepository,
@@ -70,7 +60,7 @@ public class TestConfig implements CommandLineRunner {
         this.playerRepository = playerRepository;
         this.positionParameterRepository = positionParameterRepository;
         this.playerParameterRepository = playerParameterRepository;
-    }*/
+    }
 
     @Override
     public void run(String... args) throws Exception {
@@ -268,9 +258,8 @@ public class TestConfig implements CommandLineRunner {
         File picturesFolder = new File(PICTURES_FOLDER_PATH);
         File[] picturesArray = picturesFolder.listFiles(File::isFile);
 
-        List<File> picturesList = new ArrayList<>(Arrays.asList(picturesArray));
-        picturesList.sort((f1, f2) -> Integer.parseInt(f1.getName().split("-")[0])
-                - Integer.parseInt(f2.getName().split("-")[0]));
+        List<File> picturesList = new ArrayList<>(Arrays.asList(Objects.requireNonNull(picturesArray)));
+        picturesList.sort(Comparator.comparingInt(f -> Integer.parseInt(f.getName().split("-")[0])));
 
         for (int i = 0; i < 38; i++) {
             Player player = players.get(i);

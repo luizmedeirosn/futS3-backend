@@ -3,6 +3,7 @@ package com.luizmedeirosn.futs3.entities;
 import com.luizmedeirosn.futs3.shared.dto.request.PlayerRequestDTO;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Check;
+import org.hibernate.annotations.SortComparator;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -35,7 +36,8 @@ public class Player implements Serializable {
     @JoinColumn(name = "position_id")
     private Position position;
 
-    @OneToMany(mappedBy = "id.player", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "id.player", fetch = FetchType.EAGER)
+    @OrderBy("id.parameter")
     private final Set<PlayerParameter> playerParameters = new HashSet<>();
 
     @OneToOne(mappedBy = "player", cascade = CascadeType.ALL)

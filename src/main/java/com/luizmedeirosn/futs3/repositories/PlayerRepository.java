@@ -15,9 +15,9 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
 
     @Modifying
     @Query(nativeQuery = true, value = """
-                delete from tb_player_parameter where player_id = :id\\;
-                delete from tb_player_picture where player_id = :id\\;
-                delete from tb_player where id = :id\\;
+                delete from tb_player_parameter where player_id = :id ;
+                delete from tb_player_picture where player_id = :id ;
+                delete from tb_player where id = :id ;
             """)
     void deleteByIdWithParameters(Long id);
 

@@ -9,8 +9,8 @@ import com.luizmedeirosn.futs3.repositories.ParameterRepository;
 import com.luizmedeirosn.futs3.repositories.PlayerParameterRepository;
 import com.luizmedeirosn.futs3.repositories.PlayerRepository;
 import com.luizmedeirosn.futs3.repositories.PositionRepository;
-import com.luizmedeirosn.futs3.shared.dto.request.PlayerRequestDTO;
 import com.luizmedeirosn.futs3.shared.dto.request.aux.PlayerParameterScoreDTO;
+import com.luizmedeirosn.futs3.shared.dto.request.PlayerRequestDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.PlayerResponseDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.min.PlayerMinResponseDTO;
 import com.luizmedeirosn.futs3.shared.exceptions.DatabaseException;
@@ -55,23 +55,20 @@ public class PlayerService {
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public PlayerMinResponseDTO findById(@NonNull Long id) {
-        try {
-            return new PlayerMinResponseDTO(playerRepository.findById(id).get());
-
-        } catch (NoSuchElementException e) {
-            throw new EntityNotFoundException("Player ID not found");
-        }
+        return new PlayerMinResponseDTO(
+                playerRepository
+                        .findById(id)
+                        .orElseThrow(() -> new EntityNotFoundException("Player ID not found"))
+        );
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public PlayerResponseDTO findFullById(@NonNull Long id) {
-        try {
-            return new PlayerResponseDTO(playerRepository.findById(id).get(),
-                    parameterRepository.findParametersByPlayerId(id));
-
-        } catch (NoSuchElementException e) {
-            throw new EntityNotFoundException("Player ID not found");
-        }
+        return new PlayerResponseDTO(
+                playerRepository
+                        .findById(id)
+                        .orElseThrow(() -> new EntityNotFoundException("Player ID not found"))
+        );
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
@@ -103,19 +100,16 @@ public class PlayerService {
         }
     }
 
-    @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public PlayerResponseDTO save(PlayerRequestDTO playerRequestDTO) {
         try {
             Player newPlayer = new Player(playerRequestDTO);
             PlayerPicture playerPicture = new PlayerPicture(newPlayer, playerRequestDTO.playerPicture());
 
-            Long positionId = playerRequestDTO.positionId();
-            if (positionId != null) {
-                newPlayer.setPosition(positionRepository.findById(positionId).get());
-            } else {
-                throw new NullPointerException();
-            }
-
+            newPlayer.setPosition(positionRepository
+                    .findById(playerRequestDTO.positionId())
+                    .orElseThrow(() -> new EntityNotFoundException("Position ID not found: " + playerRequestDTO.positionId()))
+            );
             newPlayer.setPlayerPicture(playerPicture);
 
             playerRepository.save(newPlayer);
@@ -134,7 +128,7 @@ public class PlayerService {
         }
     }
 
-    @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public PlayerMinResponseDTO update(@NonNull Long id, PlayerRequestDTO playerRequestDTO) {
         try {
             Player player = playerRepository.getReferenceById(id);
@@ -165,7 +159,7 @@ public class PlayerService {
         }
     }
 
-    @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public void deleteById(@NonNull Long id) {
         if (!playerRepository.existsById(id)) {
             throw new EntityNotFoundException("Player request. ID not found");
