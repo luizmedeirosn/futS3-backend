@@ -20,16 +20,20 @@ spring:
           lob:
             "[non_contextual_creation]": true
         "[format_sql]": true
-    show-sql: true
+    show-sql: false
     open-in-view: false
 
-secret:
-  key: 4e38565f12ff76de5e133eeac0085d7b842c8237117bbac10072ef79f1ca7c01
+security:
+  jwt:
+    token:
+      secret-key: 4e38565f12ff76de5e133eeac0085d7b842c8237117bbac10072ef79f1ca7c01
+      expire-lenght: 3600000
 
-admin:
-  username: admin
-  password: admin@FutS3
+users:
+  admin:
+    username: admin
+    password: admin@FutS3
 
-userTest:
-  username: userTest
-  password: userTest@FutS3
+  user:
+    username: user
+    password: user@FutS3

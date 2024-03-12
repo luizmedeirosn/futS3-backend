@@ -21,8 +21,11 @@ public class JwtService {
 
     private final UserDetailsServiceImpl userDetailsServiceImpl;
 
-    @Value("${secret.key}")
+    @Value("${security.jwt.token.secret-key}")
     private String secretKey;
+
+    @Value("${security.jwt.token.expire-lenght}")
+    private Long expireLenght;
 
     public JwtService(UserDetailsServiceImpl userDetailsServiceImpl) {
         this.userDetailsServiceImpl = userDetailsServiceImpl;
@@ -40,8 +43,8 @@ public class JwtService {
 
     public TokenResponseDTO generateToken(String username) {
         Map<String, Object> claims = new HashMap<>();
-        Date acessTokenExpirationTime = new Date(System.currentTimeMillis() + (1000L * 60L * 60L));
-        Date refreshTokenExpirationTime = new Date(System.currentTimeMillis() + (1000L * 60L * 60L * 24L));
+        Date acessTokenExpirationTime = new Date(System.currentTimeMillis() + (expireLenght));
+        Date refreshTokenExpirationTime = new Date(System.currentTimeMillis() + (expireLenght * 24L));
 
         String accessToken = createToken(username, claims, acessTokenExpirationTime);
         String refreshToken = createToken(username, claims, refreshTokenExpirationTime);
@@ -60,7 +63,8 @@ public class JwtService {
                 String accessToken = createToken(
                         username,
                         claims,
-                        new Date(System.currentTimeMillis() + (1000L * 60L * 60L)));
+                        new Date(System.currentTimeMillis() + expireLenght)
+                );
 
                 return new TokenResponseDTO(accessToken, refreshToken);
             }

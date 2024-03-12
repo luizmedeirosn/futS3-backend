@@ -33,13 +33,13 @@ public class TestConfig implements CommandLineRunner {
 
     private final Random random = new Random();
 
-    @Value("${admin.username}")
+    @Value("${users.admin.username}")
     private String adminUsername;
-    @Value("${admin.password}")
+    @Value("${users.admin.password}")
     private String adminPassword;
-    @Value("${userTest.username}")
+    @Value("${users.user.username}")
     private String userTestUsername;
-    @Value("${userTest.password}")
+    @Value("${users.user.password}")
     private String userTestPassword;
 
     public TestConfig(
@@ -73,7 +73,7 @@ public class TestConfig implements CommandLineRunner {
 
         CustomUser userTestFutS3 = new CustomUser(
                 userTestUsername,
-                "userTest@futS3.com",
+                "user@futS3.com",
                 passwordEncoder.encode(userTestPassword),
                 "ROLE_USER");
 
