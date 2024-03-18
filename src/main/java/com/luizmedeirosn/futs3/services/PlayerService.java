@@ -54,26 +54,17 @@ public class PlayerService {
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+    public List<AllPlayersParametersProjection> findAllWithParameters() {
+        return playerParameterRepository.findAllPlayersParameters();
+    }
+
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public PlayerMinResponseDTO findById(@NonNull Long id) {
         return new PlayerMinResponseDTO(
                 playerRepository
                         .findById(id)
                         .orElseThrow(() -> new EntityNotFoundException("Player ID not found"))
         );
-    }
-
-    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public PlayerResponseDTO findFullById(@NonNull Long id) {
-        return new PlayerResponseDTO(
-                playerRepository
-                        .findById(id)
-                        .orElseThrow(() -> new EntityNotFoundException("Player ID not found"))
-        );
-    }
-
-    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public List<AllPlayersParametersProjection> findAllWithParameters() {
-        return playerParameterRepository.findAllPlayersParameters();
     }
 
     private void savePlayerParameters(Player player, String parametersSTR) {
