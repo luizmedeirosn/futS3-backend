@@ -30,7 +30,7 @@ public class PlayerController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PlayerMinResponseDTO> findById(@PathVariable @NonNull Long id) {
+    public ResponseEntity<PlayerResponseDTO> findById(@PathVariable @NonNull Long id) {
         return ResponseEntity.ok().body(playerService.findById(id));
     }
 

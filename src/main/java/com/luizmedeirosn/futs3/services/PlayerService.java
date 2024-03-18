@@ -59,8 +59,8 @@ public class PlayerService {
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public PlayerMinResponseDTO findById(@NonNull Long id) {
-        return new PlayerMinResponseDTO(
+    public PlayerResponseDTO findById(@NonNull Long id) {
+        return new PlayerResponseDTO(
                 playerRepository
                         .findById(id)
                         .orElseThrow(() -> new EntityNotFoundException("Player ID not found"))
