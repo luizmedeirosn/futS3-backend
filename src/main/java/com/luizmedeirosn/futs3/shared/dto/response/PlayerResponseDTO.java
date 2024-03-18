@@ -5,12 +5,10 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.luizmedeirosn.futs3.entities.Player;
 import com.luizmedeirosn.futs3.projections.player.PlayerParameterProjection;
 import com.luizmedeirosn.futs3.services.PlayerPictureService;
-import com.luizmedeirosn.futs3.shared.dto.request.aux.PlayerParameterScoreDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.aux.PlayerParameterDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.min.PositionMinDTO;
 
 import java.io.Serializable;
-import java.util.Comparator;
 import java.util.List;
 
 @JsonPropertyOrder({ "id", "name", "age", "height", "team", "profilePictureLink", "position", "parameters" })
@@ -56,7 +54,6 @@ public record PlayerResponseDTO(
                         .getPlayerParameters()
                         .stream()
                         .map(PlayerParameterDTO::new)
-//                        .sorted(Comparator.comparing(PlayerParameterDTO::name))
                         .toList(),
 
                 (player.getPlayerPicture() == null || player.getPlayerPicture().getContent() == null) ?

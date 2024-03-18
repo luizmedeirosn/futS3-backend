@@ -39,11 +39,6 @@ public class PlayerController {
         return ResponseEntity.ok().body(playerService.findAllWithParameters());
     }
 
-    @GetMapping("/{id}/full")
-    public ResponseEntity<PlayerResponseDTO> findFullById(@PathVariable @NonNull Long id) {
-        return ResponseEntity.ok().body(playerService.findFullById(id));
-    }
-
     @PostMapping
     public ResponseEntity<PlayerResponseDTO> save(@ModelAttribute @Valid PlayerRequestDTO playerRequestDTO) {
         PlayerResponseDTO playerResponseDTO = playerService.save(playerRequestDTO);
