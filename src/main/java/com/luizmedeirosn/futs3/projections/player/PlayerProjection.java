@@ -14,7 +14,7 @@ public interface PlayerProjection {
     Integer getPlayerHeight();
     Long getPositionId();
     String getPositionName();
+    String getPositionDescription();
     String getPlayerTeam();
     Blob getPlayerProfilePicture();
-
 }

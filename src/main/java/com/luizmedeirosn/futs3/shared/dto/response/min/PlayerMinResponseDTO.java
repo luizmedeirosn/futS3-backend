@@ -25,8 +25,8 @@ public record PlayerMinResponseDTO(
                 player.getId(),
                 player.getName(),
                 new PositionMinDTO(player.getPosition()),
-                player.getPlayerPicture() == null ? null
-                        : PlayerPictureService.createPictureLink(player.getPlayerPicture().getId()));
+                player.getPlayerPicture() == null ?
+                        "" : PlayerPictureService.createPictureLink(player.getId()));
     }
 
     public PlayerMinResponseDTO(PlayerProjection playerProjection) {

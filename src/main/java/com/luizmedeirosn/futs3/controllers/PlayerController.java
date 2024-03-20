@@ -34,11 +34,6 @@ public class PlayerController {
         return ResponseEntity.ok().body(playerService.findById(id));
     }
 
-    @GetMapping("/parameters")
-    public ResponseEntity<List<AllPlayersParametersProjection>> findAllWithParameters() {
-        return ResponseEntity.ok().body(playerService.findAllWithParameters());
-    }
-
     @PostMapping
     public ResponseEntity<PlayerResponseDTO> save(@ModelAttribute @Valid PlayerRequestDTO playerRequestDTO) {
         PlayerResponseDTO playerResponseDTO = playerService.save(playerRequestDTO);

@@ -32,16 +32,16 @@ public class Player implements Serializable {
     @Column(nullable = false)
     private String team;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false,  fetch = FetchType.LAZY)
     @JoinColumn(name = "position_id")
     private Position position;
 
-    @OneToMany(mappedBy = "id.player", fetch = FetchType.EAGER)
-    @OrderBy("id.parameter")
-    private final Set<PlayerParameter> playerParameters = new HashSet<>();
-
     @OneToOne(mappedBy = "player", cascade = CascadeType.ALL)
     private PlayerPicture playerPicture;
+
+    @OneToMany(mappedBy = "id.player", fetch = FetchType.LAZY)
+    @OrderBy("id.parameter")
+    private final Set<PlayerParameter> playerParameters = new HashSet<>();
 
     public Player() {
     }

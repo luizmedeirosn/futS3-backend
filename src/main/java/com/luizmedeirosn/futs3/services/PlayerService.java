@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -51,11 +52,6 @@ public class PlayerService {
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public List<PlayerMinResponseDTO> findAll() {
         return playerRepository.findAllOptimized().stream().map(PlayerMinResponseDTO::new).toList();
-    }
-
-    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public List<AllPlayersParametersProjection> findAllWithParameters() {
-        return playerParameterRepository.findAllPlayersParameters();
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)

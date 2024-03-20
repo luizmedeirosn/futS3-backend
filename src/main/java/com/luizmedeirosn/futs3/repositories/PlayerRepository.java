@@ -27,6 +27,7 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
                     PLAY.name AS playerName,
                     POS.id AS positionId,
                     POS.name AS positionName,
+                    POS.description AS positionDescription,
                     PLAYPIC.content as playerProfilePicture
                 FROM
                     tb_player AS PLAY
