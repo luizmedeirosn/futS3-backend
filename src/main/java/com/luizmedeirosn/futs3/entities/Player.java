@@ -3,7 +3,6 @@ package com.luizmedeirosn.futs3.entities;
 import com.luizmedeirosn.futs3.shared.dto.request.PlayerRequestDTO;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Check;
-import org.hibernate.annotations.SortComparator;
 
 import java.io.Serializable;
 import java.util.HashSet;
