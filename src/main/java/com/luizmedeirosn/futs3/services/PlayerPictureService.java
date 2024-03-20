@@ -16,7 +16,7 @@ public class PlayerPictureService {
         this.playerPictureRepository = playerPictureRepository;
     }
 
-    public static String createPictureLink(Long id) {
+    public static String createPictureUrl(Long id) {
         return ServletUriComponentsBuilder.fromCurrentRequest().replacePath("/playerspictures/" + id).replaceQuery(null)
                 .toUriString();
     }

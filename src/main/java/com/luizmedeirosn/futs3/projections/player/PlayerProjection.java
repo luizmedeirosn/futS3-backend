@@ -12,9 +12,12 @@ public interface PlayerProjection {
     String getPlayerName();
     Integer getPlayerAge();
     Integer getPlayerHeight();
+    String getPlayerTeam();
+    Blob getPlayerPicture();
     Long getPositionId();
     String getPositionName();
     String getPositionDescription();
-    String getPlayerTeam();
-    Blob getPlayerProfilePicture();
+    Long getParameterId();
+    String getParameterName();
+    Integer getPlayerScore();
 }

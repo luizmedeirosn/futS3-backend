@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
-public record PlayerParameterScoreDTO(
+public record PlayerParameterIdScoreDTO(
 
         @NotNull Long id,
         @NotNull @Min(1) @Max(100) Integer score
@@ -17,7 +17,7 @@ public record PlayerParameterScoreDTO(
 
     private static final long serialVersionUID = 1L;
 
-    public PlayerParameterScoreDTO(PlayerParameter playerParameter) {
+    public PlayerParameterIdScoreDTO(PlayerParameter playerParameter) {
         this(playerParameter.getId().getParameter().getId(), playerParameter.getScore());
     }
 

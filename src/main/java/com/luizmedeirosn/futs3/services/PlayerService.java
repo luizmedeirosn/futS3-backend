@@ -4,13 +4,15 @@ import com.luizmedeirosn.futs3.entities.Parameter;
 import com.luizmedeirosn.futs3.entities.Player;
 import com.luizmedeirosn.futs3.entities.PlayerParameter;
 import com.luizmedeirosn.futs3.entities.PlayerPicture;
+import com.luizmedeirosn.futs3.projections.player.PlayerProjection;
 import com.luizmedeirosn.futs3.repositories.ParameterRepository;
 import com.luizmedeirosn.futs3.repositories.PlayerParameterRepository;
 import com.luizmedeirosn.futs3.repositories.PlayerRepository;
 import com.luizmedeirosn.futs3.repositories.PositionRepository;
 import com.luizmedeirosn.futs3.shared.dto.request.PlayerRequestDTO;
-import com.luizmedeirosn.futs3.shared.dto.request.aux.PlayerParameterScoreDTO;
+import com.luizmedeirosn.futs3.shared.dto.request.aux.PlayerParameterIdScoreDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.PlayerResponseDTO;
+import com.luizmedeirosn.futs3.shared.dto.response.aux.PlayerParameterDataDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.min.PlayerMinResponseDTO;
 import com.luizmedeirosn.futs3.shared.exceptions.DatabaseException;
 import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
@@ -22,6 +24,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -54,18 +57,28 @@ public class PlayerService {
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public PlayerResponseDTO findById(@NonNull Long id) {
-        return new PlayerResponseDTO(
-                playerRepository
-                        .findById(id)
-                        .orElseThrow(() -> new EntityNotFoundException("Player ID not found"))
-        );
+        var playerProjections = playerRepository
+                .findByIdOptimized(id)
+                .orElseThrow(() -> new EntityNotFoundException("Player ID not found"));
+
+        var playerProjection = playerProjections.get(0);
+        var parameters = extractPlayerParameters(playerProjections);
+
+        return new PlayerResponseDTO(playerProjection, parameters);
+    }
+
+    private List<PlayerParameterDataDTO> extractPlayerParameters(List<PlayerProjection> playerData) {
+        return playerData
+                .stream()
+                .map(PlayerParameterDataDTO::new)
+                .toList();
     }
 
     private void savePlayerParameters(Player player, String parametersSTR) {
         if (parametersSTR.length() > 3) {
             List<String> parametersSTRList = Arrays.asList(parametersSTR.split(","));
-            List<PlayerParameterScoreDTO> parameters = parametersSTRList.stream()
-                    .map(x -> new PlayerParameterScoreDTO(Long.parseLong(x.split(" ")[0]),
+            List<PlayerParameterIdScoreDTO> parameters = parametersSTRList.stream()
+                    .map(x -> new PlayerParameterIdScoreDTO(Long.parseLong(x.split(" ")[0]),
                             Integer.parseInt(x.split(" ")[1])))
                     .toList();
 
@@ -100,7 +113,7 @@ public class PlayerService {
             playerRepository.save(newPlayer);
             savePlayerParameters(newPlayer, playerRequestDTO.parameters());
 
-            return new PlayerResponseDTO(newPlayer, parameterRepository.findParametersByPlayerId(newPlayer.getId()));
+            return findById(newPlayer.getId());
 
         } catch (NullPointerException | InvalidDataAccessApiUsageException e) {
             throw new EntityNotFoundException("Player request. The given IDs must not be null");

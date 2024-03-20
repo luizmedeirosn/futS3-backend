@@ -39,7 +39,6 @@ public class Player implements Serializable {
     private PlayerPicture playerPicture;
 
     @OneToMany(mappedBy = "id.player", fetch = FetchType.LAZY)
-    @OrderBy("id.parameter")
     private final Set<PlayerParameter> playerParameters = new HashSet<>();
 
     public Player() {

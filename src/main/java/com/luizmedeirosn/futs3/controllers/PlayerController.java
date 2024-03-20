@@ -1,6 +1,5 @@
 package com.luizmedeirosn.futs3.controllers;
 
-import com.luizmedeirosn.futs3.projections.player.AllPlayersParametersProjection;
 import com.luizmedeirosn.futs3.services.PlayerService;
 import com.luizmedeirosn.futs3.shared.dto.request.PlayerRequestDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.PlayerResponseDTO;
