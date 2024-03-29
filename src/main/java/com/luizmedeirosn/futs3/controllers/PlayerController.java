@@ -45,9 +45,10 @@ public class PlayerController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<PlayerMinResponseDTO> update(@PathVariable @NonNull Long id,
-                                                       @ModelAttribute @Valid PlayerRequestDTO playerRequestDTO) {
-        System.out.println(playerRequestDTO);
+    public ResponseEntity<PlayerMinResponseDTO> update(
+            @PathVariable @NonNull Long id,
+            @ModelAttribute @Valid PlayerRequestDTO playerRequestDTO
+    ) {
         return ResponseEntity.ok().body(playerService.update(id, playerRequestDTO));
     }
 
@@ -56,5 +57,4 @@ public class PlayerController {
         playerService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
-
 }

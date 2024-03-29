@@ -1,9 +1,8 @@
 package com.luizmedeirosn.futs3.services;
 
-import com.luizmedeirosn.futs3.entities.Parameter;
 import com.luizmedeirosn.futs3.entities.Player;
-import com.luizmedeirosn.futs3.entities.PlayerParameter;
 import com.luizmedeirosn.futs3.entities.PlayerPicture;
+import com.luizmedeirosn.futs3.entities.Position;
 import com.luizmedeirosn.futs3.projections.player.PlayerProjection;
 import com.luizmedeirosn.futs3.repositories.ParameterRepository;
 import com.luizmedeirosn.futs3.repositories.PlayerParameterRepository;
@@ -16,6 +15,8 @@ import com.luizmedeirosn.futs3.shared.dto.response.aux.PlayerParameterDataDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.min.PlayerMinResponseDTO;
 import com.luizmedeirosn.futs3.shared.exceptions.DatabaseException;
 import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.lang.NonNull;
@@ -25,9 +26,9 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Stream;
 
 @Service
 @SuppressWarnings({"java:S2583"})
@@ -37,6 +38,9 @@ public class PlayerService {
     private final ParameterRepository parameterRepository;
     private final PlayerParameterRepository playerParameterRepository;
     private final PositionRepository positionRepository;
+
+    @PersistenceContext
+    EntityManager entityManager;
 
     public PlayerService(
             PlayerRepository playerRepository,
@@ -67,35 +71,20 @@ public class PlayerService {
         return new PlayerResponseDTO(playerProjection, parameters);
     }
 
-    private List<PlayerParameterDataDTO> extractPlayerParameters(List<PlayerProjection> playerData) {
-        return playerData
-                .stream()
-                .map(PlayerParameterDataDTO::new)
-                .toList();
-    }
-
-    private void savePlayerParameters(Player player, String parametersSTR) {
-        if (parametersSTR.length() > 3) {
-            List<String> parametersSTRList = Arrays.asList(parametersSTR.split(","));
-            List<PlayerParameterIdScoreDTO> parameters = parametersSTRList.stream()
-                    .map(x -> new PlayerParameterIdScoreDTO(Long.parseLong(x.split(" ")[0]),
-                            Integer.parseInt(x.split(" ")[1])))
+    private List<PlayerParameterDataDTO> extractPlayerParameters(List<PlayerProjection> playerProjections) {
+        if (playerProjections.get(0).getParameterId() != null) {
+            return playerProjections
+                    .stream()
+                    .map(p -> {
+                        long parameterId = p.getParameterId();
+                        String parameterName = p.getParameterName();
+                        int playerScore = p.getPlayerScore();
+                        return new PlayerParameterDataDTO(parameterId, parameterName, playerScore);
+                    })
                     .toList();
-
-            parameters.forEach(
-                    parameterScore -> {
-                        Long parameterScoreId = parameterScore.id();
-                        if (parameterScoreId != null) {
-                            Parameter parameter = parameterRepository.findById(parameterScoreId).get();
-                            PlayerParameter playerParameter = new PlayerParameter(player, parameter,
-                                    parameterScore.score());
-                            playerParameterRepository.save(playerParameter);
-
-                        } else {
-                            throw new EntityNotFoundException("Player request. The given ID must not be null");
-                        }
-                    });
         }
+
+        return new ArrayList<>();
     }
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
@@ -103,15 +92,21 @@ public class PlayerService {
         try {
             Player newPlayer = new Player(playerRequestDTO);
             PlayerPicture playerPicture = new PlayerPicture(newPlayer, playerRequestDTO.playerPicture());
-
-            newPlayer.setPosition(positionRepository
+            Position position = positionRepository
                     .findById(playerRequestDTO.positionId())
-                    .orElseThrow(() -> new EntityNotFoundException("Position ID not found: " + playerRequestDTO.positionId()))
-            );
+                    .orElseThrow(() ->
+                            new EntityNotFoundException("Position ID not found: " + playerRequestDTO.positionId())
+                    );
+
+            newPlayer.setPosition(position);
             newPlayer.setPlayerPicture(playerPicture);
 
             playerRepository.save(newPlayer);
-            savePlayerParameters(newPlayer, playerRequestDTO.parameters());
+            playerParameterRepository.saveAllOptimized(
+                    entityManager,
+                    newPlayer.getId(),
+                    new ArrayList<>()
+            );
 
             return findById(newPlayer.getId());
 
@@ -141,7 +136,11 @@ public class PlayerService {
             }
 
             playerParameterRepository.deleteByIdPlayerId(player.getId());
-            savePlayerParameters(player, playerRequestDTO.parameters());
+            playerParameterRepository.saveAllOptimized(
+                    entityManager,
+                    player.getId(),
+                    extractParametersScores(playerRequestDTO.parameters())
+            );
 
             player = playerRepository.save(player);
             return new PlayerMinResponseDTO(player);
@@ -155,6 +154,17 @@ public class PlayerService {
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException("Player request. Unique index, check index or primary key violation");
         }
+    }
+
+    private List<PlayerParameterIdScoreDTO> extractParametersScores(String parametersStr) {
+        parametersStr = parametersStr.replace(" ", "");
+        String[] parameters = parametersStr.split(",");
+        return Stream.of(parameters)
+                .map(pp -> {
+                    String[] ppStr = pp.split(":");
+                    return new PlayerParameterIdScoreDTO(Long.parseLong(ppStr[0]), Integer.parseInt(ppStr[1]));
+                })
+                .toList();
     }
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
