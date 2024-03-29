@@ -15,7 +15,5 @@ public record PositionRequestDTO(
         @NotNull @Valid List<ParameterWeightDTO> parameters
 
 ) implements Serializable {
-
     private static final long serialVersionUID = 1L;
-
 }

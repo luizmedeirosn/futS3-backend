@@ -4,6 +4,8 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.io.Serializable;
+
 public record SignupRequestDTO(
 
         @NotNull @NotBlank String username,
@@ -11,5 +13,6 @@ public record SignupRequestDTO(
         @NotNull @NotBlank String password,
         @NotNull @NotBlank String roles
 
-) {
+) implements Serializable {
+    private static final long serialVersionUID = 1L;
 }

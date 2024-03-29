@@ -10,7 +10,7 @@ public record PlayerParameterDataDTO(
         Long id,
         String name,
         Integer score
-) implements Serializable {
 
+) implements Serializable {
     private static final long serialVersionUID = 1L;
 }

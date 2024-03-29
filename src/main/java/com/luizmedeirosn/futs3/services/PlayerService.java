@@ -105,7 +105,7 @@ public class PlayerService {
             playerParameterRepository.saveAllOptimized(
                     entityManager,
                     newPlayer.getId(),
-                    new ArrayList<>()
+                    playerRequestDTO.parameters()
             );
 
             return findById(newPlayer.getId());
@@ -139,7 +139,7 @@ public class PlayerService {
             playerParameterRepository.saveAllOptimized(
                     entityManager,
                     player.getId(),
-                    extractParametersScores(playerRequestDTO.parameters())
+                    playerRequestDTO.parameters()
             );
 
             player = playerRepository.save(player);
@@ -154,17 +154,6 @@ public class PlayerService {
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException("Player request. Unique index, check index or primary key violation");
         }
-    }
-
-    private List<PlayerParameterIdScoreDTO> extractParametersScores(String parametersStr) {
-        parametersStr = parametersStr.replace(" ", "");
-        String[] parameters = parametersStr.split(",");
-        return Stream.of(parameters)
-                .map(pp -> {
-                    String[] ppStr = pp.split(":");
-                    return new PlayerParameterIdScoreDTO(Long.parseLong(ppStr[0]), Integer.parseInt(ppStr[1]));
-                })
-                .toList();
     }
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)

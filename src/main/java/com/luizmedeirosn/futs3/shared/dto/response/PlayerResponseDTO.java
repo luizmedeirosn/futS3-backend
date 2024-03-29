@@ -19,13 +19,10 @@ public record PlayerResponseDTO(
         Integer height,
         String team,
         List<PlayerParameterDataDTO> parameters,
-
-        @JsonProperty(value = "position")
-        PositionMinDTO positionDTO,
-
+        @JsonProperty(value = "position") PositionMinDTO positionDTO,
         String pictureUrl
-) implements Serializable {
 
+) implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public PlayerResponseDTO(PlayerProjection player, List<PlayerParameterDataDTO> parameters) {
