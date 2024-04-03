@@ -28,11 +28,9 @@ public interface PlayerParameterRepository extends JpaRepository<PlayerParameter
         int end = parameters.size();
         for (int i = 0; i < end; i++) {
             if (i == 0) {
-                queryStr.append("INSERT INTO tb_player_parameter (player_id, parameter_id, score) VALUES (?, ?, ?), ");
-            } else if (i < end - 1) {
-                queryStr.append("(?, ?, ?), ");
+                queryStr.append("INSERT INTO tb_player_parameter (player_id, parameter_id, score) VALUES (?, ?, ?)");
             } else {
-                queryStr.append("(?, ?, ?)");
+                queryStr.append(", (?, ?, ?)");
             }
         }
 
