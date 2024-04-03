@@ -1,7 +1,13 @@
 package com.luizmedeirosn.futs3.controllers;
 
-import java.time.Instant;
-
+import com.luizmedeirosn.futs3.shared.exceptions.DatabaseException;
+import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
+import com.luizmedeirosn.futs3.shared.exceptions.StandardError;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.io.DecodingException;
+import io.jsonwebtoken.security.SignatureException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.hibernate.PropertyValueException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -10,19 +16,12 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-import com.luizmedeirosn.futs3.shared.exceptions.DatabaseException;
-import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
-import com.luizmedeirosn.futs3.shared.exceptions.StandardError;
-
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.io.DecodingException;
-import io.jsonwebtoken.security.SignatureException;
-import jakarta.servlet.http.HttpServletRequest;
+import java.time.Instant;
 
 @ControllerAdvice
 public class ExceptionHandlerController {
@@ -94,6 +93,15 @@ public class ExceptionHandlerController {
         return ResponseEntity.status(STATUS).body(EXCEPTION);
     }
 
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<StandardError> argumentNotValidError(MethodArgumentNotValidException e, HttpServletRequest request) {
+        final String ERROR = "Argument not valid";
+        final HttpStatus STATUS = HttpStatus.BAD_REQUEST;
+        StandardError EXCEPTION = new StandardError(STATUS.value(), ERROR, e.getMessage(), request.getRequestURI(),
+                Instant.now());
+        return ResponseEntity.status(STATUS).body(EXCEPTION);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<StandardError> securityError(Exception e, HttpServletRequest request) {
         StandardError error = new StandardError();
@@ -125,6 +133,10 @@ public class ExceptionHandlerController {
 
         } else if (e instanceof DecodingException) {
             error.setError("Decoding failure");
+
+        } else if(e instanceof IllegalArgumentException) {
+            status = HttpStatus.BAD_REQUEST;
+            error.setError("Bad Request");
         }
 
         return ResponseEntity.status(status).body(error);

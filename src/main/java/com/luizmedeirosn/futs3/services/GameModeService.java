@@ -10,7 +10,7 @@ import com.luizmedeirosn.futs3.repositories.ParameterRepository;
 import com.luizmedeirosn.futs3.repositories.PositionRepository;
 import com.luizmedeirosn.futs3.shared.dto.request.GameModeRequestDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.GameModeResponseDTO;
-import com.luizmedeirosn.futs3.shared.dto.response.PlayerFullScoreResponseDTO;
+import com.luizmedeirosn.futs3.shared.dto.response.PlayerFullDataResponseDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.aux.GameModePositionParameterDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.min.GameModeMinResponseDTO;
 import com.luizmedeirosn.futs3.shared.exceptions.DatabaseException;
@@ -106,11 +106,11 @@ public class GameModeService {
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public List<PlayerFullScoreResponseDTO> getPlayersRanking(@NonNull Long gameModeId, @NonNull Long positionId) {
+    public List<PlayerFullDataResponseDTO> getPlayersRanking(@NonNull Long gameModeId, @NonNull Long positionId) {
         return gameModeRepository.getPlayersRanking(gameModeId, positionId)
                 .orElseThrow(() -> new DatabaseException("Error getting the ranking"))
                 .stream()
-                .map(player -> new PlayerFullScoreResponseDTO(player,
+                .map(player -> new PlayerFullDataResponseDTO(player,
                         parameterRepository.findParametersByPlayerId(player.getPlayerId())))
                 .toList();
     }

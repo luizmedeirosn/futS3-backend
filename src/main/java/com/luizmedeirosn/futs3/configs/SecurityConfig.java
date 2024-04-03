@@ -2,7 +2,6 @@ package com.luizmedeirosn.futs3.configs;
 
 import com.luizmedeirosn.futs3.security.jwt.JwtAuthFilter;
 import com.luizmedeirosn.futs3.security.jwt.UserDetailsServiceImpl;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,6 +12,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -28,8 +28,6 @@ public class SecurityConfig {
 
     private final UserDetailsServiceImpl userDetailsServiceImpl;
     private final HandlerExceptionResolver handlerExceptionResolver;
-    @Value("${secret.key}")
-    private String secretKey;
 
     public SecurityConfig(UserDetailsServiceImpl userDetailsServiceImpl, HandlerExceptionResolver handlerExceptionResolver) {
         this.userDetailsServiceImpl = userDetailsServiceImpl;
@@ -42,7 +40,7 @@ public class SecurityConfig {
                         auth -> auth
                                 .requestMatchers("/auth/signin", "/playerspictures/**").permitAll()
                                 .anyRequest().authenticated())
-                .csrf(csrf -> csrf.disable())
+                .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .cors(Customizer.withDefaults())
                 .addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class)

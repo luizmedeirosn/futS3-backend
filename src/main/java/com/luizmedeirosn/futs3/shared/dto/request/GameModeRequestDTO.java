@@ -1,11 +1,11 @@
 package com.luizmedeirosn.futs3.shared.dto.request;
 
-import java.io.Serializable;
-import java.util.List;
-
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
+import java.io.Serializable;
+import java.util.List;
 
 public record GameModeRequestDTO(
 
@@ -14,7 +14,5 @@ public record GameModeRequestDTO(
         @NotNull @Valid List<Long> positions
 
 ) implements Serializable {
-
     private static final long serialVersionUID = 1L;
-
 }

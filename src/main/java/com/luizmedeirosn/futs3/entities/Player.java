@@ -31,15 +31,15 @@ public class Player implements Serializable {
     @Column(nullable = false)
     private String team;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false,  fetch = FetchType.LAZY)
     @JoinColumn(name = "position_id")
     private Position position;
 
-    @OneToMany(mappedBy = "id.player", cascade = CascadeType.ALL)
-    private final Set<PlayerParameter> playerParameters = new HashSet<>();
-
     @OneToOne(mappedBy = "player", cascade = CascadeType.ALL)
     private PlayerPicture playerPicture;
+
+    @OneToMany(mappedBy = "id.player", fetch = FetchType.LAZY)
+    private final Set<PlayerParameter> playerParameters = new HashSet<>();
 
     public Player() {
     }
@@ -59,11 +59,12 @@ public class Player implements Serializable {
         team = playerRequestDTO.team();
     }
 
-    public void updateData(PlayerRequestDTO playerRequestDTO) {
+    public void updateData(PlayerRequestDTO playerRequestDTO, Position position) {
         name = playerRequestDTO.name();
         age = playerRequestDTO.age();
         height = playerRequestDTO.height();
         team = playerRequestDTO.team();
+        this.position = position;
         if (playerRequestDTO.playerPicture() != null) {
             if (playerPicture == null) {
                 setPlayerPicture(new PlayerPicture(this, playerRequestDTO.playerPicture()));

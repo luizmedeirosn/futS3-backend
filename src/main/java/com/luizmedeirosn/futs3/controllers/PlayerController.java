@@ -1,6 +1,5 @@
 package com.luizmedeirosn.futs3.controllers;
 
-import com.luizmedeirosn.futs3.projections.player.AllPlayersParametersProjection;
 import com.luizmedeirosn.futs3.services.PlayerService;
 import com.luizmedeirosn.futs3.shared.dto.request.PlayerRequestDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.PlayerResponseDTO;
@@ -30,18 +29,8 @@ public class PlayerController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PlayerMinResponseDTO> findById(@PathVariable @NonNull Long id) {
+    public ResponseEntity<PlayerResponseDTO> findById(@PathVariable @NonNull Long id) {
         return ResponseEntity.ok().body(playerService.findById(id));
-    }
-
-    @GetMapping("/parameters")
-    public ResponseEntity<List<AllPlayersParametersProjection>> findAllWithParameters() {
-        return ResponseEntity.ok().body(playerService.findAllWithParameters());
-    }
-
-    @GetMapping("/{id}/full")
-    public ResponseEntity<PlayerResponseDTO> findFullById(@PathVariable @NonNull Long id) {
-        return ResponseEntity.ok().body(playerService.findFullById(id));
     }
 
     @PostMapping
@@ -56,9 +45,10 @@ public class PlayerController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<PlayerMinResponseDTO> update(@PathVariable @NonNull Long id,
-                                                       @ModelAttribute @Valid PlayerRequestDTO playerRequestDTO) {
-        System.out.println(playerRequestDTO);
+    public ResponseEntity<PlayerResponseDTO> update(
+            @PathVariable @NonNull Long id,
+            @ModelAttribute @Valid PlayerRequestDTO playerRequestDTO
+    ) {
         return ResponseEntity.ok().body(playerService.update(id, playerRequestDTO));
     }
 
@@ -67,5 +57,4 @@ public class PlayerController {
         playerService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
-
 }

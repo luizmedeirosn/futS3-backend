@@ -1,10 +1,10 @@
 package com.luizmedeirosn.futs3.shared.dto.request.aux;
 
-import java.io.Serializable;
-
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+
+import java.io.Serializable;
 
 public record ParameterWeightDTO(
 
@@ -13,7 +13,5 @@ public record ParameterWeightDTO(
         @Min(1) @Max(100) Integer weight
 
 ) implements Serializable {
-
     private static final long serialVersionUID = 1L;
-
 }

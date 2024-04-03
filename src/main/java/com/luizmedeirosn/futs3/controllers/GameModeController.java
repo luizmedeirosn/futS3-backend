@@ -5,7 +5,7 @@ import com.luizmedeirosn.futs3.projections.gamemode.GameModePositionProjection;
 import com.luizmedeirosn.futs3.services.GameModeService;
 import com.luizmedeirosn.futs3.shared.dto.request.GameModeRequestDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.GameModeResponseDTO;
-import com.luizmedeirosn.futs3.shared.dto.response.PlayerFullScoreResponseDTO;
+import com.luizmedeirosn.futs3.shared.dto.response.PlayerFullDataResponseDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.min.GameModeMinResponseDTO;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -52,7 +52,7 @@ public class GameModeController {
     }
 
     @GetMapping("/ranking")
-    public ResponseEntity<List<PlayerFullScoreResponseDTO>> getPlayersRanking(
+    public ResponseEntity<List<PlayerFullDataResponseDTO>> getPlayersRanking(
             @RequestParam("gameModeId") @NonNull Long gameModeId,
             @RequestParam("positionId") @NonNull Long positionId) {
         try {

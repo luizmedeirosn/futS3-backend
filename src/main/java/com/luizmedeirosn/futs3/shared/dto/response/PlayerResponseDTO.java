@@ -1,16 +1,16 @@
 package com.luizmedeirosn.futs3.shared.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.luizmedeirosn.futs3.projections.player.PlayerProjection;
+import com.luizmedeirosn.futs3.services.PlayerPictureService;
+import com.luizmedeirosn.futs3.shared.dto.response.aux.PlayerParameterDataDTO;
+import com.luizmedeirosn.futs3.shared.dto.response.min.PositionMinDTO;
+
 import java.io.Serializable;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.luizmedeirosn.futs3.entities.Player;
-import com.luizmedeirosn.futs3.projections.player.PlayerParameterProjection;
-import com.luizmedeirosn.futs3.services.PlayerPictureService;
-import com.luizmedeirosn.futs3.shared.dto.response.min.PositionMinDTO;
-
-@JsonPropertyOrder({ "id", "name", "age", "height", "team", "profilePictureLink", "position", "parameters" })
+@JsonPropertyOrder({"id", "name", "age", "height", "team", "pictureUrl", "position", "parameters"})
 public record PlayerResponseDTO(
 
         Long id,
@@ -18,25 +18,30 @@ public record PlayerResponseDTO(
         Integer age,
         Integer height,
         String team,
-        List<?> parameters,
+        List<PlayerParameterDataDTO> parameters,
         @JsonProperty(value = "position") PositionMinDTO positionDTO,
-        String profilePictureLink
+        String pictureUrl
 
 ) implements Serializable {
-
     private static final long serialVersionUID = 1L;
 
-    public PlayerResponseDTO(Player player, List<PlayerParameterProjection> parameters) {
+    public PlayerResponseDTO(PlayerProjection player, List<PlayerParameterDataDTO> parameters) {
         this(
-                player.getId(),
-                player.getName(),
-                player.getAge(),
-                player.getHeight(),
-                player.getTeam(),
+                player.getPlayerId(),
+                player.getPlayerName(),
+                player.getPlayerAge(),
+                player.getPlayerHeight(),
+                player.getPlayerTeam(),
                 parameters,
-                new PositionMinDTO(player.getPosition()),
-                (player.getPlayerPicture() == null || player.getPlayerPicture().getContent() == null) ? null
-                        : PlayerPictureService.createPictureLink(player.getPlayerPicture().getId()));
+                new PositionMinDTO(
+                        player.getPositionId(),
+                        player.getPositionName(),
+                        player.getPositionDescription()
+                ),
+                (
+                        player.getPlayerPicture() == null || player.getPlayerPicture() == null) ?
+                        "" : PlayerPictureService.createPictureUrl(player.getPlayerId()
+                )
+        );
     }
-
 }

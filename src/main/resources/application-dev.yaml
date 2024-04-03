@@ -1,0 +1,39 @@
+server:
+  port: 8081
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/futs3db?useTimezone=true&serverTimezone=UTC
+    username: postgres
+    password: admin
+
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+
+  jpa:
+    hibernate.ddl-auto: create-drop
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            "[non_contextual_creation]": true
+        "[format_sql]": true
+    show-sql: true
+    open-in-view: false
+
+security:
+  jwt:
+    token:
+      secret-key: 4e38565f12ff76de5e133eeac0085d7b842c8237117bbac10072ef79f1ca7c01
+      expire-lenght: 3600000
+
+users:
+  admin:
+    username: admin
+    password: admin@FutS3
+
+  user:
+    username: user
+    password: user@FutS3
