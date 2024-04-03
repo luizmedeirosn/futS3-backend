@@ -1,10 +1,11 @@
 package com.luizmedeirosn.futs3.services;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.luizmedeirosn.futs3.entities.Player;
 import com.luizmedeirosn.futs3.entities.PlayerPicture;
 import com.luizmedeirosn.futs3.entities.Position;
 import com.luizmedeirosn.futs3.projections.player.PlayerProjection;
-import com.luizmedeirosn.futs3.repositories.ParameterRepository;
 import com.luizmedeirosn.futs3.repositories.PlayerParameterRepository;
 import com.luizmedeirosn.futs3.repositories.PlayerRepository;
 import com.luizmedeirosn.futs3.repositories.PositionRepository;
@@ -28,30 +29,28 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Stream;
 
 @Service
-@SuppressWarnings({"java:S2583"})
 public class PlayerService {
 
     private final PlayerRepository playerRepository;
-    private final ParameterRepository parameterRepository;
     private final PlayerParameterRepository playerParameterRepository;
     private final PositionRepository positionRepository;
+    private final ObjectMapper objectMapper;
 
     @PersistenceContext
-    EntityManager entityManager;
+    private EntityManager entityManager;
 
     public PlayerService(
             PlayerRepository playerRepository,
-            ParameterRepository parameterRepository,
             PlayerParameterRepository playerParameterRepository,
-            PositionRepository positionRepository
+            PositionRepository positionRepository,
+            ObjectMapper objectMapper
     ) {
         this.playerRepository = playerRepository;
-        this.parameterRepository = parameterRepository;
         this.playerParameterRepository = playerParameterRepository;
         this.positionRepository = positionRepository;
+        this.objectMapper = objectMapper;
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
@@ -97,6 +96,7 @@ public class PlayerService {
                     .orElseThrow(() ->
                             new EntityNotFoundException("Position ID not found: " + playerRequestDTO.positionId())
                     );
+            List<PlayerParameterIdScoreDTO> parameters = parseParameters(playerRequestDTO.parameters());
 
             newPlayer.setPosition(position);
             newPlayer.setPlayerPicture(playerPicture);
@@ -105,7 +105,7 @@ public class PlayerService {
             playerParameterRepository.saveAllOptimized(
                     entityManager,
                     newPlayer.getId(),
-                    playerRequestDTO.parameters()
+                    parameters
             );
 
             return findById(newPlayer.getId());
@@ -125,7 +125,6 @@ public class PlayerService {
     public PlayerMinResponseDTO update(@NonNull Long id, PlayerRequestDTO playerRequestDTO) {
         try {
             Player player = playerRepository.getReferenceById(id);
-
             player.updateData(playerRequestDTO);
 
             Long positionId = playerRequestDTO.positionId();
@@ -134,12 +133,13 @@ public class PlayerService {
             } else {
                 throw new NullPointerException();
             }
+            List<PlayerParameterIdScoreDTO> parameters = parseParameters(playerRequestDTO.parameters());
 
             playerParameterRepository.deleteByIdPlayerId(player.getId());
             playerParameterRepository.saveAllOptimized(
                     entityManager,
                     player.getId(),
-                    playerRequestDTO.parameters()
+                    parameters
             );
 
             player = playerRepository.save(player);
@@ -153,6 +153,15 @@ public class PlayerService {
 
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException("Player request. Unique index, check index or primary key violation");
+        }
+    }
+
+    private List<PlayerParameterIdScoreDTO> parseParameters(String parameters) {
+        try {
+            return objectMapper.readValue(parameters, new TypeReference<>() {
+            });
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Players Request. Invalid format for parameters");
         }
     }
 

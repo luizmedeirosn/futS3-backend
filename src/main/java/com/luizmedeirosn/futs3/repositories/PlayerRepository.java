@@ -51,7 +51,8 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
                         LEFT JOIN tb_player_picture AS playpic ON play.id = playpic.player_id
                         LEFT JOIN tb_player_parameter AS playparam ON play.id = playparam.player_id
                         LEFT JOIN tb_parameter AS param ON playparam.parameter_id = param.id
-                WHERE play.id = :id ;
+                WHERE play.id = :id
+                ORDER BY param.name;
             """)
     Optional<List<PlayerProjection>> findByIdOptimized(@Param("id") Long id);
 
