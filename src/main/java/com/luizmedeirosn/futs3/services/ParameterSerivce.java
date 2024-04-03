@@ -112,7 +112,7 @@ public class ParameterSerivce {
             }
 
             positionParameterRepository.deleteByIdParameterId(id);
-            playerParameterRepository.deleteByIdParameterId(id);
+            playerParameterRepository.deleteByPlayerId(id);
             parameterRepository.deleteById(id);
 
         } catch (DataIntegrityViolationException e) {

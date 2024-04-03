@@ -122,20 +122,18 @@ public class PlayerService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-    public PlayerMinResponseDTO update(@NonNull Long id, PlayerRequestDTO playerRequestDTO) {
+    public PlayerResponseDTO update(Long id, PlayerRequestDTO playerRequestDTO) {
         try {
             Player player = playerRepository.getReferenceById(id);
-            player.updateData(playerRequestDTO);
+            Position position = positionRepository
+                    .findById(playerRequestDTO.positionId())
+                    .orElseThrow(() ->
+                            new EntityNotFoundException("Position ID not found: " + playerRequestDTO.positionId())
+                    );
+            player.updateData(playerRequestDTO, position);
 
-            Long positionId = playerRequestDTO.positionId();
-            if (positionId != null) {
-                player.setPosition(positionRepository.findById(positionId).get());
-            } else {
-                throw new NullPointerException();
-            }
             List<PlayerParameterIdScoreDTO> parameters = parseParameters(playerRequestDTO.parameters());
-
-            playerParameterRepository.deleteByIdPlayerId(player.getId());
+            playerParameterRepository.deleteByPlayerId(player.getId());
             playerParameterRepository.saveAllOptimized(
                     entityManager,
                     player.getId(),
@@ -143,7 +141,7 @@ public class PlayerService {
             );
 
             player = playerRepository.save(player);
-            return new PlayerMinResponseDTO(player);
+            return findById(player.getId());
 
         } catch (NullPointerException | InvalidDataAccessApiUsageException e) {
             throw new EntityNotFoundException("Player request. The given ID must not be null");

@@ -45,7 +45,7 @@ public class PlayerController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<PlayerMinResponseDTO> update(
+    public ResponseEntity<PlayerResponseDTO> update(
             @PathVariable @NonNull Long id,
             @ModelAttribute @Valid PlayerRequestDTO playerRequestDTO
     ) {

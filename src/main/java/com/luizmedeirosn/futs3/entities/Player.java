@@ -59,11 +59,12 @@ public class Player implements Serializable {
         team = playerRequestDTO.team();
     }
 
-    public void updateData(PlayerRequestDTO playerRequestDTO) {
+    public void updateData(PlayerRequestDTO playerRequestDTO, Position position) {
         name = playerRequestDTO.name();
         age = playerRequestDTO.age();
         height = playerRequestDTO.height();
         team = playerRequestDTO.team();
+        this.position = position;
         if (playerRequestDTO.playerPicture() != null) {
             if (playerPicture == null) {
                 setPlayerPicture(new PlayerPicture(this, playerRequestDTO.playerPicture()));
