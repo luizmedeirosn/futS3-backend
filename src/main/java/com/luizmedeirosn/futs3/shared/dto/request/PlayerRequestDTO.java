@@ -12,7 +12,22 @@ public record PlayerRequestDTO(
         @Min(1) @Max(150) Integer age,
         @Min(65) @Max(250) Integer height,
         @NotNull Long positionId,
+
+        /*
+         * @param parameters JSON string representing an array of objects with "id" and "score" fields.
+         *          [
+         *              {"id":20,"score":50},
+         *              {"id":15,"score":40},
+         *              {"id":19,"score":30},
+         *              {"id":21,"score":20},
+         *              {"id":25,"score":10}
+         *           ]
+         * @throws IllegalArgumentException if the parameters string is null or empty.
+         * @throws IllegalArgumentException if the parameters string is not a valid JSON array of objects.
+         * @throws IllegalArgumentException if any object in the array doesn't have "id" and "score" fields.
+         */
         @NotNull @NotBlank String parameters,
+
         MultipartFile playerPicture
 
 ) implements Serializable {
