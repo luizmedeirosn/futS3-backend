@@ -7,12 +7,16 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface PlayerRepository extends JpaRepository<Player, Long> {
+
+    @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
     @Query(nativeQuery = true, value = """
                     SELECT
                         PLAY.id AS playerId,
@@ -31,6 +35,7 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
             """)
     List<PlayerProjection> findAllOptimized();
 
+    @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
     @Query(nativeQuery = true, value = """
                 SELECT
                     play.id AS playerId,
@@ -48,20 +53,21 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
                 FROM
                     tb_player AS play
                         INNER JOIN tb_position AS pos ON play.position_id = pos.id
+                        INNER JOIN tb_player_parameter AS playparam ON play.id = playparam.player_id
+                        INNER JOIN tb_parameter AS param ON playparam.parameter_id = param.id
                         LEFT JOIN tb_player_picture AS playpic ON play.id = playpic.player_id
-                        LEFT JOIN tb_player_parameter AS playparam ON play.id = playparam.player_id
-                        LEFT JOIN tb_parameter AS param ON playparam.parameter_id = param.id
                 WHERE play.id = :id
                 ORDER BY param.name;
             """)
-    Optional<List<PlayerProjection>> findByIdOptimized(@Param("id") Long id);
+    List<PlayerProjection> findByIdOptimized(@Param("id") Long id);
 
 
     @Modifying
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     @Query(nativeQuery = true, value = """
-                    delete from tb_player_parameter where player_id = :id ;
-                    delete from tb_player_picture where player_id = :id ;
-                    delete from tb_player where id = :id ;
+                DELETE FROM tb_player_parameter WHERE player_id = :id ;
+                DELETE FROM tb_player_picture WHERE player_id = :id ;
+                DELETE FROM tb_player WHERE id = :id ;
             """)
-    void deleteByIdWithParameters(@Param("id") Long id);
+    void deleteByIdOptmized(@Param("id") Long id);
 }

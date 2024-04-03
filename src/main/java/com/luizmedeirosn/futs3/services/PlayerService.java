@@ -60,14 +60,16 @@ public class PlayerService {
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public PlayerResponseDTO findById(@NonNull Long id) {
-        var playerProjections = playerRepository
-                .findByIdOptimized(id)
-                .orElseThrow(() -> new EntityNotFoundException("Player ID not found"));
+        try {
+            var projections = playerRepository.findByIdOptimized(id);
+            var oneProjection = projections.get(0);
+            var parameters = extractPlayerParameters(projections);
 
-        var playerProjection = playerProjections.get(0);
-        var parameters = extractPlayerParameters(playerProjections);
+            return new PlayerResponseDTO(oneProjection, parameters);
 
-        return new PlayerResponseDTO(playerProjection, parameters);
+        } catch (Exception e) {
+            throw new EntityNotFoundException("Player ID not found: " + id);
+        }
     }
 
     private List<PlayerParameterDataDTO> extractPlayerParameters(List<PlayerProjection> playerProjections) {
@@ -168,7 +170,6 @@ public class PlayerService {
         if (!playerRepository.existsById(id)) {
             throw new EntityNotFoundException("Player request. ID not found");
         }
-        playerRepository.deleteByIdWithParameters(id);
+        playerRepository.deleteByIdOptmized(id);
     }
-
 }
