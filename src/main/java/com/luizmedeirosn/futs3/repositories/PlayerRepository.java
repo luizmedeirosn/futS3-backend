@@ -52,10 +52,14 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
                     playparam.score AS playerScore
                 FROM
                     tb_player AS play
-                        INNER JOIN tb_position AS pos ON play.position_id = pos.id
-                        INNER JOIN tb_player_parameter AS playparam ON play.id = playparam.player_id
-                        INNER JOIN tb_parameter AS param ON playparam.parameter_id = param.id
-                        LEFT JOIN tb_player_picture AS playpic ON play.id = playpic.player_id
+                        INNER JOIN tb_position AS pos
+                            ON play.position_id = pos.id
+                        LEFT JOIN tb_player_parameter AS playparam
+                            ON play.id = playparam.player_id
+                        LEFT JOIN tb_parameter AS param
+                            ON playparam.parameter_id = param.id
+                        LEFT JOIN tb_player_picture AS playpic
+                            ON play.id = playpic.player_id
                 WHERE play.id = :id
                 ORDER BY param.name;
             """)
