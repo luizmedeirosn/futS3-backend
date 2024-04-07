@@ -1,21 +1,23 @@
 package com.luizmedeirosn.futs3.repositories;
 
+import com.luizmedeirosn.futs3.entities.Position;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
-
-import com.luizmedeirosn.futs3.entities.Position;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public interface PositionRepository extends JpaRepository<Position, Long> {
 
     @Modifying
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     @Query(nativeQuery = true, value = """
-                delete from tb_position_parameter where position_id = :id\\;
-                delete from tb_position where id = :id\\;
+                DELETE FROM tb_position_parameter WHERE position_id = :id ;
+                DELETE FROM tb_position WHERE id = :id ;
             """)
-    void deleteById(@NonNull Long id);
+    void deleteById(Long id);
 
 }
