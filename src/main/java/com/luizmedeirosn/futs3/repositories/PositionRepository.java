@@ -18,6 +18,6 @@ public interface PositionRepository extends JpaRepository<Position, Long> {
                 DELETE FROM tb_position_parameter WHERE position_id = :id ;
                 DELETE FROM tb_position WHERE id = :id ;
             """)
-    void deleteById(Long id);
+    void customDeleteById(Long id);
 
 }

@@ -30,7 +30,7 @@ public interface PlayerParameterRepository extends JpaRepository<PlayerParameter
 
     @Modifying
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-    default void saveAllOptimized(EntityManager entityManager, Long playerId, List<PlayerParameterIdScoreDTO> parameters) {
+    default void customSaveAll(EntityManager entityManager, Long playerId, List<PlayerParameterIdScoreDTO> parameters) {
         StringBuilder queryStr = new StringBuilder();
 
         int end = parameters.size();

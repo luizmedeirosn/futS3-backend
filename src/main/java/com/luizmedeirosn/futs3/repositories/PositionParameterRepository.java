@@ -34,5 +34,5 @@ public interface PositionParameterRepository extends JpaRepository<PositionParam
                     pos.id = :id
                 ORDER BY name;
             """)
-    List<PositionParametersProjection> findByIdPositionParameters(@Param("id") Long id);
+    List<PositionParametersProjection> customFindById(@Param("id") Long id);
 }

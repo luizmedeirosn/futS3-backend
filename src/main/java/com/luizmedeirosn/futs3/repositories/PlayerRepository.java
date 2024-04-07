@@ -33,7 +33,7 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
                             ON PLAY.id = PLAYPIC.player_id
                     ORDER BY PLAY.name ASC;
             """)
-    List<PlayerProjection> findAllOptimized();
+    List<PlayerProjection> customFindAll();
 
     @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
     @Query(nativeQuery = true, value = """
@@ -63,7 +63,7 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
                 WHERE play.id = :id
                 ORDER BY param.name;
             """)
-    List<PlayerProjection> findByIdOptimized(@Param("id") Long id);
+    List<PlayerProjection> customFindById(@Param("id") Long id);
 
 
     @Modifying
@@ -73,5 +73,5 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
                 DELETE FROM tb_player_picture WHERE player_id = :id ;
                 DELETE FROM tb_player WHERE id = :id ;
             """)
-    void deleteByIdOptmized(@Param("id") Long id);
+    void customDeleteById(@Param("id") Long id);
 }
