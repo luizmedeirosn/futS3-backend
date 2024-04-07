@@ -8,7 +8,6 @@ import com.luizmedeirosn.futs3.repositories.PositionParameterRepository;
 import com.luizmedeirosn.futs3.repositories.PositionRepository;
 import com.luizmedeirosn.futs3.shared.dto.request.PositionRequestDTO;
 import com.luizmedeirosn.futs3.shared.dto.request.aux.ParameterWeightDTO;
-import com.luizmedeirosn.futs3.shared.dto.response.PositionResponseDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.min.PositionMinDTO;
 import com.luizmedeirosn.futs3.shared.exceptions.DatabaseException;
 import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
@@ -21,7 +20,6 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -49,34 +47,8 @@ public class PositionService {
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public PositionMinDTO findById(@NonNull Long id) {
-        try {
-            return new PositionMinDTO(positionRepository.findById(id).get());
-
-        } catch (NoSuchElementException e) {
-            throw new EntityNotFoundException("Position ID not found");
-        }
-    }
-
-    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public List<PositionResponseDTO> findAllWithParameters() {
-        List<PositionResponseDTO> result = new ArrayList<>();
-        positionRepository.findAll(Sort.by("name")).forEach(position -> result.add(new PositionResponseDTO(position,
-                positionParameterRepository.findByIdPositionParameters(position.getId()))));
-
-        return result;
-    }
-
-    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public PositionResponseDTO findByIdPositionParameters(@NonNull Long id) {
-        Position position = positionRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Position ID not found: " + id));
-
-        return new PositionResponseDTO(
-                position.getId(),
-                position.getName(),
-                position.getDescription(),
-                positionParameterRepository.findByIdPositionParameters(id));
+    public PositionMinDTO findById(Long id) {
+        return new PositionMinDTO(positionRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Position ID not found: " + id)));
     }
 
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)

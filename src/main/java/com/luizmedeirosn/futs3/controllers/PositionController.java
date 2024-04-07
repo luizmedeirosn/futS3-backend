@@ -2,7 +2,6 @@ package com.luizmedeirosn.futs3.controllers;
 
 import com.luizmedeirosn.futs3.services.PositionService;
 import com.luizmedeirosn.futs3.shared.dto.request.PositionRequestDTO;
-import com.luizmedeirosn.futs3.shared.dto.response.PositionResponseDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.min.PositionMinDTO;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -31,16 +30,6 @@ public class PositionController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<PositionMinDTO> findById(@PathVariable @NonNull Long id) {
         return ResponseEntity.ok().body(positionService.findById(id));
-    }
-
-    @GetMapping(value = "/parameters")
-    public ResponseEntity<List<PositionResponseDTO>> findAllWithParameters() {
-        return ResponseEntity.ok().body(positionService.findAllWithParameters());
-    }
-
-    @GetMapping(value = "/{id}/parameters")
-    public ResponseEntity<PositionResponseDTO> findPositionParametersById(@PathVariable @NonNull Long id) {
-        return ResponseEntity.ok().body(positionService.findByIdPositionParameters(id));
     }
 
     @PostMapping
