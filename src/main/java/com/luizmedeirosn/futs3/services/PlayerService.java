@@ -55,13 +55,13 @@ public class PlayerService {
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public List<PlayerMinResponseDTO> findAll() {
-        return playerRepository.findAllOptimized().stream().map(PlayerMinResponseDTO::new).toList();
+        return playerRepository.customFindAll().stream().map(PlayerMinResponseDTO::new).toList();
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public PlayerResponseDTO findById(@NonNull Long id) {
+    public PlayerResponseDTO findById(Long id) {
         try {
-            var projections = playerRepository.findByIdOptimized(id);
+            var projections = playerRepository.customFindById(id);
             var oneProjection = projections.get(0);
             var parameters = extractPlayerParameters(projections);
 
@@ -104,7 +104,7 @@ public class PlayerService {
             newPlayer.setPlayerPicture(playerPicture);
 
             playerRepository.save(newPlayer);
-            playerParameterRepository.saveAllOptimized(
+            playerParameterRepository.customSaveAll(
                     entityManager,
                     newPlayer.getId(),
                     parameters
@@ -136,7 +136,7 @@ public class PlayerService {
 
             List<PlayerParameterIdScoreDTO> parameters = parseParameters(playerRequestDTO.parameters());
             playerParameterRepository.deleteByPlayerId(player.getId());
-            playerParameterRepository.saveAllOptimized(
+            playerParameterRepository.customSaveAll(
                     entityManager,
                     player.getId(),
                     parameters
@@ -170,6 +170,6 @@ public class PlayerService {
         if (!playerRepository.existsById(id)) {
             throw new EntityNotFoundException("Player request. ID not found");
         }
-        playerRepository.deleteByIdOptmized(id);
+        playerRepository.customDeleteById(id);
     }
 }
