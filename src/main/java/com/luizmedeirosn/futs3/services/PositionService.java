@@ -3,11 +3,14 @@ package com.luizmedeirosn.futs3.services;
 import com.luizmedeirosn.futs3.entities.Parameter;
 import com.luizmedeirosn.futs3.entities.Position;
 import com.luizmedeirosn.futs3.entities.PositionParameter;
+import com.luizmedeirosn.futs3.projections.postition.PositionParametersProjection;
 import com.luizmedeirosn.futs3.repositories.ParameterRepository;
 import com.luizmedeirosn.futs3.repositories.PositionParameterRepository;
 import com.luizmedeirosn.futs3.repositories.PositionRepository;
 import com.luizmedeirosn.futs3.shared.dto.request.PositionRequestDTO;
 import com.luizmedeirosn.futs3.shared.dto.request.aux.ParameterWeightDTO;
+import com.luizmedeirosn.futs3.shared.dto.response.PositionResponseDTO;
+import com.luizmedeirosn.futs3.shared.dto.response.aux.PositionParametersDataDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.min.PositionMinDTO;
 import com.luizmedeirosn.futs3.shared.exceptions.DatabaseException;
 import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
@@ -20,6 +23,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -47,8 +51,34 @@ public class PositionService {
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public PositionMinDTO findById(Long id) {
-        return new PositionMinDTO(positionRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Position ID not found: " + id)));
+    public PositionResponseDTO findById(Long id) {
+
+        try {
+            var projections = positionRepository.customFindById(id);
+            var oneProjection = projections.get(0);
+            var parameters = extractPositionParameters(projections);
+
+            return new PositionResponseDTO(oneProjection, parameters);
+
+        } catch (Exception e) {
+            throw new EntityNotFoundException("Player ID not found: " + id);
+        }
+    }
+
+    private List<PositionParametersDataDTO> extractPositionParameters(List<PositionParametersProjection> projections) {
+        if (projections.get(0).getParameterId() != null) {
+            return projections
+                    .stream()
+                    .map(p -> {
+                        long parameterId = p.getParameterId();
+                        String parameterName = p.getParameterName();
+                        int positionWeight = p.getPositionWeight();
+                        return new PositionParametersDataDTO(parameterId, parameterName, positionWeight);
+                    })
+                    .toList();
+        }
+
+        return new ArrayList<>();
     }
 
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)

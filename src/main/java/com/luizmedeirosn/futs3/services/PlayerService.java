@@ -72,9 +72,9 @@ public class PlayerService {
         }
     }
 
-    private List<PlayerParameterDataDTO> extractPlayerParameters(List<PlayerProjection> playerProjections) {
-        if (playerProjections.get(0).getParameterId() != null) {
-            return playerProjections
+    private List<PlayerParameterDataDTO> extractPlayerParameters(List<PlayerProjection> projections) {
+        if (projections.get(0).getParameterId() != null) {
+            return projections
                     .stream()
                     .map(p -> {
                         long parameterId = p.getParameterId();
