@@ -44,5 +44,4 @@ public interface PositionRepository extends JpaRepository<Position, Long> {
                 DELETE FROM tb_position WHERE id = :id ;
             """)
     void customDeleteById(Long id);
-
 }

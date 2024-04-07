@@ -52,7 +52,6 @@ public class PositionService {
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public PositionResponseDTO findById(Long id) {
-
         try {
             var projections = positionRepository.customFindById(id);
             var oneProjection = projections.get(0);
@@ -81,7 +80,7 @@ public class PositionService {
         return new ArrayList<>();
     }
 
-    @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public PositionMinDTO save(PositionRequestDTO positionRequestDTO) {
         try {
             Position position = positionRepository
@@ -116,7 +115,7 @@ public class PositionService {
         }
     }
 
-    @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public PositionMinDTO update(@NonNull Long id, PositionRequestDTO positionRequestDTO) {
         try {
             Position position = positionRepository.getReferenceById(id);
@@ -156,7 +155,7 @@ public class PositionService {
         }
     }
 
-    @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public void deleteById(@NonNull Long id) {
         try {
             if (!positionRepository.existsById(id)) {
