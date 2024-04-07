@@ -1,21 +1,12 @@
 package com.luizmedeirosn.futs3.entities;
 
+import com.luizmedeirosn.futs3.shared.dto.request.PositionRequestDTO;
+import jakarta.persistence.*;
+
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-
-import com.luizmedeirosn.futs3.shared.dto.request.PositionRequestDTO;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "tb_position")
@@ -33,13 +24,13 @@ public class Position implements Serializable {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @OneToMany(mappedBy = "position")
+    @OneToMany(mappedBy = "position", fetch = FetchType.LAZY)
     private final Set<Player> players = new HashSet<>();
 
-    @ManyToMany(mappedBy = "positions")
+    @ManyToMany(mappedBy = "positions", fetch = FetchType.LAZY)
     private final Set<GameMode> gameModes = new HashSet<>();
 
-    @OneToMany(mappedBy = "id.position", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "id.position", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private final Set<PositionParameter> positionParameters = new HashSet<>();
 
     public Position() {
