@@ -17,7 +17,6 @@ import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.domain.Sort;
-import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -116,7 +115,7 @@ public class PositionService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-    public PositionMinDTO update(@NonNull Long id, PositionRequestDTO positionRequestDTO) {
+    public PositionMinDTO update(Long id, PositionRequestDTO positionRequestDTO) {
         try {
             Position position = positionRepository.getReferenceById(id);
             position.updateData(positionRequestDTO);
@@ -156,12 +155,12 @@ public class PositionService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-    public void deleteById(@NonNull Long id) {
+    public void deleteById(Long id) {
         try {
             if (!positionRepository.existsById(id)) {
                 throw new EntityNotFoundException("Position request. ID not found");
             }
-            positionRepository.deleteById(id);
+            positionRepository.customDeleteById(id);
 
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException(e.getMessage());
