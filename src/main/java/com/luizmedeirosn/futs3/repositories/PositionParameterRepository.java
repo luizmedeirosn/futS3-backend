@@ -25,11 +25,6 @@ public interface PositionParameterRepository extends JpaRepository<PositionParam
 
     @Modifying
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-    @Query("DELETE FROM PositionParameter pp WHERE pp.id.parameter.id = :id")
-    void deleteByParameterId(@Param("id") Long id);
-
-    @Modifying
-    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     default void customSaveAll(EntityManager entityManager, Long positionId, List<PositionParameterIdWeightDTO> parameters) {
         StringBuilder queryStr = new StringBuilder();
 

@@ -11,7 +11,6 @@ import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.domain.Sort;
-import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -47,7 +46,7 @@ public class ParameterSerivce {
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public ParameterResponseDTO findById(@NonNull Long id) {
+    public ParameterResponseDTO findById(Long id) {
         var parameter = parameterRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Parameter ID not found: " + id));
         return new ParameterResponseDTO(parameter);
@@ -56,9 +55,7 @@ public class ParameterSerivce {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public ParameterResponseDTO save(ParameterRequestDTO parameterRequestDTO) {
         try {
-            Parameter parameter = new Parameter();
-            parameter.setName(parameterRequestDTO.name());
-            parameter.setDescription(parameterRequestDTO.description());
+            Parameter parameter = new Parameter(parameterRequestDTO.name(), parameterRequestDTO.description());
             parameter = parameterRepository.save(parameter);
             return new ParameterResponseDTO(parameter);
 
@@ -75,12 +72,15 @@ public class ParameterSerivce {
     }
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-    public ParameterResponseDTO update(@NonNull Long id, ParameterRequestDTO parameterRequestDTO) {
+    public ParameterResponseDTO update(Long id, ParameterRequestDTO parameterRequestDTO) {
         try {
             Parameter parameter = parameterRepository.getReferenceById(id);
             parameter.updateData(parameterRequestDTO);
+
             parameter = parameterRepository.save(parameter);
+
             return new ParameterResponseDTO(parameter);
+
         } catch (jakarta.persistence.EntityNotFoundException e) {
             throw new EntityNotFoundException("Parameter request. ID not found");
 
@@ -90,15 +90,13 @@ public class ParameterSerivce {
     }
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-    public void deleteById(@NonNull Long id) {
+    public void deleteById(Long id) {
         try {
             if (!parameterRepository.existsById(id)) {
                 throw new EntityNotFoundException("Parameter request. ID not found");
             }
 
-            positionParameterRepository.deleteByParameterId(id);
-            playerParameterRepository.deleteByParameterId(id);
-            parameterRepository.deleteById(id);
+            parameterRepository.customDeleteById(id);
 
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException("Parameter request. Database integrity reference constraint error");
