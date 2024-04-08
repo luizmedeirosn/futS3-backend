@@ -114,7 +114,7 @@ public class PositionService {
             Position position = positionRepository.getReferenceById(id);
             position.updateData(positionRequestDTO);
 
-            positionParameterRepository.deleteByIdPositionId(id);
+            positionParameterRepository.deleteByPositionId(id);
 
             for (PositionParameterIdWeightDTO parameterWeight : positionRequestDTO.parameters()) {
                 Long parameterId = parameterWeight.id();

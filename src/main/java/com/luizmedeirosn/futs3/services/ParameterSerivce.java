@@ -111,7 +111,7 @@ public class ParameterSerivce {
                 throw new EntityNotFoundException("Parameter request. ID not found");
             }
 
-            positionParameterRepository.deleteByIdParameterId(id);
+            positionParameterRepository.deleteByParameterId(id);
             playerParameterRepository.deleteByParameterId(id);
             parameterRepository.deleteById(id);
 
