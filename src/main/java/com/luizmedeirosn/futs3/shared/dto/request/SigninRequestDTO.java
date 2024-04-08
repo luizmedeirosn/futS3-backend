@@ -8,7 +8,7 @@ import java.io.Serializable;
 public record SigninRequestDTO(
 
         @NotNull @NotBlank String username,
-        @NotBlank @NotBlank String password
+        @NotNull @NotBlank String password
 
 ) implements Serializable {
     private static final long serialVersionUID = 1L;

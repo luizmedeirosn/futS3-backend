@@ -6,11 +6,10 @@ import jakarta.validation.constraints.NotNull;
 
 import java.io.Serializable;
 
-public record ParameterWeightDTO(
+public record PositionParameterIdWeightDTO(
 
         @NotNull Long id,
-        String name,
-        @Min(1) @Max(100) Integer weight
+        @NotNull @Min(1) @Max(100) Integer weight
 
 ) implements Serializable {
     private static final long serialVersionUID = 1L;

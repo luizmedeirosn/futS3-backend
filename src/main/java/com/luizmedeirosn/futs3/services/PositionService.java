@@ -8,7 +8,7 @@ import com.luizmedeirosn.futs3.repositories.ParameterRepository;
 import com.luizmedeirosn.futs3.repositories.PositionParameterRepository;
 import com.luizmedeirosn.futs3.repositories.PositionRepository;
 import com.luizmedeirosn.futs3.shared.dto.request.PositionRequestDTO;
-import com.luizmedeirosn.futs3.shared.dto.request.aux.ParameterWeightDTO;
+import com.luizmedeirosn.futs3.shared.dto.request.aux.PositionParameterIdWeightDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.PositionResponseDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.aux.PositionParametersDataDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.min.PositionMinDTO;
@@ -122,7 +122,7 @@ public class PositionService {
 
             positionParameterRepository.deleteByIdPositionId(id);
 
-            for (ParameterWeightDTO parameterWeight : positionRequestDTO.parameters()) {
+            for (PositionParameterIdWeightDTO parameterWeight : positionRequestDTO.parameters()) {
                 Long parameterId = parameterWeight.id();
                 if (parameterId != null) {
                     PositionParameter positionParameter = new PositionParameter();
