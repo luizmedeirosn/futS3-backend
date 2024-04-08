@@ -20,17 +20,17 @@ public interface PlayerParameterRepository extends JpaRepository<PlayerParameter
 
     @Modifying
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-    @Query(nativeQuery = true, value = "delete from tb_player_parameter where player_id = :id ;")
+    @Query(nativeQuery = true, value = "DELETE FROM tb_player_parameter WHERE player_id = :id ;")
     void deleteByPlayerId(@Param("id") Long id);
 
     @Modifying
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-    @Query(nativeQuery = true, value = "delete from tb_player_parameter where parameter_id = :id ;")
+    @Query(nativeQuery = true, value = "DELETE FROM tb_player_parameter WHERE parameter_id = :id ;")
     void deleteByParameterId(@Param("id") Long id);
 
     @Modifying
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-    default void saveAllOptimized(EntityManager entityManager, Long playerId, List<PlayerParameterIdScoreDTO> parameters) {
+    default void customSaveAll(EntityManager entityManager, Long playerId, List<PlayerParameterIdScoreDTO> parameters) {
         StringBuilder queryStr = new StringBuilder();
 
         int end = parameters.size();

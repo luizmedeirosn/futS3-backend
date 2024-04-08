@@ -17,7 +17,6 @@ import com.luizmedeirosn.futs3.shared.dto.response.min.PlayerMinResponseDTO;
 import com.luizmedeirosn.futs3.shared.exceptions.DatabaseException;
 import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.lang.NonNull;
@@ -37,31 +36,30 @@ public class PlayerService {
     private final PlayerParameterRepository playerParameterRepository;
     private final PositionRepository positionRepository;
     private final ObjectMapper objectMapper;
-
-    @PersistenceContext
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
 
     public PlayerService(
             PlayerRepository playerRepository,
             PlayerParameterRepository playerParameterRepository,
             PositionRepository positionRepository,
-            ObjectMapper objectMapper
+            ObjectMapper objectMapper, EntityManager entityManager
     ) {
         this.playerRepository = playerRepository;
         this.playerParameterRepository = playerParameterRepository;
         this.positionRepository = positionRepository;
         this.objectMapper = objectMapper;
+        this.entityManager = entityManager;
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public List<PlayerMinResponseDTO> findAll() {
-        return playerRepository.findAllOptimized().stream().map(PlayerMinResponseDTO::new).toList();
+        return playerRepository.customFindAll().stream().map(PlayerMinResponseDTO::new).toList();
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public PlayerResponseDTO findById(@NonNull Long id) {
+    public PlayerResponseDTO findById(Long id) {
         try {
-            var projections = playerRepository.findByIdOptimized(id);
+            var projections = playerRepository.customFindById(id);
             var oneProjection = projections.get(0);
             var parameters = extractPlayerParameters(projections);
 
@@ -72,9 +70,9 @@ public class PlayerService {
         }
     }
 
-    private List<PlayerParameterDataDTO> extractPlayerParameters(List<PlayerProjection> playerProjections) {
-        if (playerProjections.get(0).getParameterId() != null) {
-            return playerProjections
+    private List<PlayerParameterDataDTO> extractPlayerParameters(List<PlayerProjection> projections) {
+        if (projections.get(0).getParameterId() != null) {
+            return projections
                     .stream()
                     .map(p -> {
                         long parameterId = p.getParameterId();
@@ -104,7 +102,7 @@ public class PlayerService {
             newPlayer.setPlayerPicture(playerPicture);
 
             playerRepository.save(newPlayer);
-            playerParameterRepository.saveAllOptimized(
+            playerParameterRepository.customSaveAll(
                     entityManager,
                     newPlayer.getId(),
                     parameters
@@ -136,7 +134,7 @@ public class PlayerService {
 
             List<PlayerParameterIdScoreDTO> parameters = parseParameters(playerRequestDTO.parameters());
             playerParameterRepository.deleteByPlayerId(player.getId());
-            playerParameterRepository.saveAllOptimized(
+            playerParameterRepository.customSaveAll(
                     entityManager,
                     player.getId(),
                     parameters
@@ -170,6 +168,6 @@ public class PlayerService {
         if (!playerRepository.existsById(id)) {
             throw new EntityNotFoundException("Player request. ID not found");
         }
-        playerRepository.deleteByIdOptmized(id);
+        playerRepository.customDeleteById(id);
     }
 }

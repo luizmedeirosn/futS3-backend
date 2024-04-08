@@ -1,13 +1,13 @@
 package com.luizmedeirosn.futs3.repositories;
 
-import java.util.List;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Repository;
-
 import com.luizmedeirosn.futs3.entities.Parameter;
 import com.luizmedeirosn.futs3.projections.player.PlayerParameterProjection;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface ParameterRepository extends JpaRepository<Parameter, Long> {
@@ -23,9 +23,8 @@ public interface ParameterRepository extends JpaRepository<Parameter, Long> {
                         ON playparam.player_id = play.id
                     INNER JOIN tb_parameter AS param
                         ON playparam.parameter_id = param.id
-                WHERE play.id = :playerId
+                WHERE play.id = :id
                 ORDER BY param.name;
             """)
-    List<PlayerParameterProjection> findParametersByPlayerId(Long playerId);
-
+    List<PlayerParameterProjection> findParametersByPlayerId(@Param("id") Long id);
 }

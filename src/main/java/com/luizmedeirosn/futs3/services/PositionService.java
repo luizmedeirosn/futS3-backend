@@ -1,21 +1,19 @@
 package com.luizmedeirosn.futs3.services;
 
-import com.luizmedeirosn.futs3.entities.Parameter;
 import com.luizmedeirosn.futs3.entities.Position;
-import com.luizmedeirosn.futs3.entities.PositionParameter;
-import com.luizmedeirosn.futs3.repositories.ParameterRepository;
+import com.luizmedeirosn.futs3.projections.postition.PositionParametersProjection;
 import com.luizmedeirosn.futs3.repositories.PositionParameterRepository;
 import com.luizmedeirosn.futs3.repositories.PositionRepository;
 import com.luizmedeirosn.futs3.shared.dto.request.PositionRequestDTO;
-import com.luizmedeirosn.futs3.shared.dto.request.aux.ParameterWeightDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.PositionResponseDTO;
+import com.luizmedeirosn.futs3.shared.dto.response.aux.PositionParametersDataDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.min.PositionMinDTO;
 import com.luizmedeirosn.futs3.shared.exceptions.DatabaseException;
 import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
+import jakarta.persistence.EntityManager;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.domain.Sort;
-import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -23,20 +21,23 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 @SuppressWarnings({"java:S2583"})
 public class PositionService {
 
     private final PositionRepository positionRepository;
-    private final ParameterRepository parameterRepository;
     private final PositionParameterRepository positionParameterRepository;
+    private final EntityManager entityManager;
 
-    public PositionService(PositionRepository positionRepository, ParameterRepository parameterRepository, PositionParameterRepository positionParameterRepository) {
+    public PositionService(
+            PositionRepository positionRepository,
+            PositionParameterRepository positionParameterRepository,
+            EntityManager entityManager
+    ) {
         this.positionRepository = positionRepository;
-        this.parameterRepository = parameterRepository;
         this.positionParameterRepository = positionParameterRepository;
+        this.entityManager = entityManager;
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
@@ -49,59 +50,44 @@ public class PositionService {
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public PositionMinDTO findById(@NonNull Long id) {
+    public PositionResponseDTO findById(Long id) {
         try {
-            return new PositionMinDTO(positionRepository.findById(id).get());
+            var projections = positionRepository.customFindById(id);
+            var oneProjection = projections.get(0);
+            var parameters = extractPositionParameters(projections);
 
-        } catch (NoSuchElementException e) {
-            throw new EntityNotFoundException("Position ID not found");
+            return new PositionResponseDTO(oneProjection, parameters);
+
+        } catch (Exception e) {
+            throw new EntityNotFoundException("Position ID not found: " + id);
         }
     }
 
-    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public List<PositionResponseDTO> findAllWithParameters() {
-        List<PositionResponseDTO> result = new ArrayList<>();
-        positionRepository.findAll(Sort.by("name")).forEach(position -> result.add(new PositionResponseDTO(position,
-                positionParameterRepository.findByIdPositionParameters(position.getId()))));
+    private List<PositionParametersDataDTO> extractPositionParameters(List<PositionParametersProjection> projections) {
+        if (projections.get(0).getParameterId() != null) {
+            return projections
+                    .stream()
+                    .map(p -> {
+                        long parameterId = p.getParameterId();
+                        String parameterName = p.getParameterName();
+                        int positionWeight = p.getPositionWeight();
+                        return new PositionParametersDataDTO(parameterId, parameterName, positionWeight);
+                    })
+                    .toList();
+        }
 
-        return result;
+        return new ArrayList<>();
     }
 
-    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public PositionResponseDTO findByIdPositionParameters(@NonNull Long id) {
-        Position position = positionRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Position ID not found: " + id));
-
-        return new PositionResponseDTO(
-                position.getId(),
-                position.getName(),
-                position.getDescription(),
-                positionParameterRepository.findByIdPositionParameters(id));
-    }
-
-    @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-    public PositionMinDTO save(PositionRequestDTO positionRequestDTO) {
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
+    public PositionResponseDTO save(PositionRequestDTO positionRequestDTO) {
         try {
-            Position position = positionRepository
-                    .save(new Position(positionRequestDTO.name(), positionRequestDTO.description()));
+            Position newPosition = new Position(positionRequestDTO);
+            positionRepository.save(newPosition);
 
-            positionRequestDTO.parameters().forEach(parameterWeight -> {
-                Long parameterId = parameterWeight.id();
-                if (parameterId != null) {
-                    PositionParameter positionParameter = new PositionParameter();
+            positionParameterRepository.customSaveAll(entityManager, newPosition.getId(), positionRequestDTO.parameters());
 
-                    positionParameter.setPosition(position);
-                    positionParameter.setParameter(parameterRepository.findById(parameterId)
-                            .orElseThrow(NoSuchElementException::new));
-                    positionParameter.setWeight(parameterWeight.weight());
-
-                    positionParameterRepository.save(positionParameter);
-                } else {
-                    throw new NullPointerException();
-                }
-            });
-
-            return new PositionMinDTO(position);
+            return findById(newPosition.getId());
 
         } catch (NullPointerException | InvalidDataAccessApiUsageException e) {
             throw new EntityNotFoundException("Position request. The given ID must not be null");
@@ -114,34 +100,21 @@ public class PositionService {
         }
     }
 
-    @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-    public PositionMinDTO update(@NonNull Long id, PositionRequestDTO positionRequestDTO) {
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
+    public PositionResponseDTO update(Long id, PositionRequestDTO positionRequestDTO) {
         try {
             Position position = positionRepository.getReferenceById(id);
             position.updateData(positionRequestDTO);
 
-            positionParameterRepository.deleteByIdPositionId(id);
-
-            for (ParameterWeightDTO parameterWeight : positionRequestDTO.parameters()) {
-                Long parameterId = parameterWeight.id();
-                if (parameterId != null) {
-                    PositionParameter positionParameter = new PositionParameter();
-                    positionParameter.setPosition(position);
-
-                    Parameter parameter = parameterRepository.findById(parameterId)
-                            .orElseThrow(NoSuchElementException::new);
-
-                    positionParameter.setParameter(parameter);
-                    positionParameter.setWeight(parameterWeight.weight());
-
-                    positionParameterRepository.save(positionParameter);
-                } else {
-                    throw new NullPointerException();
-                }
-            }
+            positionParameterRepository.deleteByPositionId(position.getId());
+            positionParameterRepository.customSaveAll(
+                    entityManager,
+                    position.getId(),
+                    positionRequestDTO.parameters()
+            );
 
             position = positionRepository.save(position);
-            return new PositionMinDTO(position);
+            return findById(position.getId());
 
         } catch (NullPointerException | InvalidDataAccessApiUsageException e) {
             throw new EntityNotFoundException("Position request. The given ID must not be null");
@@ -154,13 +127,13 @@ public class PositionService {
         }
     }
 
-    @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-    public void deleteById(@NonNull Long id) {
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
+    public void deleteById(Long id) {
         try {
             if (!positionRepository.existsById(id)) {
                 throw new EntityNotFoundException("Position request. ID not found");
             }
-            positionRepository.deleteById(id);
+            positionRepository.customDeleteById(id);
 
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException(e.getMessage());
