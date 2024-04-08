@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@SuppressWarnings({"java:S2583"})
 public class PositionService {
 
     private final PositionRepository positionRepository;

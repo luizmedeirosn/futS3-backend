@@ -25,10 +25,10 @@ public class Parameter implements Serializable {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @OneToMany(mappedBy = "id.parameter")
+    @OneToMany(mappedBy = "id.parameter", fetch = FetchType.LAZY)
     private Set<PositionParameter> positionParameters;
 
-    @OneToMany(mappedBy = "id.parameter")
+    @OneToMany(mappedBy = "id.parameter", fetch = FetchType.LAZY)
     private final Set<PlayerParameter> playerParameters = new HashSet<>();
 
     public Parameter() {
