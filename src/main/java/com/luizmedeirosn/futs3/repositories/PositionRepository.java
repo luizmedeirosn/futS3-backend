@@ -26,14 +26,14 @@ public interface PositionRepository extends JpaRepository<Position, Long> {
                     param.name AS parameterName,
                     posparam.weight AS positionWeight
                 FROM
-                    tb_position_parameter as posparam
-                        INNER JOIN tb_position AS pos
+                    tb_position AS pos
+                        LEFT JOIN tb_position_parameter AS posparam
                             ON posparam.position_id = pos.id
-                        INNER JOIN tb_parameter AS param
+                        LEFT JOIN tb_parameter AS param
                             ON posparam.parameter_id = param.id
                 WHERE
                     pos.id = :id
-                ORDER BY name;
+                ORDER BY parameterName;
             """)
     List<PositionParametersProjection> customFindById(@Param("id") Long id);
 
