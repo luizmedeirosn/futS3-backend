@@ -16,7 +16,7 @@ import java.util.List;
 @Repository
 public interface PlayerRepository extends JpaRepository<Player, Long> {
 
-    @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     @Query(nativeQuery = true, value = """
                     SELECT
                         PLAY.id AS playerId,
@@ -35,7 +35,7 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
             """)
     List<PlayerProjection> customFindAll();
 
-    @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     @Query(nativeQuery = true, value = """
                 SELECT
                     play.id AS playerId,

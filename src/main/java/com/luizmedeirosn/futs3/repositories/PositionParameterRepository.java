@@ -19,12 +19,12 @@ import java.util.List;
 public interface PositionParameterRepository extends JpaRepository<PositionParameter, PositionParameterPK> {
 
     @Modifying
-    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.SERIALIZABLE)
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     @Query("DELETE FROM PositionParameter pp WHERE pp.id.position.id = :id")
     void deleteByPositionId(@Param("id") Long id);
 
     @Modifying
-    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.SERIALIZABLE)
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     @Query("DELETE FROM PositionParameter pp WHERE pp.id.parameter.id = :id")
     void deleteByParameterId(@Param("id") Long id);
 

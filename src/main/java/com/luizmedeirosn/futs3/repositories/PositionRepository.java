@@ -16,7 +16,7 @@ import java.util.List;
 @Repository
 public interface PositionRepository extends JpaRepository<Position, Long> {
 
-    @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     @Query(nativeQuery = true, value = """
                 SELECT
                     pos.id,

@@ -45,7 +45,7 @@ public class PositionController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<PositionMinDTO> updateById(
+    public ResponseEntity<PositionResponseDTO> updateById(
             @PathVariable @NonNull Long id,
             @RequestBody @Valid PositionRequestDTO positionRequestDTO
     ) {

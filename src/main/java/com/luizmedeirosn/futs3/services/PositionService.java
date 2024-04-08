@@ -1,14 +1,10 @@
 package com.luizmedeirosn.futs3.services;
 
-import com.luizmedeirosn.futs3.entities.Parameter;
 import com.luizmedeirosn.futs3.entities.Position;
-import com.luizmedeirosn.futs3.entities.PositionParameter;
 import com.luizmedeirosn.futs3.projections.postition.PositionParametersProjection;
-import com.luizmedeirosn.futs3.repositories.ParameterRepository;
 import com.luizmedeirosn.futs3.repositories.PositionParameterRepository;
 import com.luizmedeirosn.futs3.repositories.PositionRepository;
 import com.luizmedeirosn.futs3.shared.dto.request.PositionRequestDTO;
-import com.luizmedeirosn.futs3.shared.dto.request.aux.PositionParameterIdWeightDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.PositionResponseDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.aux.PositionParametersDataDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.min.PositionMinDTO;
@@ -25,25 +21,21 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 @SuppressWarnings({"java:S2583"})
 public class PositionService {
 
     private final PositionRepository positionRepository;
-    private final ParameterRepository parameterRepository;
     private final PositionParameterRepository positionParameterRepository;
     private final EntityManager entityManager;
 
     public PositionService(
             PositionRepository positionRepository,
-            ParameterRepository parameterRepository,
             PositionParameterRepository positionParameterRepository,
             EntityManager entityManager
     ) {
         this.positionRepository = positionRepository;
-        this.parameterRepository = parameterRepository;
         this.positionParameterRepository = positionParameterRepository;
         this.entityManager = entityManager;
     }
@@ -109,33 +101,20 @@ public class PositionService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-    public PositionMinDTO update(Long id, PositionRequestDTO positionRequestDTO) {
+    public PositionResponseDTO update(Long id, PositionRequestDTO positionRequestDTO) {
         try {
             Position position = positionRepository.getReferenceById(id);
             position.updateData(positionRequestDTO);
 
-            positionParameterRepository.deleteByPositionId(id);
-
-            for (PositionParameterIdWeightDTO parameterWeight : positionRequestDTO.parameters()) {
-                Long parameterId = parameterWeight.id();
-                if (parameterId != null) {
-                    PositionParameter positionParameter = new PositionParameter();
-                    positionParameter.setPosition(position);
-
-                    Parameter parameter = parameterRepository.findById(parameterId)
-                            .orElseThrow(NoSuchElementException::new);
-
-                    positionParameter.setParameter(parameter);
-                    positionParameter.setWeight(parameterWeight.weight());
-
-                    positionParameterRepository.save(positionParameter);
-                } else {
-                    throw new NullPointerException();
-                }
-            }
+            positionParameterRepository.deleteByPositionId(position.getId());
+            positionParameterRepository.customSaveAll(
+                    entityManager,
+                    position.getId(),
+                    positionRequestDTO.parameters()
+            );
 
             position = positionRepository.save(position);
-            return new PositionMinDTO(position);
+            return findById(position.getId());
 
         } catch (NullPointerException | InvalidDataAccessApiUsageException e) {
             throw new EntityNotFoundException("Position request. The given ID must not be null");
