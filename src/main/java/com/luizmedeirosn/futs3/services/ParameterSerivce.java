@@ -1,7 +1,6 @@
 package com.luizmedeirosn.futs3.services;
 
 import com.luizmedeirosn.futs3.entities.Parameter;
-import com.luizmedeirosn.futs3.projections.player.PlayerParameterProjection;
 import com.luizmedeirosn.futs3.repositories.ParameterRepository;
 import com.luizmedeirosn.futs3.repositories.PlayerParameterRepository;
 import com.luizmedeirosn.futs3.repositories.PositionParameterRepository;
@@ -49,22 +48,9 @@ public class ParameterSerivce {
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public ParameterResponseDTO findById(@NonNull Long id) {
-        try {
-            return new ParameterResponseDTO(parameterRepository.findById(id).get());
-
-        } catch (NoSuchElementException e) {
-            throw new EntityNotFoundException("Parameter ID not found");
-        }
-    }
-
-    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public List<PlayerParameterProjection> findByPlayerId(@NonNull Long id) {
-        try {
-            return parameterRepository.findParametersByPlayerId(id);
-
-        } catch (NoSuchElementException e) {
-            throw new EntityNotFoundException("Parameter ID not found");
-        }
+        var parameter = parameterRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Parameter ID not found: " + id));
+        return new ParameterResponseDTO(parameter);
     }
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
