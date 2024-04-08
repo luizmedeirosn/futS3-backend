@@ -34,8 +34,8 @@ public class PositionController {
     }
 
     @PostMapping
-    public ResponseEntity<PositionMinDTO> save(@RequestBody @Valid PositionRequestDTO postPositionDTO) {
-        PositionMinDTO positionDTO = positionService.save(postPositionDTO);
+    public ResponseEntity<PositionResponseDTO> save(@RequestBody @Valid PositionRequestDTO postPositionDTO) {
+        PositionResponseDTO positionDTO = positionService.save(postPositionDTO);
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
@@ -45,8 +45,10 @@ public class PositionController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<PositionMinDTO> updateById(@PathVariable @NonNull Long id,
-                                                     @RequestBody @Valid PositionRequestDTO positionRequestDTO) {
+    public ResponseEntity<PositionMinDTO> updateById(
+            @PathVariable @NonNull Long id,
+            @RequestBody @Valid PositionRequestDTO positionRequestDTO
+    ) {
         return ResponseEntity.ok().body(positionService.update(id, positionRequestDTO));
     }
 
@@ -55,5 +57,4 @@ public class PositionController {
         positionService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
-
 }

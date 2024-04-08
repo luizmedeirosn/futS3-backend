@@ -17,7 +17,6 @@ import com.luizmedeirosn.futs3.shared.dto.response.min.PlayerMinResponseDTO;
 import com.luizmedeirosn.futs3.shared.exceptions.DatabaseException;
 import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.lang.NonNull;
@@ -37,20 +36,19 @@ public class PlayerService {
     private final PlayerParameterRepository playerParameterRepository;
     private final PositionRepository positionRepository;
     private final ObjectMapper objectMapper;
-
-    @PersistenceContext
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
 
     public PlayerService(
             PlayerRepository playerRepository,
             PlayerParameterRepository playerParameterRepository,
             PositionRepository positionRepository,
-            ObjectMapper objectMapper
+            ObjectMapper objectMapper, EntityManager entityManager
     ) {
         this.playerRepository = playerRepository;
         this.playerParameterRepository = playerParameterRepository;
         this.positionRepository = positionRepository;
         this.objectMapper = objectMapper;
+        this.entityManager = entityManager;
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
