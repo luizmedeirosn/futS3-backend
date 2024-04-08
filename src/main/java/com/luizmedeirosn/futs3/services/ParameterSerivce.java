@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
-@SuppressWarnings({"java:S2589"})
 public class ParameterSerivce {
 
     private final PositionParameterRepository positionParameterRepository;
@@ -68,7 +67,7 @@ public class ParameterSerivce {
         }
     }
 
-    @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public ParameterResponseDTO save(ParameterRequestDTO parameterRequestDTO) {
         try {
             Parameter parameter = new Parameter();
@@ -89,7 +88,7 @@ public class ParameterSerivce {
         }
     }
 
-    @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public ParameterResponseDTO update(@NonNull Long id, ParameterRequestDTO parameterRequestDTO) {
         try {
             Parameter parameter = parameterRepository.getReferenceById(id);
@@ -104,7 +103,7 @@ public class ParameterSerivce {
         }
     }
 
-    @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public void deleteById(@NonNull Long id) {
         try {
             if (!parameterRepository.existsById(id)) {
@@ -119,5 +118,4 @@ public class ParameterSerivce {
             throw new DatabaseException("Parameter request. Database integrity reference constraint error");
         }
     }
-
 }
