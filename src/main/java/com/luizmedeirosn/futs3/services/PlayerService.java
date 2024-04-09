@@ -102,10 +102,10 @@ public class PlayerService {
             newPlayer.setPlayerPicture(playerPicture);
 
             playerRepository.save(newPlayer);
-            playerParameterRepository.customSaveAll(
-                    entityManager,
+            playerParameterRepository.saveAllPlayerParameters(
                     newPlayer.getId(),
-                    parameters
+                    parameters,
+                    entityManager
             );
 
             return findById(newPlayer.getId());
@@ -134,10 +134,10 @@ public class PlayerService {
 
             List<PlayerParameterIdScoreDTO> parameters = parseParameters(playerRequestDTO.parameters());
             playerParameterRepository.deleteByPlayerId(player.getId());
-            playerParameterRepository.customSaveAll(
-                    entityManager,
+            playerParameterRepository.saveAllPlayerParameters(
                     player.getId(),
-                    parameters
+                    parameters,
+                    entityManager
             );
 
             player = playerRepository.save(player);
@@ -156,7 +156,7 @@ public class PlayerService {
 
     private List<PlayerParameterIdScoreDTO> parseParameters(String parameters) {
         try {
-            return objectMapper.readValue(parameters, new TypeReference<>() {
+            return parameters.isBlank() ? new ArrayList<>() : objectMapper.readValue(parameters, new TypeReference<>() {
             });
         } catch (Exception e) {
             throw new IllegalArgumentException("Players Request. Invalid format for parameters");

@@ -25,27 +25,21 @@ public interface PositionParameterRepository extends JpaRepository<PositionParam
 
     @Modifying
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-    default void customSaveAll(EntityManager entityManager, Long positionId, List<PositionParameterIdWeightDTO> parameters) {
+    default void saveAllPositionParameters(Long positionId, List<PositionParameterIdWeightDTO> parameters, EntityManager entityManager) {
         StringBuilder queryStr = new StringBuilder();
 
         int end = parameters.size();
         for (int i = 0; i < end; i++) {
+            var parameter = parameters.get(i);
             if (i == 0) {
-                queryStr.append("INSERT INTO tb_position_parameter (position_id, parameter_id, weight) VALUES (?, ?, ?)");
+                queryStr.append("INSERT INTO tb_position_parameter (position_id, parameter_id, weight) VALUES");
+                queryStr.append(String.format(" (%d, %d, %d)", positionId, parameter.id(), parameter.weight()));
             } else {
-                queryStr.append(", (?, ?, ?)");
+                queryStr.append(String.format(", (%d, %d, %d)", positionId, parameter.id(), parameter.weight()));
             }
         }
 
         jakarta.persistence.Query query = entityManager.createNativeQuery(queryStr.toString());
-
-        int parameterIndex = 1;
-        for (PositionParameterIdWeightDTO parameter : parameters) {
-            query.setParameter(parameterIndex++, positionId);
-            query.setParameter(parameterIndex++, parameter.id());
-            query.setParameter(parameterIndex++, parameter.weight());
-        }
-
         query.executeUpdate();
     }
 }

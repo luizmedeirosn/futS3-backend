@@ -25,27 +25,21 @@ public interface PlayerParameterRepository extends JpaRepository<PlayerParameter
 
     @Modifying
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-    default void customSaveAll(EntityManager entityManager, Long playerId, List<PlayerParameterIdScoreDTO> parameters) {
+    default void saveAllPlayerParameters(Long playerId, List<PlayerParameterIdScoreDTO> parameters, EntityManager entityManager) {
         StringBuilder queryStr = new StringBuilder();
 
         int end = parameters.size();
         for (int i = 0; i < end; i++) {
+            var parameter = parameters.get(i);
             if (i == 0) {
-                queryStr.append("INSERT INTO tb_player_parameter (player_id, parameter_id, score) VALUES (?, ?, ?)");
+                queryStr.append("INSERT INTO tb_player_parameter (player_id, parameter_id, score) VALUES");
+                queryStr.append(String.format(" (%d, %d, %d)", playerId, parameter.id(), parameter.score()));
             } else {
-                queryStr.append(", (?, ?, ?)");
+                queryStr.append(String.format(", (%d, %d, %d)", playerId, parameter.id(), parameter.score()));
             }
         }
 
         jakarta.persistence.Query query = entityManager.createNativeQuery(queryStr.toString());
-
-        int parameterIndex = 1;
-        for (PlayerParameterIdScoreDTO parameter : parameters) {
-            query.setParameter(parameterIndex++, playerId);
-            query.setParameter(parameterIndex++, parameter.id());
-            query.setParameter(parameterIndex++, parameter.score());
-        }
-
         query.executeUpdate();
     }
 }

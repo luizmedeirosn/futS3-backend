@@ -26,7 +26,7 @@ public record PlayerRequestDTO(
          * @throws IllegalArgumentException if the parameters string is not a valid JSON array of objects.
          * @throws IllegalArgumentException if any object in the array doesn't have "id" and "score" fields.
          */
-        @NotNull @NotBlank String parameters,
+        @NotNull String parameters,
 
         MultipartFile playerPicture
 

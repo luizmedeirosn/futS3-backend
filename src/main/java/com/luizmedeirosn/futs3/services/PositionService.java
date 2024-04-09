@@ -84,7 +84,11 @@ public class PositionService {
             Position newPosition = new Position(positionRequestDTO);
             positionRepository.save(newPosition);
 
-            positionParameterRepository.customSaveAll(entityManager, newPosition.getId(), positionRequestDTO.parameters());
+            positionParameterRepository.saveAllPositionParameters(
+                    newPosition.getId(),
+                    positionRequestDTO.parameters(),
+                    entityManager
+            );
 
             return findById(newPosition.getId());
 
@@ -106,10 +110,10 @@ public class PositionService {
             position.updateData(positionRequestDTO);
 
             positionParameterRepository.deleteByPositionId(position.getId());
-            positionParameterRepository.customSaveAll(
-                    entityManager,
+            positionParameterRepository.saveAllPositionParameters(
                     position.getId(),
-                    positionRequestDTO.parameters()
+                    positionRequestDTO.parameters(),
+                    entityManager
             );
 
             position = positionRepository.save(position);
@@ -138,5 +142,4 @@ public class PositionService {
             throw new DatabaseException(e.getMessage());
         }
     }
-
 }
