@@ -25,5 +25,4 @@ public class PlayerPictureService {
         return playerPictureRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Image ID not found"));
     }
-
 }

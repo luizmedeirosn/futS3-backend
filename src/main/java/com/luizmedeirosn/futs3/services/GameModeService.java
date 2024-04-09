@@ -127,7 +127,7 @@ public class GameModeService {
             );
 
             newGameMode = gameModeRepository.save(newGameMode);
-            gameModeRepository.savePositions(
+            gameModeRepository.saveAllPositions(
                     newGameMode.getId(),
                     gameModeRequestDTO.positions(),
                     entityManager
@@ -147,25 +147,20 @@ public class GameModeService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-    public GameModeMinResponseDTO update(Long id, GameModeRequestDTO gameModeRequestDTO) {
+    public GameModeResponseDTO update(Long id, GameModeRequestDTO gameModeRequestDTO) {
         try {
             GameMode gameMode = gameModeRepository.getReferenceById(id);
             gameMode.updateData(gameModeRequestDTO);
 
-            gameModeRepository.deletePositionFromGameModeById(id);
-            Set<Position> positions = gameMode.getPositions();
-
-            gameModeRequestDTO.positions()
-                    .forEach(positionId -> {
-                        if (positionId != null) {
-                            positions.add(positionRepository.findById(positionId).get());
-                        } else {
-                            throw new NullPointerException();
-                        }
-                    });
+            gameModeRepository.deletePositionsFromGameModeById(gameMode.getId());
+            gameModeRepository.saveAllPositions(
+                    gameMode.getId(),
+                    gameModeRequestDTO.positions(),
+                    entityManager
+            );
 
             gameMode = gameModeRepository.save(gameMode);
-            return new GameModeMinResponseDTO(gameMode);
+            return findById(gameMode.getId());
 
         } catch (NullPointerException e) {
             throw new EntityNotFoundException("GameMode request. The given IDs must not be null");
@@ -173,7 +168,7 @@ public class GameModeService {
         } catch (jakarta.persistence.EntityNotFoundException e) {
             // jakarta.persistence.EntityNotFoundException: Unable to find
             // com.luizmedeirosn.futs3.entities.GameMode with id 10
-            throw new EntityNotFoundException("GameMode request. ID not found");
+            throw new EntityNotFoundException("GameMode request. ID not found: " + id);
 
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException("GameMode request. Unique index, check index or primary key violation");

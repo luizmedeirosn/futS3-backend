@@ -85,13 +85,13 @@ public interface GameModeRepository extends JpaRepository<GameMode, Long> {
     List<PlayerFullScoreProjection> getPlayersRanking(Long gameModeId, Long positionId);
 
     @Modifying
-    @Query(nativeQuery = true, value = "DELETE FROM tb_gamemode_position AS gmp WHERE gmp.id = :id ;")
+    @Query(nativeQuery = true, value = "DELETE FROM tb_gamemode_position AS gmp WHERE gmp.gamemode_id = :id ;")
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-    void deletePositionFromGameModeById(Long id);
+    void deletePositionsFromGameModeById(Long id);
 
     @Modifying
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-    default void savePositions(Long gameModeId, List<Long> positions, EntityManager entityManager) {
+    default void saveAllPositions(Long gameModeId, List<Long> positions, EntityManager entityManager) {
         StringBuilder queryStr = new StringBuilder();
 
         int end = positions.size();

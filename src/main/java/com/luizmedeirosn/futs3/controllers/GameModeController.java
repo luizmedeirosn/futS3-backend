@@ -54,7 +54,7 @@ public class GameModeController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<GameModeMinResponseDTO> updateById(
+    public ResponseEntity<GameModeResponseDTO> updateById(
             @PathVariable @NonNull Long id,
             @RequestBody @Valid GameModeRequestDTO gameModeRequestDTO
     ) {
@@ -66,5 +66,4 @@ public class GameModeController {
         gameModeService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
-
 }
