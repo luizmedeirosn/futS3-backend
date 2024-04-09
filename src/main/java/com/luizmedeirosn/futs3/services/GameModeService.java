@@ -68,14 +68,15 @@ public class GameModeService {
     }
 
     private List<PositionResponseDTO> extractPositionsData(List<PositionParametersProjection> projections) {
-        Map<Position, List<PositionParametersDataDTO>> positionsParameters = new HashMap<>();
+        Map<Position, List<PositionParametersDataDTO>> positionsParameters = new LinkedHashMap<>();
 
-        projections.forEach(p -> positionsParameters
-                .computeIfAbsent(
-                        new Position(p.getId(), p.getName(), p.getDescription()),
-                        k -> new ArrayList<>()
-                )
-                .add(new PositionParametersDataDTO(p.getParameterId(), p.getParameterName(), p.getPositionWeight()))
+        projections.forEach(
+                p -> positionsParameters
+                        .computeIfAbsent(
+                                new Position(p.getId(), p.getName(), p.getDescription()),
+                                k -> new ArrayList<>()
+                        )
+                        .add(new PositionParametersDataDTO(p.getParameterId(), p.getParameterName(), p.getPositionWeight()))
         );
 
         return mapToPositionResponseDTO(positionsParameters);
@@ -185,9 +186,8 @@ public class GameModeService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public void deleteById(Long id) {
         if (!gameModeRepository.existsById(id)) {
-            throw new EntityNotFoundException("GameMode request. ID not found");
+            throw new EntityNotFoundException("GameMode ID not found: " + id);
         }
         gameModeRepository.deleteById(id);
     }
-
 }

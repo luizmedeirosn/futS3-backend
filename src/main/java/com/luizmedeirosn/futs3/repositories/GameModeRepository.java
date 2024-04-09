@@ -22,32 +22,23 @@ public interface GameModeRepository extends JpaRepository<GameMode, Long> {
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     @Query(nativeQuery = true, value = """
-                SELECT
-                    gamemodepos.id,
-                    gamemodepos.name,
-                    gamemodepos.description,
-                    posparam.parameter_id AS parameterId,
-                    param.name AS parameterName,
-                    posparam.weight AS positionWeight
-                FROM
-                    tb_position_parameter AS posparam
-                        INNER JOIN (
-                            SELECT
-                                pos.id,
-                                pos.name,
-                                pos.description
-                            FROM
-                                tb_gamemode_position AS gamepos
-                                    INNER JOIN tb_gamemode AS gamemode
-                                        ON gamepos.gamemode_id = gamemode.id
-                                    INNER JOIN tb_position AS pos
-                                        ON gamepos.position_id = pos.id
-                            WHERE gamemode.id = :id
-                        ) AS gamemodepos
-                            ON posparam.position_id = gamemodepos.id
-                        INNER JOIN tb_parameter AS param
-                            ON posparam.parameter_id = param.id
-                ORDER BY name, parameterName;
+                    SELECT
+                        pos.id,
+                        pos.name,
+                        pos.description,
+                        param.id AS parameterId,
+                        param.name AS parameterName,
+                        posparam.weight AS positionWeight
+                    FROM
+                        tb_gamemode_position AS gamepos
+                            INNER JOIN tb_position AS pos
+                                ON gamepos.position_id = pos.id
+                            INNER JOIN tb_position_parameter AS posparam
+                                ON pos.id = posparam.position_id
+                            INNER JOIN tb_parameter AS param
+                                ON posparam.parameter_id = param.id
+                    WHERE gamepos.gamemode_id = :id
+                    ORDER BY pos.name, param.name;
             """)
     List<PositionParametersProjection> findPositionsDataByGameModeId(@Param("id") Long id);
 
