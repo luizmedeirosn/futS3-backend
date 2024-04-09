@@ -26,12 +26,18 @@ public class Parameter implements Serializable {
     private String description;
 
     @OneToMany(mappedBy = "id.parameter", fetch = FetchType.LAZY)
-    private Set<PositionParameter> positionParameters;
+    private final Set<PositionParameter> positionParameters = new HashSet<>();
 
     @OneToMany(mappedBy = "id.parameter", fetch = FetchType.LAZY)
     private final Set<PlayerParameter> playerParameters = new HashSet<>();
 
     public Parameter() {
+    }
+
+    public Parameter(Long id, String name, String description) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
     }
 
     public Parameter(String name, String description) {

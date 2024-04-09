@@ -36,6 +36,12 @@ public class Position implements Serializable {
     public Position() {
     }
 
+    public Position(Long id, String name, String description) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+    }
+
     public Position(String name, String description) {
         this.name = name;
         this.description = description;

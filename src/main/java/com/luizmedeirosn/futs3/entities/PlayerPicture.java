@@ -33,6 +33,14 @@ public class PlayerPicture implements Serializable {
     public PlayerPicture() {
     }
 
+    public PlayerPicture(Long id, String filename, String contentType, byte[] content, Player player) {
+        this.id = id;
+        this.filename = filename;
+        this.contentType = contentType;
+        this.content = content;
+        this.player = player;
+    }
+
     public PlayerPicture(String filename, String contentType, byte[] content, Player player) {
         this.filename = filename;
         this.contentType = contentType;

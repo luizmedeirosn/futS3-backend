@@ -1,11 +1,13 @@
 package com.luizmedeirosn.futs3.shared.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.luizmedeirosn.futs3.projections.postition.PositionParametersProjection;
 import com.luizmedeirosn.futs3.shared.dto.response.aux.PositionParametersDataDTO;
 
 import java.io.Serializable;
 import java.util.List;
 
+@JsonPropertyOrder({"id", "name", "description", "parameters"})
 public record PositionResponseDTO(
 
         Long id,

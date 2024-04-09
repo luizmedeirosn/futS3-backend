@@ -1,7 +1,5 @@
 package com.luizmedeirosn.futs3.controllers;
 
-import com.luizmedeirosn.futs3.projections.gamemode.AllGameModesProjection;
-import com.luizmedeirosn.futs3.projections.gamemode.GameModePositionProjection;
 import com.luizmedeirosn.futs3.services.GameModeService;
 import com.luizmedeirosn.futs3.shared.dto.request.GameModeRequestDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.GameModeResponseDTO;
@@ -32,34 +30,15 @@ public class GameModeController {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<GameModeMinResponseDTO> findById(@PathVariable @NonNull Long id) {
+    public ResponseEntity<GameModeResponseDTO> findById(@PathVariable @NonNull Long id) {
         return ResponseEntity.ok().body(gameModeService.findById(id));
-    }
-
-    @GetMapping(value = "/full")
-    public ResponseEntity<List<AllGameModesProjection>> findAllFull() {
-        return ResponseEntity.ok().body(gameModeService.findAllFull());
-    }
-
-    @GetMapping(value = "/{id}/full")
-    public ResponseEntity<GameModeResponseDTO> findFullById(@PathVariable @NonNull Long id) {
-        return ResponseEntity.ok().body(gameModeService.findFullById(id));
-    }
-
-    @GetMapping(value = "/{id}/positions")
-    public ResponseEntity<List<GameModePositionProjection>> findGameModePositions(@PathVariable @NonNull Long id) {
-        return ResponseEntity.ok().body(gameModeService.findGameModePositions(id));
     }
 
     @GetMapping("/ranking")
     public ResponseEntity<List<PlayerFullDataResponseDTO>> getPlayersRanking(
             @RequestParam("gameModeId") @NonNull Long gameModeId,
-            @RequestParam("positionId") @NonNull Long positionId) {
-        try {
-            Thread.sleep(0);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
+            @RequestParam("positionId") @NonNull Long positionId
+    ) {
         return ResponseEntity.ok().body(gameModeService.getPlayersRanking(gameModeId, positionId));
     }
 
@@ -75,8 +54,10 @@ public class GameModeController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<GameModeMinResponseDTO> updateById(@PathVariable @NonNull Long id,
-                                                             @RequestBody @Valid GameModeRequestDTO gameModeRequestDTO) {
+    public ResponseEntity<GameModeMinResponseDTO> updateById(
+            @PathVariable @NonNull Long id,
+            @RequestBody @Valid GameModeRequestDTO gameModeRequestDTO
+    ) {
         return ResponseEntity.ok().body(gameModeService.update(id, gameModeRequestDTO));
     }
 

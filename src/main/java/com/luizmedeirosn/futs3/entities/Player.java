@@ -44,6 +44,19 @@ public class Player implements Serializable {
     public Player() {
     }
 
+    public Player(
+            Long id, String name, Integer age, Integer height,
+            String team, Position position, PlayerPicture playerPicture
+    ) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.height = height;
+        this.team = team;
+        this.position = position;
+        this.playerPicture = playerPicture;
+    }
+
     public Player(String name, Integer age, Integer height, String team, Position position) {
         this.name = name;
         this.age = age;

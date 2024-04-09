@@ -31,6 +31,14 @@ public class CustomUser implements Serializable {
     public CustomUser() {
     }
 
+    public CustomUser(Long id, String username, String email, String password, String roles) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
+    }
+
     public CustomUser(String username, String email, String password, String roles) {
         this.username = username;
         this.email = email;
