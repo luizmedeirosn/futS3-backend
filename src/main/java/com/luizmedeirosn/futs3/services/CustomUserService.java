@@ -1,16 +1,15 @@
 package com.luizmedeirosn.futs3.services;
 
-import java.util.List;
-
+import com.luizmedeirosn.futs3.entities.CustomUser;
+import com.luizmedeirosn.futs3.repositories.CustomUserRepository;
+import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
 import org.springframework.data.domain.Sort;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.luizmedeirosn.futs3.entities.CustomUser;
-import com.luizmedeirosn.futs3.repositories.CustomUserRepository;
-import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
+import java.util.List;
 
 
 @Service
@@ -32,5 +31,4 @@ public class CustomUserService {
         return customUserRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User not found. ID: " + id));
     }
-
 }

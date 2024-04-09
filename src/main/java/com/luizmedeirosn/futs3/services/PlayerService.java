@@ -117,7 +117,7 @@ public class PlayerService {
             throw new EntityNotFoundException("Player request. IDs not found");
 
         } catch (DataIntegrityViolationException e) {
-            throw new DatabaseException("Player request. Unique index, check index or primary key violation");
+            throw new DatabaseException(e.getMessage());
         }
     }
 
@@ -147,10 +147,10 @@ public class PlayerService {
             throw new EntityNotFoundException("Player request. The given ID must not be null");
 
         } catch (jakarta.persistence.EntityNotFoundException e) {
-            throw new EntityNotFoundException("Player request. ID not found");
+            throw new EntityNotFoundException("Player request. ID not found: " + id);
 
         } catch (DataIntegrityViolationException e) {
-            throw new DatabaseException("Player request. Unique index, check index or primary key violation");
+            throw new DatabaseException(e.getMessage());
         }
     }
 

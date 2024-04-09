@@ -13,36 +13,32 @@ import java.nio.file.Paths;
 import java.util.*;
 
 @Configuration
-public class TestConfig implements CommandLineRunner {
-
-    private final CustomUserRepository customUserRepository;
+public class StartupSeedConfig implements CommandLineRunner {
 
     private final PasswordEncoder passwordEncoder;
-
+    private final CustomUserRepository customUserRepository;
     private final GameModeRepository gameModeRepository;
-
     private final PositionRepository positionRepository;
-
     private final ParameterRepository parameterRepository;
-
     private final PlayerRepository playerRepository;
-
     private final PositionParameterRepository positionParameterRepository;
-
     private final PlayerParameterRepository playerParameterRepository;
 
     private final Random random = new Random();
 
     @Value("${users.admin.username}")
     private String adminUsername;
+
     @Value("${users.admin.password}")
     private String adminPassword;
+
     @Value("${users.user.username}")
     private String userTestUsername;
+
     @Value("${users.user.password}")
     private String userTestPassword;
 
-    public TestConfig(
+    public StartupSeedConfig(
             CustomUserRepository customUserRepository,
             PasswordEncoder passwordEncoder,
             GameModeRepository gameModeRepository,
@@ -292,51 +288,6 @@ public class TestConfig implements CommandLineRunner {
         List<PositionParameter> positionParameters = new ArrayList<>(
                 Arrays.asList(pp1, pp2, pp3, pp4, pp5, pp6, pp7, pp8, pp9, pp10, pp11, pp12, pp13));
         positionParameterRepository.saveAll(positionParameters);
-
-        /* ESTATÍSTICA DOS ATACANTES */
-        // PlayerParameter pylp2 = new PlayerParameter( player28, prmt21, 30 );
-        // PlayerParameter pylp3 = new PlayerParameter( player28, prmt25, 30 );
-        // PlayerParameter pylp1 = new PlayerParameter( player28, prmt15, 30 );
-
-        // PlayerParameter pylp4 = new PlayerParameter( player29, prmt15, 90 );
-        // PlayerParameter pylp5 = new PlayerParameter( player29, prmt21, 90 );
-        // PlayerParameter pylp6 = new PlayerParameter( player29, prmt25, 90 );
-
-        // PlayerParameter pylp7 = new PlayerParameter( player30, prmt15, 50 );
-        // PlayerParameter pylp8 = new PlayerParameter( player30, prmt21, 50 );
-        // PlayerParameter pylp9 = new PlayerParameter( player30, prmt25, 50 );
-
-        // PlayerParameter pylp10 = new PlayerParameter( player31, prmt15, 100 );
-        // PlayerParameter pylp11 = new PlayerParameter( player31, prmt21, 100 );
-        // PlayerParameter pylp12 = new PlayerParameter( player31, prmt25, 100 );
-
-        // PlayerParameter pylp13 = new PlayerParameter( player32, prmt15, 70 );
-        // PlayerParameter pylp14 = new PlayerParameter( player32, prmt21, 70 );
-        // PlayerParameter pylp15 = new PlayerParameter( player32, prmt25, 70 );
-
-        // PlayerParameter pylp16 = new PlayerParameter( player33, prmt15, 20 );
-        // PlayerParameter pylp17 = new PlayerParameter( player33, prmt21, 20 );
-        // PlayerParameter pylp18 = new PlayerParameter( player33, prmt25, 20 );
-
-        // PlayerParameter pylp19 = new PlayerParameter( player34, prmt15, 60 );
-        // PlayerParameter pylp20 = new PlayerParameter( player34, prmt21, 60 );
-        // PlayerParameter pylp21 = new PlayerParameter( player34, prmt25, 60 );
-
-        // PlayerParameter pylp22 = new PlayerParameter( player35, prmt15, 40 );
-        // PlayerParameter pylp23 = new PlayerParameter( player35, prmt21, 40 );
-        // PlayerParameter pylp24 = new PlayerParameter( player35, prmt25, 40 );
-
-        // PlayerParameter pylp25 = new PlayerParameter( player36, prmt15, 10 );
-        // PlayerParameter pylp26 = new PlayerParameter( player36, prmt21, 10 );
-        // PlayerParameter pylp27 = new PlayerParameter( player36, prmt25, 10 );
-
-        // PlayerParameter pylp28 = new PlayerParameter( player37, prmt15, 80 );
-        // PlayerParameter pylp29 = new PlayerParameter( player37, prmt21, 80 );
-        // PlayerParameter pylp30 = new PlayerParameter( player37, prmt25, 80 );
-
-        // PlayerParameter pylp31 = new PlayerParameter( player38, prmt15, 85 );
-        // PlayerParameter pylp32 = new PlayerParameter( player38, prmt21, 85 );
-        // PlayerParameter pylp33 = new PlayerParameter( player38, prmt25, 85 );
 
         PlayerParameter pylp1 = new PlayerParameter(player28, prmt15, random.nextInt(30, 100));
         PlayerParameter pylp2 = new PlayerParameter(player28, prmt21, random.nextInt(30, 100));

@@ -99,7 +99,7 @@ public class PositionService {
             throw new EntityNotFoundException("Position request. ID not found");
 
         } catch (DataIntegrityViolationException e) {
-            throw new DatabaseException("Position request. Unique index, check index, or primary key violation");
+            throw new DatabaseException(e.getMessage());
         }
     }
 
@@ -126,7 +126,7 @@ public class PositionService {
             throw new EntityNotFoundException("Position request. ID not found");
 
         } catch (DataIntegrityViolationException e) {
-            throw new DatabaseException("Position request. Unique index, check index, or primary key violation");
+            throw new DatabaseException(e.getMessage());
         }
     }
 

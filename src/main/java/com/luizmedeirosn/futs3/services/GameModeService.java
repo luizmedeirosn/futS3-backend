@@ -29,7 +29,6 @@ import java.util.*;
 public class GameModeService {
 
     private final GameModeRepository gameModeRepository;
-    private final PositionRepository positionRepository;
     private final ParameterRepository parameterRepository;
     private final EntityManager entityManager;
 
@@ -40,7 +39,6 @@ public class GameModeService {
             EntityManager entityManager
     ) {
         this.gameModeRepository = gameModeRepository;
-        this.positionRepository = positionRepository;
         this.parameterRepository = parameterRepository;
         this.entityManager = entityManager;
     }
@@ -142,7 +140,7 @@ public class GameModeService {
             throw new EntityNotFoundException("GameMode request. The given IDs must not be null");
 
         } catch (DataIntegrityViolationException e) {
-            throw new DatabaseException("GameMode request. Unique index, check index or primary key violation");
+            throw new DatabaseException(e.getMessage());
         }
     }
 
@@ -171,7 +169,7 @@ public class GameModeService {
             throw new EntityNotFoundException("GameMode request. ID not found: " + id);
 
         } catch (DataIntegrityViolationException e) {
-            throw new DatabaseException("GameMode request. Unique index, check index or primary key violation");
+            throw new DatabaseException(e.getMessage());
         }
     }
 

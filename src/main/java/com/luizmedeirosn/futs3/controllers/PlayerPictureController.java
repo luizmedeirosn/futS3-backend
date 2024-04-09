@@ -26,7 +26,7 @@ public class PlayerPictureController {
     public ResponseEntity<ByteArrayResource> findById(@PathVariable @NonNull Long id) {
         PlayerPicture playerPicture = playerPictureService.findById(id);
         byte[] content = playerPicture.getContent();
-        ByteArrayResource body = null;
+        ByteArrayResource body;
 
         if (content != null) {
             body = new ByteArrayResource(content);

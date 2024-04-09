@@ -1,9 +1,9 @@
 package com.luizmedeirosn.futs3.shared.dto.response.min;
 
-import java.io.Serializable;
-
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.luizmedeirosn.futs3.entities.Position;
+
+import java.io.Serializable;
 
 @JsonPropertyOrder({ "id", "name", "position" })
 public record PositionMinDTO(

@@ -1,21 +1,20 @@
 package com.luizmedeirosn.futs3.security.jwt;
 
+import com.luizmedeirosn.futs3.entities.CustomUser;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import com.luizmedeirosn.futs3.entities.CustomUser;
-
 public class UserDetailsImpl implements UserDetails {
 
-    private String username;
-    private String password;
-    private List<GrantedAuthority> authorities;
+    private final String username;
+    private final String password;
+    private final List<GrantedAuthority> authorities;
 
     public UserDetailsImpl(CustomUser customUser) {
         username = customUser.getUsername();
