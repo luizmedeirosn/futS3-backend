@@ -3,11 +3,13 @@ package com.luizmedeirosn.futs3.repositories;
 import com.luizmedeirosn.futs3.entities.GameMode;
 import com.luizmedeirosn.futs3.projections.gamemode.PlayerFullScoreProjection;
 import com.luizmedeirosn.futs3.projections.postition.PositionParametersProjection;
+import jakarta.persistence.EntityManager;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,10 +17,6 @@ import java.util.List;
 
 @Repository
 public interface GameModeRepository extends JpaRepository<GameMode, Long> {
-
-    @Modifying
-    @Query(nativeQuery = true, value = "DELETE FROM tb_gamemode_position WHERE gamemode_id = :id ;")
-    void deleteByIdFromTbGameModePosition(Long id);
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     @Query(nativeQuery = true, value = """
@@ -85,4 +83,29 @@ public interface GameModeRepository extends JpaRepository<GameMode, Long> {
                     ORDER BY totalScore DESC;
             """)
     List<PlayerFullScoreProjection> getPlayersRanking(Long gameModeId, Long positionId);
+
+    @Modifying
+    @Query(nativeQuery = true, value = "DELETE FROM tb_gamemode_position AS gmp WHERE gmp.id = :id ;")
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
+    void deletePositionFromGameModeById(Long id);
+
+    @Modifying
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
+    default void savePositions(Long gameModeId, List<Long> positions, EntityManager entityManager) {
+        StringBuilder queryStr = new StringBuilder();
+
+        int end = positions.size();
+        int parameterIndex = 1;
+        for (int i = 0; i < end; i++) {
+            if (i == 0) {
+                queryStr.append("INSERT INTO tb_gamemode_position (gamemode_id, position_id) VALUES");
+                queryStr.append(String.format(" (%d, %d)", gameModeId, positions.get(i)));
+            } else {
+                queryStr.append(String.format(", (%d, %d)", gameModeId, positions.get(i)));
+            }
+        }
+
+        jakarta.persistence.Query query = entityManager.createNativeQuery(queryStr.toString());
+        query.executeUpdate();
+    }
 }
