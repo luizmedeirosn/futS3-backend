@@ -33,9 +33,9 @@ public interface GameModeRepository extends JpaRepository<GameMode, Long> {
                         tb_gamemode_position AS gamepos
                             INNER JOIN tb_position AS pos
                                 ON gamepos.position_id = pos.id
-                            INNER JOIN tb_position_parameter AS posparam
+                            LEFT JOIN tb_position_parameter AS posparam
                                 ON pos.id = posparam.position_id
-                            INNER JOIN tb_parameter AS param
+                            LEFT JOIN tb_parameter AS param
                                 ON posparam.parameter_id = param.id
                     WHERE gamepos.gamemode_id = :id
                     ORDER BY pos.name, param.name;
@@ -85,5 +85,4 @@ public interface GameModeRepository extends JpaRepository<GameMode, Long> {
                     ORDER BY totalScore DESC;
             """)
     List<PlayerFullScoreProjection> getPlayersRanking(Long gameModeId, Long positionId);
-
 }
