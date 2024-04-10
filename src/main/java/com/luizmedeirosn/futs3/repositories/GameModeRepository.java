@@ -90,6 +90,14 @@ public interface GameModeRepository extends JpaRepository<GameMode, Long> {
     void deletePositionsFromGameModeById(Long id);
 
     @Modifying
+    @Query(nativeQuery = true, value = """
+                DELETE FROM tb_gamemode_position AS gmp WHERE gmp.gamemode_id = :id ;
+                DELETE FROM tb_gamemode AS gm WHERE gm.id = :id ;
+            """)
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
+    void customDeleteById(Long id);
+
+    @Modifying
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     default void saveAllPositions(Long gameModeId, List<Long> positions, EntityManager entityManager) {
         StringBuilder queryStr = new StringBuilder();

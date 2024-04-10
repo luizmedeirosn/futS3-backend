@@ -164,8 +164,6 @@ public class GameModeService {
             throw new EntityNotFoundException("GameMode request. The given IDs must not be null");
 
         } catch (jakarta.persistence.EntityNotFoundException e) {
-            // jakarta.persistence.EntityNotFoundException: Unable to find
-            // com.luizmedeirosn.futs3.entities.GameMode with id 10
             throw new EntityNotFoundException("GameMode request. ID not found: " + id);
 
         } catch (DataIntegrityViolationException e) {
@@ -178,6 +176,6 @@ public class GameModeService {
         if (!gameModeRepository.existsById(id)) {
             throw new EntityNotFoundException("GameMode ID not found: " + id);
         }
-        gameModeRepository.deleteById(id);
+        gameModeRepository.customDeleteById(id);
     }
 }
