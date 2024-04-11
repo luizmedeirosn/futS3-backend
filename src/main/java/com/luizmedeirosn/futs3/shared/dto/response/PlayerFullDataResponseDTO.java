@@ -1,10 +1,9 @@
 package com.luizmedeirosn.futs3.shared.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.luizmedeirosn.futs3.projections.gamemode.PlayerFullScoreProjection;
-import com.luizmedeirosn.futs3.projections.player.PlayerParameterProjection;
+import com.luizmedeirosn.futs3.projections.gamemode.PlayerDataScoreProjection;
 import com.luizmedeirosn.futs3.services.PlayerPictureService;
-import org.springframework.lang.NonNull;
+import com.luizmedeirosn.futs3.shared.dto.response.aux.PlayerParameterDataDTO;
 
 import java.io.Serializable;
 import java.util.List;
@@ -18,14 +17,16 @@ public record PlayerFullDataResponseDTO(
         Integer height,
         String team,
         Integer totalScore,
-        List<PlayerParameterProjection> parameters,
+        List<PlayerParameterDataDTO> parameters,
         String pictureUrl
 
 ) implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    public PlayerFullDataResponseDTO(@NonNull PlayerFullScoreProjection player,
-                                     List<PlayerParameterProjection> parameters) {
+    public PlayerFullDataResponseDTO(
+            PlayerDataScoreProjection player,
+            List<PlayerParameterDataDTO> parameters
+    ) {
         this(
                 player.getPlayerId(),
                 player.getPlayerName(),

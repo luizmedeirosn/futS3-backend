@@ -31,7 +31,7 @@ public class AuthService {
         this.authenticationManager = authenticationManager;
     }
 
-    @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public SignupResponseDTO signup(SignupRequestDTO signup) {
         var user = customUserRepository.save(new CustomUser(signup));
         return new SignupResponseDTO(user, jwtService.generateToken(user.getUsername()));
@@ -49,7 +49,7 @@ public class AuthService {
         }
     }
 
-    @Transactional(readOnly = false, propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public TokenResponseDTO refreshToken(String refreshToken) {
         return jwtService.refreshToken(refreshToken);
     }

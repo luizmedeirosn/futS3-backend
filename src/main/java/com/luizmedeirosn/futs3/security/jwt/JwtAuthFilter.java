@@ -1,8 +1,8 @@
 package com.luizmedeirosn.futs3.security.jwt;
 
-import java.io.IOException;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -11,22 +11,19 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-    @Autowired
-    private JwtService jwtService;
+    private final JwtService jwtService;
+    private final UserDetailsServiceImpl userDetailsServiceImpl;
+    private final HandlerExceptionResolver handlerExceptionResolver;
 
-    @Autowired
-    private UserDetailsServiceImpl userDetailsServiceImpl;
-
-    private HandlerExceptionResolver handlerExceptionResolver;
-
-    public JwtAuthFilter(HandlerExceptionResolver handlerExceptionResolver) {
+    public JwtAuthFilter(
+            JwtService jwtService,
+            UserDetailsServiceImpl userDetailsServiceImpl,
+            HandlerExceptionResolver handlerExceptionResolver
+    ) {
+        this.jwtService = jwtService;
+        this.userDetailsServiceImpl = userDetailsServiceImpl;
         this.handlerExceptionResolver = handlerExceptionResolver;
     }
 
@@ -34,8 +31,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,
             @NonNull HttpServletResponse response,
-            @NonNull FilterChain filterChain) throws ServletException, IOException {
-
+            @NonNull FilterChain filterChain
+    ) {
         try {
 
             String authHeader = request.getHeader("Authorization");

@@ -1,98 +1,46 @@
 package com.luizmedeirosn.futs3.repositories;
 
-import java.util.List;
-import java.util.Optional;
-
+import com.luizmedeirosn.futs3.entities.GameMode;
+import com.luizmedeirosn.futs3.projections.gamemode.PlayerDataScoreProjection;
+import com.luizmedeirosn.futs3.projections.postition.PositionParametersProjection;
+import jakarta.persistence.EntityManager;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.luizmedeirosn.futs3.entities.GameMode;
-import com.luizmedeirosn.futs3.projections.gamemode.AllGameModesProjection;
-import com.luizmedeirosn.futs3.projections.gamemode.GameModePositionProjection;
-import com.luizmedeirosn.futs3.projections.gamemode.GameModePositionsParametersProjection;
-import com.luizmedeirosn.futs3.projections.gamemode.PlayerFullScoreProjection;
+import java.util.List;
 
 @Repository
 public interface GameModeRepository extends JpaRepository<GameMode, Long> {
 
-    @Modifying
-    @Query(nativeQuery = true, value = "DELETE FROM tb_gamemode_position WHERE gamemode_id = :id\\;")
-    void deleteByIdFromTbGameModePosition(Long id);
-
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     @Query(nativeQuery = true, value = """
-                SELECT
-                    POS.id AS positionId,
-                    POS.name AS positionName
-                FROM
-                    tb_gamemode_position AS GAMEPOS
-                        INNER JOIN tb_position AS POS
-                            ON GAMEPOS.position_id = POS.id
-                WHERE
-                    GAMEPOS.gamemode_id = :id\\;
-            """)
-    Optional<List<GameModePositionProjection>> findGameModePositions(Long id);
-
-    @Query(nativeQuery = true, value = """
-                SELECT
-                    gamemodepos.gamemode_id AS gameModeId,
-                    gamemodepos.gamemode_formation_name AS gameModeFormationName,
-                    gamemodepos.position_id AS positionId,
-                    gamemodepos.position_name AS positionName,
-                    posparam.parameter_id AS parameterId,
-                    param.name AS parameterName,
-                    posparam.weight AS parameterWeight
-                FROM
-                    tb_position_parameter AS posparam
-                    INNER JOIN (
-                        SELECT
-                            gamemode.id AS gamemode_id,
-                            gamemode.formation_name AS gamemode_formation_name,
-                            pos.id AS position_id,
-                            pos.name AS position_name
-
-                        FROM
-                            tb_gamemode_position AS gamepos
-                            INNER JOIN tb_gamemode AS gamemode
-                                ON gamepos.gamemode_id = gamemode.id
+                    SELECT
+                        pos.id,
+                        pos.name,
+                        pos.description,
+                        param.id AS parameterId,
+                        param.name AS parameterName,
+                        posparam.weight AS positionWeight
+                    FROM
+                        tb_gamemode_position AS gamepos
                             INNER JOIN tb_position AS pos
                                 ON gamepos.position_id = pos.id
-                    ) AS gamemodepos
-                        ON posparam.position_id = gamemodepos.position_id
-                    INNER JOIN tb_parameter AS param
-                        ON posparam.parameter_id = param.id;
+                            LEFT JOIN tb_position_parameter AS posparam
+                                ON pos.id = posparam.position_id
+                            LEFT JOIN tb_parameter AS param
+                                ON posparam.parameter_id = param.id
+                    WHERE gamepos.gamemode_id = :id
+                    ORDER BY pos.name, param.name;
             """)
-    List<AllGameModesProjection> findAllFull();
+    List<PositionParametersProjection> findPositionsDataByGameModeId(@Param("id") Long id);
 
-    @Query(nativeQuery = true, value = """
-                SELECT
-                    gamemodepos.position_id AS positionId,
-                    gamemodepos.position_name AS positionName,
-                    posparam.parameter_id AS parameterId,
-                    param.name AS parameterName,
-                    posparam.weight AS parameterWeight
-                FROM
-                    tb_position_parameter AS posparam
-                        INNER JOIN (
-                            SELECT
-                                pos.id AS position_id,
-                                pos.name AS position_name
-                            FROM
-                                tb_gamemode_position AS gamepos
-                                    INNER JOIN tb_gamemode AS gamemode
-                                        ON gamepos.gamemode_id = gamemode.id
-                                    INNER JOIN tb_position AS pos
-                                        ON gamepos.position_id = pos.id
-                            WHERE gamemode.id = :gameModeId
-                        ) AS gamemodepos
-                            ON posparam.position_id = gamemodepos.position_id
-                        INNER JOIN tb_parameter AS param
-                            ON posparam.parameter_id = param.id
-                ORDER BY positionName, parameterName;
-            """)
-    List<GameModePositionsParametersProjection> findByIdWithPositionsParameters(Long gameModeId);
-
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     @Query(nativeQuery = true, value = """
                     SELECT
                         player_id AS playerId,
@@ -134,6 +82,38 @@ public interface GameModeRepository extends JpaRepository<GameMode, Long> {
                     GROUP BY player_id, player_name, player_picture, player_age, player_height, player_team
                     ORDER BY totalScore DESC;
             """)
-    Optional<List<PlayerFullScoreProjection>> getPlayersRanking(Long gameModeId, Long positionId);
+    List<PlayerDataScoreProjection> getPlayersRanking(Long gameModeId, Long positionId);
 
+    @Modifying
+    @Query(nativeQuery = true, value = "DELETE FROM tb_gamemode_position AS gmp WHERE gmp.gamemode_id = :id ;")
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
+    void deletePositionsFromGameModeById(Long id);
+
+    @Modifying
+    @Query(nativeQuery = true, value = """
+                DELETE FROM tb_gamemode_position AS gmp WHERE gmp.gamemode_id = :id ;
+                DELETE FROM tb_gamemode AS gm WHERE gm.id = :id ;
+            """)
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
+    void customDeleteById(Long id);
+
+    @Modifying
+    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
+    default void saveAllPositions(Long gameModeId, List<Long> positions, EntityManager entityManager) {
+        StringBuilder queryStr = new StringBuilder();
+
+        int end = positions.size();
+        int parameterIndex = 1;
+        for (int i = 0; i < end; i++) {
+            if (i == 0) {
+                queryStr.append("INSERT INTO tb_gamemode_position (gamemode_id, position_id) VALUES");
+                queryStr.append(String.format(" (%d, %d)", gameModeId, positions.get(i)));
+            } else {
+                queryStr.append(String.format(", (%d, %d)", gameModeId, positions.get(i)));
+            }
+        }
+
+        jakarta.persistence.Query query = entityManager.createNativeQuery(queryStr.toString());
+        query.executeUpdate();
+    }
 }

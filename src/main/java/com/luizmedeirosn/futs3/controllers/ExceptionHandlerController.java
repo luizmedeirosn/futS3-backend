@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -134,9 +135,13 @@ public class ExceptionHandlerController {
         } else if (e instanceof DecodingException) {
             error.setError("Decoding failure");
 
-        } else if(e instanceof IllegalArgumentException) {
+        } else if (e instanceof IllegalArgumentException) {
             status = HttpStatus.BAD_REQUEST;
             error.setError("Bad Request");
+
+        } else if (e instanceof UsernameNotFoundException) {
+            status = HttpStatus.NOT_FOUND;
+            error.setError("User not found");
         }
 
         return ResponseEntity.status(status).body(error);

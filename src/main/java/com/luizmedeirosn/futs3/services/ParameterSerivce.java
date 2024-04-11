@@ -2,8 +2,6 @@ package com.luizmedeirosn.futs3.services;
 
 import com.luizmedeirosn.futs3.entities.Parameter;
 import com.luizmedeirosn.futs3.repositories.ParameterRepository;
-import com.luizmedeirosn.futs3.repositories.PlayerParameterRepository;
-import com.luizmedeirosn.futs3.repositories.PositionParameterRepository;
 import com.luizmedeirosn.futs3.shared.dto.request.ParameterRequestDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.ParameterResponseDTO;
 import com.luizmedeirosn.futs3.shared.exceptions.DatabaseException;
@@ -22,17 +20,11 @@ import java.util.NoSuchElementException;
 @Service
 public class ParameterSerivce {
 
-    private final PositionParameterRepository positionParameterRepository;
-    private final PlayerParameterRepository playerParameterRepository;
     private final ParameterRepository parameterRepository;
 
     public ParameterSerivce(
-            PositionParameterRepository positionParameterRepository,
-            PlayerParameterRepository playerParameterRepository,
             ParameterRepository parameterRepository
     ) {
-        this.positionParameterRepository = positionParameterRepository;
-        this.playerParameterRepository = playerParameterRepository;
         this.parameterRepository = parameterRepository;
     }
 
@@ -66,8 +58,7 @@ public class ParameterSerivce {
             throw new EntityNotFoundException("Parameter request. The given IDs must not be null");
 
         } catch (DataIntegrityViolationException e) {
-            throw new DatabaseException(
-                    "Parameter request. Unique index, not null, check index or primary key violation");
+            throw new DatabaseException(e.getMessage());
         }
     }
 
@@ -85,7 +76,7 @@ public class ParameterSerivce {
             throw new EntityNotFoundException("Parameter request. ID not found");
 
         } catch (DataIntegrityViolationException e) {
-            throw new DatabaseException("Parameter request. Unique index, check index or primary key violation");
+            throw new DatabaseException(e.getMessage());
         }
     }
 
@@ -99,7 +90,7 @@ public class ParameterSerivce {
             parameterRepository.customDeleteById(id);
 
         } catch (DataIntegrityViolationException e) {
-            throw new DatabaseException("Parameter request. Database integrity reference constraint error");
+            throw new DatabaseException(e.getMessage());
         }
     }
 }

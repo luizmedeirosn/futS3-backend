@@ -31,6 +31,12 @@ public class GameMode implements Serializable {
     public GameMode() {
     }
 
+    public GameMode(Long id, String formationName, String description) {
+        this.id = id;
+        this.formationName = formationName;
+        this.description = description;
+    }
+
     public GameMode(String formationName, String description) {
         this.formationName = formationName;
         this.description = description;

@@ -1,6 +1,7 @@
 package com.luizmedeirosn.futs3.configs;
 
 import com.luizmedeirosn.futs3.security.jwt.JwtAuthFilter;
+import com.luizmedeirosn.futs3.security.jwt.JwtService;
 import com.luizmedeirosn.futs3.security.jwt.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,10 +27,16 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 @EnableMethodSecurity
 public class SecurityConfig {
 
+    private final JwtService jwtService;
     private final UserDetailsServiceImpl userDetailsServiceImpl;
     private final HandlerExceptionResolver handlerExceptionResolver;
 
-    public SecurityConfig(UserDetailsServiceImpl userDetailsServiceImpl, HandlerExceptionResolver handlerExceptionResolver) {
+    public SecurityConfig(
+            JwtService jwtService,
+            UserDetailsServiceImpl userDetailsServiceImpl,
+            HandlerExceptionResolver handlerExceptionResolver
+    ) {
+        this.jwtService = jwtService;
         this.userDetailsServiceImpl = userDetailsServiceImpl;
         this.handlerExceptionResolver = handlerExceptionResolver;
     }
@@ -49,7 +56,7 @@ public class SecurityConfig {
 
     @Bean
     JwtAuthFilter jwtAuthFilter() {
-        return new JwtAuthFilter(handlerExceptionResolver);
+        return new JwtAuthFilter(jwtService, userDetailsServiceImpl, handlerExceptionResolver);
     }
 
     @Bean

@@ -102,10 +102,10 @@ public class PlayerService {
             newPlayer.setPlayerPicture(playerPicture);
 
             playerRepository.save(newPlayer);
-            playerParameterRepository.customSaveAll(
-                    entityManager,
+            playerParameterRepository.saveAllPlayerParameters(
                     newPlayer.getId(),
-                    parameters
+                    parameters,
+                    entityManager
             );
 
             return findById(newPlayer.getId());
@@ -117,7 +117,7 @@ public class PlayerService {
             throw new EntityNotFoundException("Player request. IDs not found");
 
         } catch (DataIntegrityViolationException e) {
-            throw new DatabaseException("Player request. Unique index, check index or primary key violation");
+            throw new DatabaseException(e.getMessage());
         }
     }
 
@@ -134,10 +134,10 @@ public class PlayerService {
 
             List<PlayerParameterIdScoreDTO> parameters = parseParameters(playerRequestDTO.parameters());
             playerParameterRepository.deleteByPlayerId(player.getId());
-            playerParameterRepository.customSaveAll(
-                    entityManager,
+            playerParameterRepository.saveAllPlayerParameters(
                     player.getId(),
-                    parameters
+                    parameters,
+                    entityManager
             );
 
             player = playerRepository.save(player);
@@ -147,16 +147,16 @@ public class PlayerService {
             throw new EntityNotFoundException("Player request. The given ID must not be null");
 
         } catch (jakarta.persistence.EntityNotFoundException e) {
-            throw new EntityNotFoundException("Player request. ID not found");
+            throw new EntityNotFoundException("Player request. ID not found: " + id);
 
         } catch (DataIntegrityViolationException e) {
-            throw new DatabaseException("Player request. Unique index, check index or primary key violation");
+            throw new DatabaseException(e.getMessage());
         }
     }
 
     private List<PlayerParameterIdScoreDTO> parseParameters(String parameters) {
         try {
-            return objectMapper.readValue(parameters, new TypeReference<>() {
+            return parameters.isBlank() ? new ArrayList<>() : objectMapper.readValue(parameters, new TypeReference<>() {
             });
         } catch (Exception e) {
             throw new IllegalArgumentException("Players Request. Invalid format for parameters");
