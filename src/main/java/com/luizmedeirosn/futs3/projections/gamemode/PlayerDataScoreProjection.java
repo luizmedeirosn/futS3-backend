@@ -2,7 +2,7 @@ package com.luizmedeirosn.futs3.projections.gamemode;
 
 import java.sql.Blob;
 
-public interface PlayerFullScoreProjection {
+public interface PlayerDataScoreProjection {
 
     Long getPlayerId();
     String getPlayerName();

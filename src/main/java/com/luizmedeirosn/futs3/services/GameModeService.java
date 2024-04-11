@@ -2,14 +2,15 @@ package com.luizmedeirosn.futs3.services;
 
 import com.luizmedeirosn.futs3.entities.GameMode;
 import com.luizmedeirosn.futs3.entities.Position;
+import com.luizmedeirosn.futs3.projections.gamemode.PlayerDataScoreProjection;
 import com.luizmedeirosn.futs3.projections.postition.PositionParametersProjection;
 import com.luizmedeirosn.futs3.repositories.GameModeRepository;
-import com.luizmedeirosn.futs3.repositories.ParameterRepository;
-import com.luizmedeirosn.futs3.repositories.PositionRepository;
+import com.luizmedeirosn.futs3.repositories.PlayerParameterRepository;
 import com.luizmedeirosn.futs3.shared.dto.request.GameModeRequestDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.GameModeResponseDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.PlayerFullDataResponseDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.PositionResponseDTO;
+import com.luizmedeirosn.futs3.shared.dto.response.aux.PlayerParameterDataDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.aux.PositionParametersDataDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.min.GameModeMinResponseDTO;
 import com.luizmedeirosn.futs3.shared.exceptions.DatabaseException;
@@ -29,17 +30,16 @@ import java.util.*;
 public class GameModeService {
 
     private final GameModeRepository gameModeRepository;
-    private final ParameterRepository parameterRepository;
+    private final PlayerParameterRepository playerParameterRepository;
     private final EntityManager entityManager;
 
     public GameModeService(
             GameModeRepository gameModeRepository,
-            PositionRepository positionRepository,
-            ParameterRepository parameterRepository,
+            PlayerParameterRepository playerParameterRepository,
             EntityManager entityManager
     ) {
         this.gameModeRepository = gameModeRepository;
-        this.parameterRepository = parameterRepository;
+        this.playerParameterRepository = playerParameterRepository;
         this.entityManager = entityManager;
     }
 
@@ -105,10 +105,30 @@ public class GameModeService {
             Long positionId
     ) {
         try {
-            return gameModeRepository.getPlayersRanking(gameModeId, positionId)
+            var playersRanking =
+                    gameModeRepository.getPlayersRanking(gameModeId, positionId);
+            var playersIds =
+                    playersRanking.stream().map(PlayerDataScoreProjection::getPlayerId).toList();
+
+            var filteredParameters =
+                    playerParameterRepository.findParametersByPlayerIds(playersIds);
+
+            return playersRanking
                     .stream()
-                    .map(player -> new PlayerFullDataResponseDTO(player,
-                            parameterRepository.findParametersByPlayerId(player.getPlayerId())))
+                    .map(playerProjection -> {
+                        var parameters = new ArrayList<PlayerParameterDataDTO>();
+
+                        var iterator = filteredParameters.iterator();
+                        while (iterator.hasNext()) {
+                            var parameter = iterator.next();
+                            if (Objects.equals(parameter.getPlayerId(), playerProjection.getPlayerId())) {
+                                parameters.add(new PlayerParameterDataDTO(parameter));
+                                iterator.remove();
+                            }
+                        }
+
+                        return new PlayerFullDataResponseDTO(playerProjection, parameters);
+                    })
                     .toList();
 
         } catch (Exception e) {

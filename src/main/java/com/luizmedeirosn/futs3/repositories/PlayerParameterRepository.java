@@ -2,6 +2,7 @@ package com.luizmedeirosn.futs3.repositories;
 
 import com.luizmedeirosn.futs3.entities.PlayerParameter;
 import com.luizmedeirosn.futs3.entities.pks.PlayerParameterPK;
+import com.luizmedeirosn.futs3.projections.player.PlayerIdParameterProjection;
 import com.luizmedeirosn.futs3.shared.dto.request.aux.PlayerParameterIdScoreDTO;
 import jakarta.persistence.EntityManager;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,6 +18,25 @@ import java.util.List;
 
 @Repository
 public interface PlayerParameterRepository extends JpaRepository<PlayerParameter, PlayerParameterPK> {
+
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+    @Query(nativeQuery = true, value = """
+                SELECT
+                    play.id AS playerId,
+                    param.id AS parameterId,
+                    param.name AS parameterName,
+                    playparam.score AS playerScore
+                FROM
+                    tb_player_parameter AS playparam
+                        INNER JOIN tb_player AS play
+                            ON playparam.player_id = play.id
+                        INNER JOIN tb_parameter AS param
+                            ON playparam.parameter_id = param.id
+                WHERE
+                    play.id IN :ids
+                ORDER BY param.name;
+            """)
+    List<PlayerIdParameterProjection> findParametersByPlayerIds(List<Long> ids);
 
     @Modifying
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)

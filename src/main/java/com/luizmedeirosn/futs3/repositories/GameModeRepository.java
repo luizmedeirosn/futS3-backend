@@ -1,7 +1,7 @@
 package com.luizmedeirosn.futs3.repositories;
 
 import com.luizmedeirosn.futs3.entities.GameMode;
-import com.luizmedeirosn.futs3.projections.gamemode.PlayerFullScoreProjection;
+import com.luizmedeirosn.futs3.projections.gamemode.PlayerDataScoreProjection;
 import com.luizmedeirosn.futs3.projections.postition.PositionParametersProjection;
 import jakarta.persistence.EntityManager;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -82,7 +82,7 @@ public interface GameModeRepository extends JpaRepository<GameMode, Long> {
                     GROUP BY player_id, player_name, player_picture, player_age, player_height, player_team
                     ORDER BY totalScore DESC;
             """)
-    List<PlayerFullScoreProjection> getPlayersRanking(Long gameModeId, Long positionId);
+    List<PlayerDataScoreProjection> getPlayersRanking(Long gameModeId, Long positionId);
 
     @Modifying
     @Query(nativeQuery = true, value = "DELETE FROM tb_gamemode_position AS gmp WHERE gmp.gamemode_id = :id ;")

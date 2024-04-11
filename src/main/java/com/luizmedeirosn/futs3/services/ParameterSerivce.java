@@ -2,8 +2,6 @@ package com.luizmedeirosn.futs3.services;
 
 import com.luizmedeirosn.futs3.entities.Parameter;
 import com.luizmedeirosn.futs3.repositories.ParameterRepository;
-import com.luizmedeirosn.futs3.repositories.PlayerParameterRepository;
-import com.luizmedeirosn.futs3.repositories.PositionParameterRepository;
 import com.luizmedeirosn.futs3.shared.dto.request.ParameterRequestDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.ParameterResponseDTO;
 import com.luizmedeirosn.futs3.shared.exceptions.DatabaseException;
@@ -25,8 +23,6 @@ public class ParameterSerivce {
     private final ParameterRepository parameterRepository;
 
     public ParameterSerivce(
-            PositionParameterRepository positionParameterRepository,
-            PlayerParameterRepository playerParameterRepository,
             ParameterRepository parameterRepository
     ) {
         this.parameterRepository = parameterRepository;
