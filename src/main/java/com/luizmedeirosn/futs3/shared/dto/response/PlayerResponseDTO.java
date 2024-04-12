@@ -38,10 +38,8 @@ public record PlayerResponseDTO(
                         player.getPositionName(),
                         player.getPositionDescription()
                 ),
-                (
-                        player.getPlayerPicture() == null || player.getPlayerPicture() == null) ?
-                        "" : PlayerPictureService.createPictureUrl(player.getPlayerId()
-                )
+                player.getPlayerPicture() == null?
+                        "" : PlayerPictureService.createPictureUrl(player.getPlayerId())
         );
     }
 }

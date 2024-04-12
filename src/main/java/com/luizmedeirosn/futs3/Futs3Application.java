@@ -12,5 +12,4 @@ public class Futs3Application {
 		ClearTerminal.run();
 		SpringApplication.run(Futs3Application.class, args);
 	}
-
 }
