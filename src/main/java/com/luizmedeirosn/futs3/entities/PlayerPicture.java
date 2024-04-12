@@ -1,6 +1,7 @@
 package com.luizmedeirosn.futs3.entities;
 
 import com.luizmedeirosn.futs3.shared.exceptions.DatabaseException;
+import com.luizmedeirosn.futs3.utils.CustomConstants;
 import jakarta.persistence.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,6 +14,8 @@ import java.util.Objects;
 public class PlayerPicture implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    private static String acceptTypes = CustomConstants.ACCEPTED_FILE_TYPES;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,14 +39,14 @@ public class PlayerPicture implements Serializable {
     public PlayerPicture(Long id, String filename, String contentType, byte[] content, Player player) {
         this.id = id;
         this.filename = filename;
-        this.contentType = contentType;
+        setContentType(contentType);
         this.content = content;
         this.player = player;
     }
 
     public PlayerPicture(String filename, String contentType, byte[] content, Player player) {
         this.filename = filename;
-        this.contentType = contentType;
+        setContentType(contentType);
         this.content = content;
         this.player = player;
     }
@@ -52,7 +55,7 @@ public class PlayerPicture implements Serializable {
         try {
             if (playerPicture != null) {
                 filename = playerPicture.getOriginalFilename();
-                contentType = playerPicture.getContentType();
+                setContentType(playerPicture.getContentType());
                 content = playerPicture.getBytes();
             }
             this.player = player;
@@ -65,7 +68,7 @@ public class PlayerPicture implements Serializable {
     public void updateData(MultipartFile playerPicture) {
         try {
             filename = playerPicture.getOriginalFilename();
-            contentType = playerPicture.getContentType();
+            setContentType(playerPicture.getContentType());
             content = playerPicture.getBytes();
         } catch (IOException e) {
             throw new DatabaseException(e.getMessage());
@@ -93,6 +96,9 @@ public class PlayerPicture implements Serializable {
     }
 
     public void setContentType(String contentType) {
+        if (!acceptTypes.contains(contentType)) {
+            throw new DatabaseException("Invalid content type: " + contentType);
+        }
         this.contentType = contentType;
     }
 

@@ -1,32 +1,38 @@
-{"properties": [
+{
+  "properties": [
     {
-        "name": "users.user.password",
-        "type": "java.lang.String",
-        "description": "A description for 'userTest.password'"
+      "name": "users.user.password",
+      "type": "java.lang.String",
+      "description": "A description for 'userTest.password'"
     },
     {
-        "name": "users.user.username",
-        "type": "java.lang.String",
-        "description": "A description for 'userTest.username'"
+      "name": "users.user.username",
+      "type": "java.lang.String",
+      "description": "A description for 'userTest.username'"
     },
     {
-        "name": "users.admin.password",
-        "type": "java.lang.String",
-        "description": "A description for 'admin.password'"
+      "name": "users.admin.password",
+      "type": "java.lang.String",
+      "description": "A description for 'admin.password'"
     },
     {
-        "name": "users.admin.username",
-        "type": "java.lang.String",
-        "description": "A description for 'admin.username'"
+      "name": "users.admin.username",
+      "type": "java.lang.String",
+      "description": "A description for 'admin.username'"
     },
     {
-        "name": "security.jwt.token.secret-key",
-        "type": "java.lang.String",
-        "description": "A description for 'secret-key'"
+      "name": "security.jwt.token.secret-key",
+      "type": "java.lang.String",
+      "description": "A description for 'secret-key'"
     },
     {
-        "name": "security.jwt.token.expire-lenght",
-        "type": "java.lang.Long",
-        "description": "A description for 'expire-length'"
-    }
+      "name": "security.jwt.token.expire-lenght",
+      "type": "java.lang.Long",
+      "description": "A description for 'expire-length'"
+    },
+    {
+      "name": "file.format.accept",
+      "type": "java.lang.String",
+      "description": "Description for file.format.accept."
+  }
 ]}
