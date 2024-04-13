@@ -1,10 +1,10 @@
 package com.luizmedeirosn.futs3.shared.exceptions;
 
-public class DatabaseException extends RuntimeException {
+public class FormatterException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
-    public DatabaseException(String message) {
+    public FormatterException(String message) {
         super(message);
     }
 }

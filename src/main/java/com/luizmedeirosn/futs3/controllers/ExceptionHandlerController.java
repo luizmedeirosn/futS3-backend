@@ -3,6 +3,7 @@ package com.luizmedeirosn.futs3.controllers;
 import com.luizmedeirosn.futs3.shared.exceptions.DatabaseException;
 import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
 import com.luizmedeirosn.futs3.shared.exceptions.StandardError;
+import com.luizmedeirosn.futs3.utils.MessageFormatter;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.io.DecodingException;
@@ -29,80 +30,72 @@ import java.time.Instant;
 public class ExceptionHandlerController {
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ResponseEntity<StandardError> methodNotSupported(HttpRequestMethodNotSupportedException e,
-            HttpServletRequest request) {
-        final String ERROR = "Method not supported";
-        final HttpStatus STATUS = HttpStatus.METHOD_NOT_ALLOWED;
-        StandardError EXCEPTION = new StandardError(STATUS.value(), ERROR, e.getMessage(), request.getRequestURI(),
-                Instant.now());
-        return ResponseEntity.status(STATUS).body(EXCEPTION);
+    public ResponseEntity<StandardError> methodNotSupported(HttpRequestMethodNotSupportedException e, HttpServletRequest request) {
+        final String error = "Method not supported";
+        final HttpStatus status = HttpStatus.METHOD_NOT_ALLOWED;
+        final StandardError exception = new StandardError(status.value(), error, e.getMessage(), request.getRequestURI(), Instant.now());
+        return ResponseEntity.status(status).body(exception);
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<StandardError> entityNotFound(EntityNotFoundException e, HttpServletRequest request) {
-        final String ERROR = "Entity not found";
-        final HttpStatus STATUS = HttpStatus.NOT_FOUND;
-        StandardError EXCEPTION = new StandardError(STATUS.value(), ERROR, e.getMessage(), request.getRequestURI(),
-                Instant.now());
-        return ResponseEntity.status(STATUS).body(EXCEPTION);
+        final String error = "Entity not found";
+        final HttpStatus status = HttpStatus.NOT_FOUND;
+        final StandardError exception = new StandardError(status.value(), error, e.getMessage(), request.getRequestURI(), Instant.now());
+        return ResponseEntity.status(status).body(exception);
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<StandardError> endpointValueConversionError(MethodArgumentTypeMismatchException e,
             HttpServletRequest request) {
-        final String ERROR = "Error in endpoint value conversion";
-        final HttpStatus STATUS = HttpStatus.BAD_REQUEST;
-        StandardError EXCEPTION = new StandardError(STATUS.value(), ERROR, e.getMessage(), request.getRequestURI(),
-                Instant.now());
-        return ResponseEntity.status(STATUS).body(EXCEPTION);
+        final String error = "Error in endpoint value conversion";
+        final HttpStatus status = HttpStatus.BAD_REQUEST;
+        final StandardError exception = new StandardError(status.value(), error, e.getMessage(), request.getRequestURI(), Instant.now());
+        return ResponseEntity.status(status).body(exception);
     }
 
     @ExceptionHandler(DatabaseException.class)
     public ResponseEntity<StandardError> databaseError(DatabaseException e, HttpServletRequest request) {
-        final String ERROR = "Database error";
-        final HttpStatus STATUS = HttpStatus.BAD_REQUEST;
-        final String MESSAGE = DatabaseException.formatMessage(e.getMessage());
-        StandardError EXCEPTION = new StandardError(STATUS.value(), ERROR, MESSAGE, request.getRequestURI(),
-                Instant.now());
-        return ResponseEntity.status(STATUS).body(EXCEPTION);
+        final String error = "Database error";
+        final HttpStatus status = HttpStatus.BAD_REQUEST;
+        final String detail = MessageFormatter.databaseException(e.getMessage());
+        final StandardError exception = new StandardError(status.value(), error, detail, request.getRequestURI(), Instant.now());
+        return ResponseEntity.status(status).body(exception);
     }
 
     @ExceptionHandler(PropertyValueException.class)
     public ResponseEntity<StandardError> notNullError(PropertyValueException e, HttpServletRequest request) {
-        final String ERROR = "Database error";
-        final HttpStatus STATUS = HttpStatus.BAD_REQUEST;
-        StandardError EXCEPTION = new StandardError(STATUS.value(), ERROR, e.getMessage(), request.getRequestURI(),
-                Instant.now());
-        return ResponseEntity.status(STATUS).body(EXCEPTION);
+        final String error = "Database error";
+        final HttpStatus status = HttpStatus.BAD_REQUEST;
+        final String detail = MessageFormatter.databaseException(e.getMessage());
+        final StandardError exception = new StandardError(status.value(), error, detail, request.getRequestURI(), Instant.now());
+        return ResponseEntity.status(status).body(exception);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<StandardError> dataIntegrityError(DataIntegrityViolationException e,
-            HttpServletRequest request) {
-        final String ERROR = "Database error";
-        final HttpStatus STATUS = HttpStatus.BAD_REQUEST;
-        final String MESSAGE = "Update failure. Unique index, not null, check index violation";
-        StandardError EXCEPTION = new StandardError(STATUS.value(), ERROR, MESSAGE, request.getRequestURI(),
-                Instant.now());
-        return ResponseEntity.status(STATUS).body(EXCEPTION);
+    public ResponseEntity<StandardError> dataIntegrityError(DataIntegrityViolationException e, HttpServletRequest request) {
+        final String error = "Database error";
+        final HttpStatus status = HttpStatus.BAD_REQUEST;
+        final String detail = MessageFormatter.databaseException(e.getMessage());
+        final StandardError exception = new StandardError(status.value(), error, detail, request.getRequestURI(), Instant.now());
+        return ResponseEntity.status(status).body(exception);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<StandardError> jsonParseError(HttpMessageNotReadableException e, HttpServletRequest request) {
-        final String ERROR = "Json parser error";
-        final HttpStatus STATUS = HttpStatus.BAD_REQUEST;
-        StandardError EXCEPTION = new StandardError(STATUS.value(), ERROR, e.getMessage(), request.getRequestURI(),
-                Instant.now());
-        return ResponseEntity.status(STATUS).body(EXCEPTION);
+        final String error = "Json parser error";
+        final HttpStatus status = HttpStatus.BAD_REQUEST;
+        final StandardError exception = new StandardError(status.value(), error, e.getMessage(), request.getRequestURI(), Instant.now());
+        return ResponseEntity.status(status).body(exception);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<StandardError> argumentNotValidError(MethodArgumentNotValidException e, HttpServletRequest request) {
-        final String ERROR = "Argument not valid";
-        final HttpStatus STATUS = HttpStatus.BAD_REQUEST;
-        StandardError EXCEPTION = new StandardError(STATUS.value(), ERROR, e.getMessage(), request.getRequestURI(),
-                Instant.now());
-        return ResponseEntity.status(STATUS).body(EXCEPTION);
+    public ResponseEntity<StandardError> methodArgumentNotValid(MethodArgumentNotValidException e, HttpServletRequest request) {
+        final String error = e.getBody().getDetail().replace(".", "");
+        final HttpStatus status = HttpStatus.BAD_REQUEST;
+        final String detail = MessageFormatter.methodArgumentNotValidException(e.getMessage());
+        final StandardError exception = new StandardError(status.value(), error, detail, request.getRequestURI(), Instant.now());
+        return ResponseEntity.status(status).body(exception);
     }
 
     @ExceptionHandler(Exception.class)
@@ -152,5 +145,4 @@ public class ExceptionHandlerController {
         error.setStatus(status.value());
         return ResponseEntity.status(status).body(error);
     }
-
 }
