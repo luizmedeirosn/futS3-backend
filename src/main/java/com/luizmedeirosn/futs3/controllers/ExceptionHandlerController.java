@@ -21,6 +21,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import java.time.Instant;
 
@@ -111,11 +112,9 @@ public class ExceptionHandlerController {
         error.setTimestamp(Instant.now());
 
         HttpStatus status = HttpStatus.FORBIDDEN;
-        error.setStatus(status.value());
 
         if (e instanceof BadCredentialsException) {
             status = HttpStatus.UNAUTHORIZED;
-            error.setStatus(HttpStatus.UNAUTHORIZED.value());
             error.setError("Bad credentials");
             error.setDetail("Authentication failure");
 
@@ -135,15 +134,21 @@ public class ExceptionHandlerController {
         } else if (e instanceof DecodingException) {
             error.setError("Decoding failure");
 
+        } else if (e instanceof UsernameNotFoundException) {
+            status = HttpStatus.NOT_FOUND;
+            error.setError("User not found");
+
         } else if (e instanceof IllegalArgumentException) {
             status = HttpStatus.BAD_REQUEST;
             error.setError("Bad Request");
 
-        } else if (e instanceof UsernameNotFoundException) {
-            status = HttpStatus.NOT_FOUND;
-            error.setError("User not found");
+        } else if (e instanceof MaxUploadSizeExceededException) {
+            status = HttpStatus.BAD_REQUEST;
+            error.setError(e.getMessage());
+            error.setDetail("The maximum allowed value for images is 1 MB");
         }
 
+        error.setStatus(status.value());
         return ResponseEntity.status(status).body(error);
     }
 
