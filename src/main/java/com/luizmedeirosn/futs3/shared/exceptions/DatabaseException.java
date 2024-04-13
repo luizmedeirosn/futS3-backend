@@ -9,9 +9,11 @@ public class DatabaseException extends RuntimeException {
     }
 
     public static String formatMessage(String message) {
-        return message
+        final String regex = "Detail: ";
+        return message.contains(regex) ? message
                 .split("Detail: ")[1]
                 .split("\\.")[0]
-                .replace("\"", "");
+                .replace("\"", "")
+                : message;
     }
 }

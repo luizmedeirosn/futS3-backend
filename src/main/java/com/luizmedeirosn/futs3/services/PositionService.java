@@ -82,13 +82,7 @@ public class PositionService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public PositionResponseDTO save(PositionRequestDTO positionRequestDTO) {
         try {
-            var weights = positionRequestDTO
-                    .parameters()
-                    .stream()
-                    .map(PositionParameterIdWeightDTO::weight)
-                    .toList();
-
-            if (!validateTotalWeight(weights)) {
+            if (sumWeights(positionRequestDTO.parameters()) > 100) {
                 throw new DataIntegrityViolationException("The sum of weights cannot exceed 100");
             }
 
@@ -117,6 +111,10 @@ public class PositionService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public PositionResponseDTO update(Long id, PositionRequestDTO positionRequestDTO) {
         try {
+            if (sumWeights(positionRequestDTO.parameters()) > 100) {
+                throw new DataIntegrityViolationException("The sum of weights cannot exceed 100");
+            }
+
             Position position = positionRepository.getReferenceById(id);
             position.updateData(positionRequestDTO);
 
@@ -131,26 +129,25 @@ public class PositionService {
             return findById(position.getId());
 
         } catch (NullPointerException | InvalidDataAccessApiUsageException e) {
-            throw new EntityNotFoundException("Position request. The given ID must not be null");
+            throw new EntityNotFoundException("The given IDs must not be null");
 
         } catch (jakarta.persistence.EntityNotFoundException e) {
-            throw new EntityNotFoundException("Position request. ID not found");
+            throw new EntityNotFoundException("Position ID not found: " + id);
 
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException(e.getMessage());
         }
     }
 
-    private boolean validateTotalWeight(List<Integer> weigths) {
-        int sum = weigths.stream().reduce(0, Integer::sum);
-        return sum <= 100;
+    private int sumWeights(List<PositionParameterIdWeightDTO> weights) {
+        return weights.stream().mapToInt(PositionParameterIdWeightDTO::weight).sum();
     }
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public void deleteById(Long id) {
         try {
             if (!positionRepository.existsById(id)) {
-                throw new EntityNotFoundException("Position request. ID not found");
+                throw new EntityNotFoundException("Position ID not found: " + id);
             }
             positionRepository.customDeleteById(id);
 

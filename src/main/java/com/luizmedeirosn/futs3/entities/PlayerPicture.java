@@ -15,8 +15,6 @@ public class PlayerPicture implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private static String acceptTypes = CustomConstants.ACCEPTED_FILE_TYPES;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -96,7 +94,7 @@ public class PlayerPicture implements Serializable {
     }
 
     public void setContentType(String contentType) {
-        if (!acceptTypes.contains(contentType)) {
+        if (!CustomConstants.ACCEPTED_FILE_TYPES.contains(contentType)) {
             throw new DatabaseException("Invalid content type: " + contentType);
         }
         this.contentType = contentType;
