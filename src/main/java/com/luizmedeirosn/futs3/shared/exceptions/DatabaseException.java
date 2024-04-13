@@ -7,4 +7,11 @@ public class DatabaseException extends RuntimeException {
     public DatabaseException(String message) {
         super(message);
     }
+
+    public static String formatMessage(String message) {
+        return message
+                .split("Detail: ")[1]
+                .split("\\.")[0]
+                .replace("\"", "");
+    }
 }

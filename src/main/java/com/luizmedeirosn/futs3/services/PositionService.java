@@ -5,6 +5,7 @@ import com.luizmedeirosn.futs3.projections.postition.PositionParametersProjectio
 import com.luizmedeirosn.futs3.repositories.PositionParameterRepository;
 import com.luizmedeirosn.futs3.repositories.PositionRepository;
 import com.luizmedeirosn.futs3.shared.dto.request.PositionRequestDTO;
+import com.luizmedeirosn.futs3.shared.dto.request.aux.PositionParameterIdWeightDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.PositionResponseDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.aux.PositionParametersDataDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.min.PositionMinDTO;
@@ -81,6 +82,16 @@ public class PositionService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public PositionResponseDTO save(PositionRequestDTO positionRequestDTO) {
         try {
+            var weights = positionRequestDTO
+                    .parameters()
+                    .stream()
+                    .map(PositionParameterIdWeightDTO::weight)
+                    .toList();
+
+            if (!validateTotalWeight(weights)) {
+                throw new DataIntegrityViolationException("The sum of weights cannot exceed 100");
+            }
+
             Position newPosition = new Position(positionRequestDTO);
             positionRepository.save(newPosition);
 
@@ -93,10 +104,10 @@ public class PositionService {
             return findById(newPosition.getId());
 
         } catch (NullPointerException | InvalidDataAccessApiUsageException e) {
-            throw new EntityNotFoundException("Position request. The given ID must not be null");
+            throw new EntityNotFoundException("The given IDs must not be null");
 
         } catch (jakarta.persistence.EntityNotFoundException e) {
-            throw new EntityNotFoundException("Position request. ID not found");
+            throw new EntityNotFoundException(e.getMessage());
 
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException(e.getMessage());
@@ -128,6 +139,11 @@ public class PositionService {
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException(e.getMessage());
         }
+    }
+
+    private boolean validateTotalWeight(List<Integer> weigths) {
+        int sum = weigths.stream().reduce(0, Integer::sum);
+        return sum <= 100;
     }
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
