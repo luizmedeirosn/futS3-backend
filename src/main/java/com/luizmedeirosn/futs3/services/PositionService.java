@@ -5,6 +5,7 @@ import com.luizmedeirosn.futs3.projections.postition.PositionParametersProjectio
 import com.luizmedeirosn.futs3.repositories.PositionParameterRepository;
 import com.luizmedeirosn.futs3.repositories.PositionRepository;
 import com.luizmedeirosn.futs3.shared.dto.request.PositionRequestDTO;
+import com.luizmedeirosn.futs3.shared.dto.request.aux.PositionParameterIdWeightDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.PositionResponseDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.aux.PositionParametersDataDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.min.PositionMinDTO;
@@ -12,7 +13,6 @@ import com.luizmedeirosn.futs3.shared.exceptions.DatabaseException;
 import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
 import jakarta.persistence.EntityManager;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -81,6 +81,10 @@ public class PositionService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public PositionResponseDTO save(PositionRequestDTO positionRequestDTO) {
         try {
+            if (sumWeights(positionRequestDTO.parameters()) > 100) {
+                throw new DataIntegrityViolationException("The sum of weights cannot exceed 100");
+            }
+
             Position newPosition = new Position(positionRequestDTO);
             positionRepository.save(newPosition);
 
@@ -92,12 +96,6 @@ public class PositionService {
 
             return findById(newPosition.getId());
 
-        } catch (NullPointerException | InvalidDataAccessApiUsageException e) {
-            throw new EntityNotFoundException("Position request. The given ID must not be null");
-
-        } catch (jakarta.persistence.EntityNotFoundException e) {
-            throw new EntityNotFoundException("Position request. ID not found");
-
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException(e.getMessage());
         }
@@ -106,6 +104,10 @@ public class PositionService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public PositionResponseDTO update(Long id, PositionRequestDTO positionRequestDTO) {
         try {
+            if (sumWeights(positionRequestDTO.parameters()) > 100) {
+                throw new DataIntegrityViolationException("The sum of weights cannot exceed 100");
+            }
+
             Position position = positionRepository.getReferenceById(id);
             position.updateData(positionRequestDTO);
 
@@ -119,22 +121,23 @@ public class PositionService {
             position = positionRepository.save(position);
             return findById(position.getId());
 
-        } catch (NullPointerException | InvalidDataAccessApiUsageException e) {
-            throw new EntityNotFoundException("Position request. The given ID must not be null");
-
         } catch (jakarta.persistence.EntityNotFoundException e) {
-            throw new EntityNotFoundException("Position request. ID not found");
+            throw new EntityNotFoundException("Position ID not found: " + id);
 
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException(e.getMessage());
         }
     }
 
+    private int sumWeights(List<PositionParameterIdWeightDTO> weights) {
+        return weights.stream().mapToInt(PositionParameterIdWeightDTO::weight).sum();
+    }
+
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public void deleteById(Long id) {
         try {
             if (!positionRepository.existsById(id)) {
-                throw new EntityNotFoundException("Position request. ID not found");
+                throw new EntityNotFoundException("Position ID not found: " + id);
             }
             positionRepository.customDeleteById(id);
 

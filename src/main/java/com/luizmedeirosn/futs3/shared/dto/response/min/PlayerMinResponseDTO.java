@@ -2,9 +2,8 @@ package com.luizmedeirosn.futs3.shared.dto.response.min;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.luizmedeirosn.futs3.entities.Player;
 import com.luizmedeirosn.futs3.projections.player.PlayerProjection;
-import com.luizmedeirosn.futs3.services.PlayerPictureService;
+import com.luizmedeirosn.futs3.services.PlayerService;
 
 import java.io.Serializable;
 
@@ -20,15 +19,6 @@ public record PlayerMinResponseDTO(
 
     private static final long serialVersionUID = 1L;
 
-    public PlayerMinResponseDTO(Player player) {
-        this(
-                player.getId(),
-                player.getName(),
-                new PositionMinDTO(player.getPosition()),
-                player.getPlayerPicture() == null ?
-                        "" : PlayerPictureService.createPictureUrl(player.getId()));
-    }
-
     public PlayerMinResponseDTO(PlayerProjection playerProjection) {
         this(
                 playerProjection.getPlayerId(),
@@ -38,8 +28,7 @@ public record PlayerMinResponseDTO(
                         playerProjection.getPositionName(),
                         playerProjection.getPositionDescription()
                 ),
-                playerProjection.getPlayerPicture() == null ? ""
-                        : PlayerPictureService.createPictureUrl(playerProjection.getPlayerId()));
+                playerProjection.getPlayerPicture() == null ?
+                        "" : PlayerService.createPictureUrl(playerProjection.getPlayerId()));
     }
-
 }

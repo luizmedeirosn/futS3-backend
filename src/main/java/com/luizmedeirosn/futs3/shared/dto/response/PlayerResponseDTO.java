@@ -3,7 +3,7 @@ package com.luizmedeirosn.futs3.shared.dto.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.luizmedeirosn.futs3.projections.player.PlayerProjection;
-import com.luizmedeirosn.futs3.services.PlayerPictureService;
+import com.luizmedeirosn.futs3.services.PlayerService;
 import com.luizmedeirosn.futs3.shared.dto.response.aux.PlayerParameterDataDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.min.PositionMinDTO;
 
@@ -38,10 +38,8 @@ public record PlayerResponseDTO(
                         player.getPositionName(),
                         player.getPositionDescription()
                 ),
-                (
-                        player.getPlayerPicture() == null || player.getPlayerPicture() == null) ?
-                        "" : PlayerPictureService.createPictureUrl(player.getPlayerId()
-                )
+                player.getPlayerPicture() == null ?
+                        "" : PlayerService.createPictureUrl(player.getPlayerId())
         );
     }
 }

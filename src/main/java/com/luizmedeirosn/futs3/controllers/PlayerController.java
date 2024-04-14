@@ -1,10 +1,14 @@
 package com.luizmedeirosn.futs3.controllers;
 
+import com.luizmedeirosn.futs3.entities.PlayerPicture;
 import com.luizmedeirosn.futs3.services.PlayerService;
 import com.luizmedeirosn.futs3.shared.dto.request.PlayerRequestDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.PlayerResponseDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.min.PlayerMinResponseDTO;
+import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
 import jakarta.validation.Valid;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +36,22 @@ public class PlayerController {
     public ResponseEntity<PlayerResponseDTO> findById(@PathVariable @NonNull Long id) {
         return ResponseEntity.ok().body(playerService.findById(id));
     }
+
+    @GetMapping(value = "/picture/{id}")
+    public ResponseEntity<ByteArrayResource> findPictureById(@PathVariable @NonNull Long id) {
+        PlayerPicture playerPicture = playerService.findPictureById(id);
+        byte[] content = playerPicture.getContent();
+        ByteArrayResource body;
+
+        if (content != null) {
+            body = new ByteArrayResource(content);
+        } else {
+            throw new EntityNotFoundException("Player without a picture");
+        }
+
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, playerPicture.getContentType()).body(body);
+    }
+
 
     @PostMapping
     public ResponseEntity<PlayerResponseDTO> save(@ModelAttribute @Valid PlayerRequestDTO playerRequestDTO) {

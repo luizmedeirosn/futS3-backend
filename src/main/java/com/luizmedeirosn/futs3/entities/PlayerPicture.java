@@ -1,6 +1,7 @@
 package com.luizmedeirosn.futs3.entities;
 
 import com.luizmedeirosn.futs3.shared.exceptions.DatabaseException;
+import com.luizmedeirosn.futs3.utils.CustomConstants;
 import jakarta.persistence.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -36,14 +37,14 @@ public class PlayerPicture implements Serializable {
     public PlayerPicture(Long id, String filename, String contentType, byte[] content, Player player) {
         this.id = id;
         this.filename = filename;
-        this.contentType = contentType;
+        setContentType(contentType);
         this.content = content;
         this.player = player;
     }
 
     public PlayerPicture(String filename, String contentType, byte[] content, Player player) {
         this.filename = filename;
-        this.contentType = contentType;
+        setContentType(contentType);
         this.content = content;
         this.player = player;
     }
@@ -52,7 +53,7 @@ public class PlayerPicture implements Serializable {
         try {
             if (playerPicture != null) {
                 filename = playerPicture.getOriginalFilename();
-                contentType = playerPicture.getContentType();
+                setContentType(playerPicture.getContentType());
                 content = playerPicture.getBytes();
             }
             this.player = player;
@@ -65,7 +66,7 @@ public class PlayerPicture implements Serializable {
     public void updateData(MultipartFile playerPicture) {
         try {
             filename = playerPicture.getOriginalFilename();
-            contentType = playerPicture.getContentType();
+            setContentType(playerPicture.getContentType());
             content = playerPicture.getBytes();
         } catch (IOException e) {
             throw new DatabaseException(e.getMessage());
@@ -93,6 +94,9 @@ public class PlayerPicture implements Serializable {
     }
 
     public void setContentType(String contentType) {
+        if (!CustomConstants.ACCEPTED_FILE_TYPES.contains(contentType)) {
+            throw new DatabaseException("Invalid content type: " + contentType);
+        }
         this.contentType = contentType;
     }
 

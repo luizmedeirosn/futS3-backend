@@ -26,5 +26,4 @@ public record PositionMinDTO(
     public PositionMinDTO(Long id, String name) {
         this(id, name, null);
     }
-
 }
