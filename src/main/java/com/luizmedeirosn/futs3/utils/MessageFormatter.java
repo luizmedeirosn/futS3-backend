@@ -6,7 +6,12 @@ public final class MessageFormatter {
 
     public static String databaseException(String message) {
         try {
-            String regex = "Detail: ";
+            String regex = "null";
+            if (message.contains(regex)) {
+                return "IDs cannot be null";
+            }
+
+            regex = "Detail: ";
             return message.contains(regex) ? message
                     .split(regex)[1]
                     .split("\\.")[0]

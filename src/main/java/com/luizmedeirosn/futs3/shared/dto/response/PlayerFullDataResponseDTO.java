@@ -2,7 +2,7 @@ package com.luizmedeirosn.futs3.shared.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.luizmedeirosn.futs3.projections.gamemode.PlayerDataScoreProjection;
-import com.luizmedeirosn.futs3.services.PlayerPictureService;
+import com.luizmedeirosn.futs3.services.PlayerService;
 import com.luizmedeirosn.futs3.shared.dto.response.aux.PlayerParameterDataDTO;
 
 import java.io.Serializable;
@@ -36,6 +36,6 @@ public record PlayerFullDataResponseDTO(
                 player.getTotalScore(),
                 parameters,
                 player.getPlayerProfilePicture() == null ? null
-                        : PlayerPictureService.createPictureUrl(player.getPlayerId()));
+                        : PlayerService.createPictureUrl(player.getPlayerId()));
     }
 }

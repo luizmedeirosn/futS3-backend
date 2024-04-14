@@ -23,11 +23,22 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.time.Instant;
+import java.util.Objects;
 
 @ControllerAdvice
 public class ExceptionHandlerController {
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<StandardError> noResourceFound(NoResourceFoundException e, HttpServletRequest request) {
+        final String error = "No resource found";
+        final HttpStatus status = HttpStatus.NOT_FOUND;
+        final String message = e.getMessage().replace(".", "");
+        final StandardError exception = new StandardError(status.value(), error, message, request.getRequestURI(), Instant.now());
+        return ResponseEntity.status(status).body(exception);
+    }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<StandardError> methodNotSupported(HttpRequestMethodNotSupportedException e, HttpServletRequest request) {
@@ -91,7 +102,7 @@ public class ExceptionHandlerController {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<StandardError> methodArgumentNotValid(MethodArgumentNotValidException e, HttpServletRequest request) {
-        final String error = e.getBody().getDetail().replace(".", "");
+        final String error = Objects.requireNonNull(e.getBody().getDetail()).replace(".", "");
         final HttpStatus status = HttpStatus.BAD_REQUEST;
         final String detail = MessageFormatter.methodArgumentNotValidException(e.getMessage());
         final StandardError exception = new StandardError(status.value(), error, detail, request.getRequestURI(), Instant.now());

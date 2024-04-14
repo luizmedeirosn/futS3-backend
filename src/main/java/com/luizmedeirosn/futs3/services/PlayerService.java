@@ -7,6 +7,7 @@ import com.luizmedeirosn.futs3.entities.PlayerPicture;
 import com.luizmedeirosn.futs3.entities.Position;
 import com.luizmedeirosn.futs3.projections.player.PlayerProjection;
 import com.luizmedeirosn.futs3.repositories.PlayerParameterRepository;
+import com.luizmedeirosn.futs3.repositories.PlayerPictureRepository;
 import com.luizmedeirosn.futs3.repositories.PlayerRepository;
 import com.luizmedeirosn.futs3.repositories.PositionRepository;
 import com.luizmedeirosn.futs3.shared.dto.request.PlayerRequestDTO;
@@ -18,21 +19,21 @@ import com.luizmedeirosn.futs3.shared.exceptions.DatabaseException;
 import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
 import jakarta.persistence.EntityManager;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 public class PlayerService {
 
     private final PlayerRepository playerRepository;
+    private final PlayerPictureRepository playerPictureRepository;
     private final PlayerParameterRepository playerParameterRepository;
     private final PositionRepository positionRepository;
     private final ObjectMapper objectMapper;
@@ -40,11 +41,13 @@ public class PlayerService {
 
     public PlayerService(
             PlayerRepository playerRepository,
+            PlayerPictureRepository playerPictureRepository,
             PlayerParameterRepository playerParameterRepository,
             PositionRepository positionRepository,
             ObjectMapper objectMapper, EntityManager entityManager
     ) {
         this.playerRepository = playerRepository;
+        this.playerPictureRepository = playerPictureRepository;
         this.playerParameterRepository = playerParameterRepository;
         this.positionRepository = positionRepository;
         this.objectMapper = objectMapper;
@@ -86,6 +89,19 @@ public class PlayerService {
         return new ArrayList<>();
     }
 
+    public static String createPictureUrl(Long id) {
+        return ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .replacePath("/players/picture/" + id)
+                .replaceQuery(null)
+                .toUriString();
+    }
+
+    public PlayerPicture findPictureById(Long id) {
+        return playerPictureRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Player picture ID not found: " + id));
+    }
+
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public PlayerResponseDTO save(PlayerRequestDTO playerRequestDTO) {
         try {
@@ -109,12 +125,6 @@ public class PlayerService {
             );
 
             return findById(newPlayer.getId());
-
-        } catch (NullPointerException | InvalidDataAccessApiUsageException e) {
-            throw new EntityNotFoundException("Player request. The given IDs must not be null");
-
-        } catch (NoSuchElementException e) {
-            throw new EntityNotFoundException("Player request. IDs not found");
 
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException(e.getMessage());
@@ -143,11 +153,8 @@ public class PlayerService {
             player = playerRepository.save(player);
             return findById(player.getId());
 
-        } catch (NullPointerException | InvalidDataAccessApiUsageException e) {
-            throw new EntityNotFoundException("Player request. The given ID must not be null");
-
         } catch (jakarta.persistence.EntityNotFoundException e) {
-            throw new EntityNotFoundException("Player request. ID not found: " + id);
+            throw new EntityNotFoundException("Player ID not found: " + id);
 
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException(e.getMessage());
@@ -159,14 +166,14 @@ public class PlayerService {
             return parameters.isBlank() ? new ArrayList<>() : objectMapper.readValue(parameters, new TypeReference<>() {
             });
         } catch (Exception e) {
-            throw new IllegalArgumentException("Players Request. Invalid format for parameters");
+            throw new IllegalArgumentException("Invalid format for player parameters");
         }
     }
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public void deleteById(@NonNull Long id) {
         if (!playerRepository.existsById(id)) {
-            throw new EntityNotFoundException("Player request. ID not found");
+            throw new EntityNotFoundException("Player ID not found: " + id);
         }
         playerRepository.customDeleteById(id);
     }

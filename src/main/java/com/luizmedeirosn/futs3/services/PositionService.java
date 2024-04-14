@@ -13,7 +13,6 @@ import com.luizmedeirosn.futs3.shared.exceptions.DatabaseException;
 import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
 import jakarta.persistence.EntityManager;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -97,12 +96,6 @@ public class PositionService {
 
             return findById(newPosition.getId());
 
-        } catch (NullPointerException | InvalidDataAccessApiUsageException e) {
-            throw new EntityNotFoundException("The given IDs must not be null");
-
-        } catch (jakarta.persistence.EntityNotFoundException e) {
-            throw new EntityNotFoundException(e.getMessage());
-
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException(e.getMessage());
         }
@@ -127,9 +120,6 @@ public class PositionService {
 
             position = positionRepository.save(position);
             return findById(position.getId());
-
-        } catch (NullPointerException | InvalidDataAccessApiUsageException e) {
-            throw new EntityNotFoundException("The given IDs must not be null");
 
         } catch (jakarta.persistence.EntityNotFoundException e) {
             throw new EntityNotFoundException("Position ID not found: " + id);

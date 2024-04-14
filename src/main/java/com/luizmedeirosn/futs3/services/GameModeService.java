@@ -17,7 +17,6 @@ import com.luizmedeirosn.futs3.shared.exceptions.DatabaseException;
 import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
 import jakarta.persistence.EntityManager;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -100,10 +99,7 @@ public class GameModeService {
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public List<PlayerFullDataResponseDTO> getPlayersRanking(
-            Long gameModeId,
-            Long positionId
-    ) {
+    public List<PlayerFullDataResponseDTO> getPlayersRanking(Long gameModeId, Long positionId) {
         try {
             var playersRanking =
                     gameModeRepository.getPlayersRanking(gameModeId, positionId);
@@ -153,12 +149,6 @@ public class GameModeService {
 
             return findById(newGameMode.getId());
 
-        } catch (NoSuchElementException e) {
-            throw new EntityNotFoundException("GameMode request. IDs not found");
-
-        } catch (InvalidDataAccessApiUsageException e) {
-            throw new EntityNotFoundException("GameMode request. The given IDs must not be null");
-
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException(e.getMessage());
         }
@@ -180,11 +170,8 @@ public class GameModeService {
             gameMode = gameModeRepository.save(gameMode);
             return findById(gameMode.getId());
 
-        } catch (NullPointerException e) {
-            throw new EntityNotFoundException("GameMode request. The given IDs must not be null");
-
         } catch (jakarta.persistence.EntityNotFoundException e) {
-            throw new EntityNotFoundException("GameMode request. ID not found: " + id);
+            throw new EntityNotFoundException("GameMode ID not found: " + id);
 
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException(e.getMessage());

@@ -22,5 +22,4 @@ public record GameModeMinResponseDTO(
                 gameMode.getFormationName(),
                 gameMode.getDescription());
     }
-
 }
