@@ -18,10 +18,10 @@ public class GameMode implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "formation_name", nullable = false, unique = true)
+    @Column(name = "formation_name", length = 50, nullable = false, unique = true)
     private String formationName;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT", length = 2000)
     private String description;
 
     @ManyToMany(fetch = FetchType.LAZY)

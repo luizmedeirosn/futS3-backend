@@ -1,5 +1,6 @@
 package com.luizmedeirosn.futs3.security.jwt;
 
+import com.luizmedeirosn.futs3.security.user.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

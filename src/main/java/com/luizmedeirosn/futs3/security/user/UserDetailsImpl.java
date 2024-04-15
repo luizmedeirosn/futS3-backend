@@ -1,4 +1,4 @@
-package com.luizmedeirosn.futs3.security.jwt;
+package com.luizmedeirosn.futs3.security.user;
 
 import com.luizmedeirosn.futs3.entities.CustomUser;
 import org.springframework.security.core.GrantedAuthority;
@@ -59,5 +59,4 @@ public class UserDetailsImpl implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
 }

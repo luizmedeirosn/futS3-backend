@@ -2,7 +2,7 @@ package com.luizmedeirosn.futs3.configs;
 
 import com.luizmedeirosn.futs3.security.jwt.JwtAuthFilter;
 import com.luizmedeirosn.futs3.security.jwt.JwtService;
-import com.luizmedeirosn.futs3.security.jwt.UserDetailsServiceImpl;
+import com.luizmedeirosn.futs3.security.user.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

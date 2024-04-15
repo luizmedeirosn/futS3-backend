@@ -14,7 +14,7 @@ spring:
       max-request-size: 2MB
 
   jpa:
-    hibernate.ddl-auto: create-drop
+    hibernate.ddl-auto: validate
     properties:
       hibernate:
         jdbc:

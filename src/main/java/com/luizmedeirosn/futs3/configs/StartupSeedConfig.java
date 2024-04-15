@@ -39,8 +39,8 @@ public class StartupSeedConfig implements CommandLineRunner {
     private String userTestPassword;
 
     public StartupSeedConfig(
-            CustomUserRepository customUserRepository,
             PasswordEncoder passwordEncoder,
+            CustomUserRepository customUserRepository,
             GameModeRepository gameModeRepository,
             PositionRepository positionRepository,
             ParameterRepository parameterRepository,
@@ -48,8 +48,8 @@ public class StartupSeedConfig implements CommandLineRunner {
             PositionParameterRepository positionParameterRepository,
             PlayerParameterRepository playerParameterRepository
     ) {
-        this.customUserRepository = customUserRepository;
         this.passwordEncoder = passwordEncoder;
+        this.customUserRepository = customUserRepository;
         this.gameModeRepository = gameModeRepository;
         this.positionRepository = positionRepository;
         this.parameterRepository = parameterRepository;
@@ -60,6 +60,16 @@ public class StartupSeedConfig implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        customUserRepository.deleteAll();
+
+        gameModeRepository.deleteAll();
+
+        positionParameterRepository.deleteAll();
+        playerParameterRepository.deleteAll();
+
+        playerRepository.deleteAll();
+        positionRepository.deleteAll();
+        parameterRepository.deleteAll();
 
         CustomUser adminFutS3 = new CustomUser(
                 adminUsername,
