@@ -2,6 +2,7 @@ package com.luizmedeirosn.futs3.controllers;
 
 import com.luizmedeirosn.futs3.shared.exceptions.DatabaseException;
 import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
+import com.luizmedeirosn.futs3.shared.exceptions.PageableException;
 import com.luizmedeirosn.futs3.shared.exceptions.StandardError;
 import com.luizmedeirosn.futs3.utils.MessageFormatter;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -48,14 +49,6 @@ public class ExceptionHandlerController {
         return ResponseEntity.status(status).body(exception);
     }
 
-    @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<StandardError> entityNotFound(EntityNotFoundException e, HttpServletRequest request) {
-        final String error = "Entity not found";
-        final HttpStatus status = HttpStatus.NOT_FOUND;
-        final StandardError exception = new StandardError(status.value(), error, e.getMessage(), request.getRequestURI(), Instant.now());
-        return ResponseEntity.status(status).body(exception);
-    }
-
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<StandardError> endpointValueConversionError(MethodArgumentTypeMismatchException e,
             HttpServletRequest request) {
@@ -71,6 +64,22 @@ public class ExceptionHandlerController {
         final HttpStatus status = HttpStatus.BAD_REQUEST;
         final String detail = MessageFormatter.databaseException(e.getMessage());
         final StandardError exception = new StandardError(status.value(), error, detail, request.getRequestURI(), Instant.now());
+        return ResponseEntity.status(status).body(exception);
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<StandardError> entityNotFound(EntityNotFoundException e, HttpServletRequest request) {
+        final String error = "Entity not found";
+        final HttpStatus status = HttpStatus.NOT_FOUND;
+        final StandardError exception = new StandardError(status.value(), error, e.getMessage(), request.getRequestURI(), Instant.now());
+        return ResponseEntity.status(status).body(exception);
+    }
+
+    @ExceptionHandler(PageableException.class)
+    public ResponseEntity<StandardError> pageableError(PageableException e, HttpServletRequest request) {
+        final String error = "Invalid page size";
+        final HttpStatus status = HttpStatus.BAD_REQUEST;
+        final StandardError exception = new StandardError(status.value(), error, e.getMessage(), request.getRequestURI(), Instant.now());
         return ResponseEntity.status(status).body(exception);
     }
 

@@ -7,6 +7,8 @@ import com.luizmedeirosn.futs3.shared.dto.response.PlayerResponseDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.min.PlayerMinResponseDTO;
 import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
 import jakarta.validation.Valid;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -29,6 +31,7 @@ public class PlayerController {
         this.playerService = playerService;
     }
 
+    @Cacheable(value = "players")
     @GetMapping
     public ResponseEntity<List<PlayerMinResponseDTO>> findAll(
             @RequestParam(value = "pageNumber", defaultValue = "0") Integer pageNumber,
@@ -38,11 +41,13 @@ public class PlayerController {
         return ResponseEntity.ok().body(playerService.findAll(pageable));
     }
 
+    @Cacheable(value = "players")
     @GetMapping("/{id}")
     public ResponseEntity<PlayerResponseDTO> findById(@PathVariable @NonNull Long id) {
         return ResponseEntity.ok().body(playerService.findById(id));
     }
 
+    @Cacheable(value = "players")
     @GetMapping(value = "/picture/{id}")
     public ResponseEntity<ByteArrayResource> findPictureById(@PathVariable @NonNull Long id) {
         PlayerPicture playerPicture = playerService.findPictureById(id);
@@ -58,7 +63,7 @@ public class PlayerController {
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, playerPicture.getContentType()).body(body);
     }
 
-
+    @CacheEvict(value = "players")
     @PostMapping
     public ResponseEntity<PlayerResponseDTO> save(@ModelAttribute @Valid PlayerRequestDTO playerRequestDTO) {
         PlayerResponseDTO playerResponseDTO = playerService.save(playerRequestDTO);
@@ -70,6 +75,7 @@ public class PlayerController {
         return ResponseEntity.created(uri).body(playerResponseDTO);
     }
 
+    @CacheEvict(value = "players")
     @PutMapping(value = "/{id}")
     public ResponseEntity<PlayerResponseDTO> update(
             @PathVariable @NonNull Long id,
@@ -78,6 +84,7 @@ public class PlayerController {
         return ResponseEntity.ok().body(playerService.update(id, playerRequestDTO));
     }
 
+    @CacheEvict(value = "players")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable @NonNull Long id) {
         playerService.deleteById(id);
