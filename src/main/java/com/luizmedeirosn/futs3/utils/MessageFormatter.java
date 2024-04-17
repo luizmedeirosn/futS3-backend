@@ -8,7 +8,7 @@ public final class MessageFormatter {
         try {
             String regex = "null";
             if (message.contains(regex)) {
-                return "IDs cannot be null";
+                return "The provided data is invalid";
             }
 
             regex = "Detail: ";

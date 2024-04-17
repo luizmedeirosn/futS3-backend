@@ -28,14 +28,14 @@ public interface GameModeRepository extends JpaRepository<GameMode, Long> {
                         param.name AS parameterName,
                         posparam.weight AS positionWeight
                     FROM
-                        tb_gamemode_position AS gamepos
+                        tb_game_mode_position AS gamepos
                             INNER JOIN tb_position AS pos
                                 ON gamepos.position_id = pos.id
                             LEFT JOIN tb_position_parameter AS posparam
                                 ON pos.id = posparam.position_id
                             LEFT JOIN tb_parameter AS param
                                 ON posparam.parameter_id = param.id
-                    WHERE gamepos.gamemode_id = :id
+                    WHERE gamepos.game_mode_id = :id
                     ORDER BY pos.name, param.name;
             """)
     List<PositionParametersProjection> findPositionsDataByGameModeId(@Param("id") Long id);
@@ -64,7 +64,7 @@ public interface GameModeRepository extends JpaRepository<GameMode, Long> {
                             POSPARAM.weight AS param_weight
                         FROM
                             tb_position_parameter AS POSPARAM
-                                INNER JOIN tb_gamemode_position AS GAMEPOS
+                                INNER JOIN tb_game_mode_position AS GAMEPOS
                                     ON POSPARAM.position_id = GAMEPOS.position_id
                                 INNER JOIN tb_player AS PLAY
                                     ON POSPARAM.position_id = PLAY.position_id
@@ -75,7 +75,7 @@ public interface GameModeRepository extends JpaRepository<GameMode, Long> {
                                 LEFT JOIN tb_player_picture AS PLAYPIC
                                     ON play.id = playpic.player_id
                         WHERE
-                            GAMEPOS.gamemode_id = :gameModeId AND
+                            GAMEPOS.game_mode_id = :gameModeId AND
                             POSPARAM.position_id = :positionId AND
                             PLAYPARAM.parameter_id = POSPARAM.parameter_id
                     ) subquery
@@ -85,14 +85,14 @@ public interface GameModeRepository extends JpaRepository<GameMode, Long> {
     List<PlayerDataScoreProjection> getPlayersRanking(Long gameModeId, Long positionId);
 
     @Modifying
-    @Query(nativeQuery = true, value = "DELETE FROM tb_gamemode_position AS gmp WHERE gmp.gamemode_id = :id ;")
+    @Query(nativeQuery = true, value = "DELETE FROM tb_game_mode_position AS gmp WHERE gmp.game_mode_id = :id ;")
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     void deletePositionsFromGameModeById(Long id);
 
     @Modifying
     @Query(nativeQuery = true, value = """
-                DELETE FROM tb_gamemode_position AS gmp WHERE gmp.gamemode_id = :id ;
-                DELETE FROM tb_gamemode AS gm WHERE gm.id = :id ;
+                DELETE FROM tb_game_mode_position AS gmp WHERE gmp.game_mode_id = :id ;
+                DELETE FROM tb_game_mode AS gm WHERE gm.id = :id ;
             """)
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     void customDeleteById(Long id);
@@ -106,7 +106,7 @@ public interface GameModeRepository extends JpaRepository<GameMode, Long> {
         int parameterIndex = 1;
         for (int i = 0; i < end; i++) {
             if (i == 0) {
-                queryStr.append("INSERT INTO tb_gamemode_position (gamemode_id, position_id) VALUES");
+                queryStr.append("INSERT INTO tb_game_mode_position (game_mode_id, position_id) VALUES");
                 queryStr.append(String.format(" (%d, %d)", gameModeId, positions.get(i)));
             } else {
                 queryStr.append(String.format(", (%d, %d)", gameModeId, positions.get(i)));

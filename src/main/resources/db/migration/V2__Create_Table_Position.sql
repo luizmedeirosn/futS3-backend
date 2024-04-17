@@ -8,4 +8,3 @@ CREATE TABLE IF NOT EXISTS tb_position
     UNIQUE (name),
     CHECK (LENGTH(description) <= 2000)
 );
-

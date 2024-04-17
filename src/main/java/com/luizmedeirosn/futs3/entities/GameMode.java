@@ -9,7 +9,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "tb_gamemode")
+@Table(name = "tb_game_mode")
 public class GameMode implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -25,7 +25,7 @@ public class GameMode implements Serializable {
     private String description;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "tb_gamemode_position", joinColumns = @JoinColumn(name = "gamemode_id"), inverseJoinColumns = @JoinColumn(name = "position_id"))
+    @JoinTable(name = "tb_game_mode_position", joinColumns = @JoinColumn(name = "game_mode_id"), inverseJoinColumns = @JoinColumn(name = "position_id"))
     private final Set<Position> positions = new HashSet<>();
 
     public GameMode() {

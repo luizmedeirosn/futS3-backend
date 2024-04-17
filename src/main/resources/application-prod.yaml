@@ -7,11 +7,8 @@ spring:
     username: postgres
     password: admin
 
-  servlet:
-    multipart:
-      enabled: true
-      max-file-size: 1MB
-      max-request-size: 2MB
+  flyway:
+    enabled: true
 
   jpa:
     hibernate.ddl-auto: none
@@ -24,17 +21,14 @@ spring:
     show-sql: false
     open-in-view: false
 
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 1MB
+      max-request-size: 2MB
+
 security:
   jwt:
     token:
       secret-key: 4e38565f12ff76de5e133eeac0085d7b842c8237117bbac10072ef79f1ca7c01
       expire-lenght: 3600000
-
-users:
-  admin:
-    username: admin
-    password: admin@FutS3
-
-  user:
-    username: user
-    password: user@FutS3
