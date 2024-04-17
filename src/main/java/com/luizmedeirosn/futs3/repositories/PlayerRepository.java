@@ -31,9 +31,11 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
                             ON PLAY.position_id = POS.id
                         LEFT JOIN tb_player_picture AS PLAYPIC
                             ON PLAY.id = PLAYPIC.player_id
-                    ORDER BY PLAY.name ASC;
+                    ORDER BY PLAY.name ASC
+                    OFFSET :offset
+                    LIMIT :pageSize
             """)
-    List<PlayerProjection> customFindAll();
+    List<PlayerProjection> customFindAll(@Param("offset") Long offset, @Param("pageSize") Integer pageSize);
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     @Query(nativeQuery = true, value = """

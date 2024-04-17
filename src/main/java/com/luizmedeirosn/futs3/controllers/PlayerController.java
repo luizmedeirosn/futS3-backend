@@ -8,6 +8,8 @@ import com.luizmedeirosn.futs3.shared.dto.response.min.PlayerMinResponseDTO;
 import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
@@ -28,8 +30,12 @@ public class PlayerController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PlayerMinResponseDTO>> findAll() {
-        return ResponseEntity.ok().body(playerService.findAll());
+    public ResponseEntity<List<PlayerMinResponseDTO>> findAll(
+            @RequestParam(value = "pageNumber", defaultValue = "0") Integer pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize
+    ) {
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        return ResponseEntity.ok().body(playerService.findAll(pageable));
     }
 
     @GetMapping("/{id}")
