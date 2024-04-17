@@ -35,7 +35,7 @@ public record PlayerFullDataResponseDTO(
                 player.getPlayerTeam(),
                 player.getTotalScore(),
                 parameters,
-                player.getPlayerProfilePicture() == null ? null
-                        : PlayerService.createPictureUrl(player.getPlayerId()));
+                player.getPlayerProfilePicture() == null ?
+                        "" : PlayerService.createPictureUrl(player.getPlayerId()));
     }
 }

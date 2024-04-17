@@ -1,4 +1,4 @@
-package com.luizmedeirosn.futs3.security.jwt;
+package com.luizmedeirosn.futs3.security.user;
 
 import com.luizmedeirosn.futs3.repositories.CustomUserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,7 +19,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         var user = customUserRepository.findByUsername(username);
         return user.map(UserDetailsImpl::new)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+                .orElseThrow(() -> new UsernameNotFoundException("Username not found: " + username));
     }
-
 }

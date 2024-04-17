@@ -19,10 +19,10 @@ public class Parameter implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(length = 50, nullable = false, unique = true)
     private String name;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT", length = 2000)
     private String description;
 
     @OneToMany(mappedBy = "id.parameter", fetch = FetchType.LAZY)

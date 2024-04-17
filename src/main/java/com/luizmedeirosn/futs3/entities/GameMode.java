@@ -9,7 +9,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "tb_gamemode")
+@Table(name = "tb_game_mode")
 public class GameMode implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -18,14 +18,14 @@ public class GameMode implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "formation_name", nullable = false, unique = true)
+    @Column(name = "formation_name", length = 50, nullable = false, unique = true)
     private String formationName;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT", length = 2000)
     private String description;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "tb_gamemode_position", joinColumns = @JoinColumn(name = "gamemode_id"), inverseJoinColumns = @JoinColumn(name = "position_id"))
+    @JoinTable(name = "tb_game_mode_position", joinColumns = @JoinColumn(name = "game_mode_id"), inverseJoinColumns = @JoinColumn(name = "position_id"))
     private final Set<Position> positions = new HashSet<>();
 
     public GameMode() {

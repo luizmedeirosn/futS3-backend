@@ -7,7 +7,6 @@ import com.luizmedeirosn.futs3.shared.dto.response.ParameterResponseDTO;
 import com.luizmedeirosn.futs3.shared.exceptions.DatabaseException;
 import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -15,7 +14,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 public class ParameterSerivce {
@@ -51,12 +49,6 @@ public class ParameterSerivce {
             parameter = parameterRepository.save(parameter);
             return new ParameterResponseDTO(parameter);
 
-        } catch (NoSuchElementException e) {
-            throw new EntityNotFoundException("Parameter request. IDs not found");
-
-        } catch (InvalidDataAccessApiUsageException e) {
-            throw new EntityNotFoundException("Parameter request. The given IDs must not be null");
-
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException(e.getMessage());
         }
@@ -73,7 +65,7 @@ public class ParameterSerivce {
             return new ParameterResponseDTO(parameter);
 
         } catch (jakarta.persistence.EntityNotFoundException e) {
-            throw new EntityNotFoundException("Parameter request. ID not found");
+            throw new EntityNotFoundException("Parameter ID not found: " + id);
 
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException(e.getMessage());
@@ -84,7 +76,7 @@ public class ParameterSerivce {
     public void deleteById(Long id) {
         try {
             if (!parameterRepository.existsById(id)) {
-                throw new EntityNotFoundException("Parameter request. ID not found");
+                throw new EntityNotFoundException("Parameter ID not found: " + id);
             }
 
             parameterRepository.customDeleteById(id);

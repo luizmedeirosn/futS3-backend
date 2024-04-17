@@ -1,5 +1,6 @@
 package com.luizmedeirosn.futs3.security.jwt;
 
+import com.luizmedeirosn.futs3.security.user.UserDetailsServiceImpl;
 import com.luizmedeirosn.futs3.shared.dto.response.TokenResponseDTO;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

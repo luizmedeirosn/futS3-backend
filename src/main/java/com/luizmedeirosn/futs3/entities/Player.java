@@ -19,7 +19,7 @@ public class Player implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(length = 30, nullable = false)
     private String name;
 
     @Check(constraints = "age >= 1 AND age <= 150")
@@ -28,7 +28,7 @@ public class Player implements Serializable {
     @Check(constraints = "height >= 65 AND height <= 250")
     private Integer height;
 
-    @Column(nullable = false)
+    @Column(length = 30, nullable = false)
     private String team;
 
     @ManyToOne(optional = false,  fetch = FetchType.LAZY)
