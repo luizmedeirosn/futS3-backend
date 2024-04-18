@@ -20,6 +20,8 @@ import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
 import com.luizmedeirosn.futs3.shared.exceptions.PageableException;
 import jakarta.persistence.EntityManager;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -97,6 +99,22 @@ public class PlayerService {
         }
 
         return new ArrayList<>();
+    }
+
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+    public Page<PlayerMinResponseDTO> findByKeyWord(String keyWord, Pageable pageable) {
+        if (pageable.getPageSize() > 30) {
+            throw new PageableException("The maximum allowed size for the page: 30");
+        }
+
+        var projections = playerRepository.findByKeyWord(keyWord, pageable.getOffset(), pageable.getPageSize());
+        long totalElements = playerRepository.countByKeyWord(keyWord);
+
+        return new PageImpl<>(
+                projections.stream().map(PlayerMinResponseDTO::new).toList(),
+                pageable,
+                totalElements
+        );
     }
 
     public static String createPictureUrl(Long id) {

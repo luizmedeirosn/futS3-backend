@@ -7,11 +7,12 @@ import com.luizmedeirosn.futs3.services.PlayerService;
 
 import java.io.Serializable;
 
-@JsonPropertyOrder({"id", "name", "pictureUrl", "position"})
+@JsonPropertyOrder({"id", "name", "pictureUrl", "team", "position"})
 public record PlayerMinResponseDTO(
 
         Long id,
         String name,
+        String team,
         @JsonProperty(value = "position") PositionMinDTO positionDTO,
         String pictureUrl
 
@@ -19,16 +20,17 @@ public record PlayerMinResponseDTO(
 
     private static final long serialVersionUID = 1L;
 
-    public PlayerMinResponseDTO(PlayerProjection playerProjection) {
+    public PlayerMinResponseDTO(PlayerProjection projection) {
         this(
-                playerProjection.getPlayerId(),
-                playerProjection.getPlayerName(),
+                projection.getPlayerId(),
+                projection.getPlayerName(),
+                projection.getPlayerTeam(),
                 new PositionMinDTO(
-                        playerProjection.getPositionId(),
-                        playerProjection.getPositionName(),
-                        playerProjection.getPositionDescription()
+                        projection.getPositionId(),
+                        projection.getPositionName(),
+                        projection.getPositionDescription()
                 ),
-                playerProjection.getPlayerPicture() == null ?
-                        "" : PlayerService.createPictureUrl(playerProjection.getPlayerId()));
+                projection.getPlayerPicture() == null ?
+                        "" : PlayerService.createPictureUrl(projection.getPlayerId()));
     }
 }
