@@ -11,9 +11,10 @@ import com.luizmedeirosn.futs3.shared.dto.response.aux.PositionParametersDataDTO
 import com.luizmedeirosn.futs3.shared.dto.response.min.PositionMinDTO;
 import com.luizmedeirosn.futs3.shared.exceptions.DatabaseException;
 import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
+import com.luizmedeirosn.futs3.shared.exceptions.PageableException;
 import jakarta.persistence.EntityManager;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -40,9 +41,13 @@ public class PositionService {
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public List<PositionMinDTO> findAll() {
+    public List<PositionMinDTO> findAll(Pageable pageable) {
+        if (pageable.getPageSize() > 30) {
+            throw new PageableException("The maximum allowed size for the page: 30");
+        }
+
         return positionRepository
-                .findAll(Sort.by("name"))
+                .findAll(pageable)
                 .stream()
                 .map(PositionMinDTO::new)
                 .toList();
