@@ -7,6 +7,7 @@ import com.luizmedeirosn.futs3.shared.dto.response.PlayerFullDataResponseDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.min.GameModeMinResponseDTO;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
@@ -26,8 +27,12 @@ public class GameModeController {
     }
 
     @GetMapping
-    public ResponseEntity<List<GameModeMinResponseDTO>> findAll() {
-        return ResponseEntity.ok().body(gameModeService.findAll());
+    public ResponseEntity<List<GameModeMinResponseDTO>> findAll(
+            @RequestParam(value = "pageNumber", defaultValue = "0") Integer pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize
+    ) {
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by("formationName"));
+        return ResponseEntity.ok().body(gameModeService.findAll(pageRequest));
     }
 
     @GetMapping(value = "/{id}")
