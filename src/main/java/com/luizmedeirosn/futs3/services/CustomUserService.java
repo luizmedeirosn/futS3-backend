@@ -1,7 +1,7 @@
 package com.luizmedeirosn.futs3.services;
 
-import com.luizmedeirosn.futs3.entities.CustomUser;
 import com.luizmedeirosn.futs3.repositories.CustomUserRepository;
+import com.luizmedeirosn.futs3.shared.dto.response.CustomUserDTO;
 import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
 import org.springframework.data.domain.Sort;
 import org.springframework.lang.NonNull;
@@ -22,13 +22,18 @@ public class CustomUserService {
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public List<CustomUser> findAll() {
-        return customUserRepository.findAll(Sort.by("username"));
+    public List<CustomUserDTO> findAll() {
+        return customUserRepository
+                .findAll(Sort.by("username"))
+                .stream()
+                .map(CustomUserDTO::new)
+                .toList();
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public CustomUser findById(@NonNull Long id) {
-        return customUserRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("User not found. ID: " + id));
+    public CustomUserDTO findById(@NonNull Long id) {
+        var user = customUserRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User ID not found: " + id));
+        return new CustomUserDTO(user);
     }
 }

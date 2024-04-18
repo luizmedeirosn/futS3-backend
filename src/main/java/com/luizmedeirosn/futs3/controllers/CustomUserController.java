@@ -2,6 +2,7 @@ package com.luizmedeirosn.futs3.controllers;
 
 import com.luizmedeirosn.futs3.entities.CustomUser;
 import com.luizmedeirosn.futs3.services.CustomUserService;
+import com.luizmedeirosn.futs3.shared.dto.response.CustomUserDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,13 +25,13 @@ public class CustomUserController {
 
     @GetMapping
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<List<CustomUser>> findAll() {
+    public ResponseEntity<List<CustomUserDTO>> findAll() {
         return ResponseEntity.ok().body(customUserService.findAll());
     }
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<CustomUser> findById(@PathVariable @NonNull Long id) {
+    public ResponseEntity<CustomUserDTO> findById(@PathVariable @NonNull Long id) {
         return ResponseEntity.ok().body(customUserService.findById(id));
     }
 }
