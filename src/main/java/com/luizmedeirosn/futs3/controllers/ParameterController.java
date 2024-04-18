@@ -4,6 +4,8 @@ import com.luizmedeirosn.futs3.services.ParameterSerivce;
 import com.luizmedeirosn.futs3.shared.dto.request.ParameterRequestDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.ParameterResponseDTO;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
@@ -23,8 +25,12 @@ public class ParameterController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ParameterResponseDTO>> findAll() {
-        return ResponseEntity.ok().body(parameterSerivce.findAll());
+    public ResponseEntity<List<ParameterResponseDTO>> findAll(
+            @RequestParam(value = "pageNumber", defaultValue = "0") Integer pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize
+    ) {
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by("name"));
+        return ResponseEntity.ok().body(parameterSerivce.findAll(pageRequest));
     }
 
     @GetMapping(value = "/{id}")

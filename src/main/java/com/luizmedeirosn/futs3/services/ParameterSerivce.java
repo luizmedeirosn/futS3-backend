@@ -6,8 +6,9 @@ import com.luizmedeirosn.futs3.shared.dto.request.ParameterRequestDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.ParameterResponseDTO;
 import com.luizmedeirosn.futs3.shared.exceptions.DatabaseException;
 import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
+import com.luizmedeirosn.futs3.shared.exceptions.PageableException;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -27,9 +28,13 @@ public class ParameterSerivce {
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public List<ParameterResponseDTO> findAll() {
+    public List<ParameterResponseDTO> findAll(Pageable pageable) {
+        if (pageable.getPageSize() > 30) {
+            throw new PageableException("The maximum allowed size for the page: 30");
+        }
+
         return parameterRepository
-                .findAll(Sort.by("name"))
+                .findAll(pageable)
                 .stream()
                 .map(ParameterResponseDTO::new)
                 .toList();
