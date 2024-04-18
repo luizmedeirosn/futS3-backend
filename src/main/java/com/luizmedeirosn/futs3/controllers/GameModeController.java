@@ -6,6 +6,7 @@ import com.luizmedeirosn.futs3.shared.dto.response.GameModeResponseDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.PlayerFullDataResponseDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.min.GameModeMinResponseDTO;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
@@ -37,9 +38,12 @@ public class GameModeController {
     @GetMapping("/ranking")
     public ResponseEntity<List<PlayerFullDataResponseDTO>> getPlayersRanking(
             @RequestParam("gameModeId") @NonNull Long gameModeId,
-            @RequestParam("positionId") @NonNull Long positionId
+            @RequestParam("positionId") @NonNull Long positionId,
+            @RequestParam(value = "pageNumber", defaultValue = "0") Integer pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize
     ) {
-        return ResponseEntity.ok().body(gameModeService.getPlayersRanking(gameModeId, positionId));
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
+        return ResponseEntity.ok().body(gameModeService.getPlayersRanking(gameModeId, positionId, pageRequest));
     }
 
     @PostMapping

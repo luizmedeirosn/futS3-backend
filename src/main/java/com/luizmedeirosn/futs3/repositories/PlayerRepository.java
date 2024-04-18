@@ -35,7 +35,10 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
                     OFFSET :offset
                     LIMIT :pageSize
             """)
-    List<PlayerProjection> customFindAll(@Param("offset") Long offset, @Param("pageSize") Integer pageSize);
+    List<PlayerProjection> customFindAll(
+            @Param(value = "offset") Long offset,
+            @Param(value = "pageSize") Integer pageSize
+    );
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     @Query(nativeQuery = true, value = """
@@ -65,7 +68,7 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
                 WHERE play.id = :id
                 ORDER BY param.name;
             """)
-    List<PlayerProjection> customFindById(@Param("id") Long id);
+    List<PlayerProjection> customFindById(@Param(value = "id") Long id);
 
 
     @Modifying
@@ -75,5 +78,5 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
                 DELETE FROM tb_player_picture WHERE player_id = :id ;
                 DELETE FROM tb_player WHERE id = :id ;
             """)
-    void customDeleteById(@Param("id") Long id);
+    void customDeleteById(@Param(value = "id") Long id);
 }

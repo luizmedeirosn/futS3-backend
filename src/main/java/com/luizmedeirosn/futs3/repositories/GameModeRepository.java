@@ -80,14 +80,21 @@ public interface GameModeRepository extends JpaRepository<GameMode, Long> {
                             PLAYPARAM.parameter_id = POSPARAM.parameter_id
                     ) subquery
                     GROUP BY player_id, player_name, player_picture, player_age, player_height, player_team
-                    ORDER BY totalScore DESC;
+                    ORDER BY totalScore DESC
+                    OFFSET :offset
+                    LIMIT :pageSize ;
             """)
-    List<PlayerDataScoreProjection> getPlayersRanking(Long gameModeId, Long positionId);
+    List<PlayerDataScoreProjection> getPlayersRanking(
+            @Param(value = "gameModeId") Long gameModeId,
+            @Param(value = "positionId") Long positionId,
+            @Param(value = "offset") Long offset,
+            @Param(value = "pageSize") Integer pageSize
+    );
 
     @Modifying
     @Query(nativeQuery = true, value = "DELETE FROM tb_game_mode_position AS gmp WHERE gmp.game_mode_id = :id ;")
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-    void deletePositionsFromGameModeById(Long id);
+    void deletePositionsFromGameModeById(@Param(value = "id") Long id);
 
     @Modifying
     @Query(nativeQuery = true, value = """

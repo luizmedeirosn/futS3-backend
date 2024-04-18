@@ -15,8 +15,10 @@ import com.luizmedeirosn.futs3.shared.dto.response.aux.PositionParametersDataDTO
 import com.luizmedeirosn.futs3.shared.dto.response.min.GameModeMinResponseDTO;
 import com.luizmedeirosn.futs3.shared.exceptions.DatabaseException;
 import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
+import com.luizmedeirosn.futs3.shared.exceptions.PageableException;
 import jakarta.persistence.EntityManager;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -99,10 +101,14 @@ public class GameModeService {
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public List<PlayerFullDataResponseDTO> getPlayersRanking(Long gameModeId, Long positionId) {
+    public List<PlayerFullDataResponseDTO> getPlayersRanking(Long gameModeId, Long positionId, Pageable pageable) {
         try {
+            if (pageable.getPageSize() > 30) {
+                throw new PageableException("The maximum allowed size for the page: 30");
+            }
+
             var playersRanking =
-                    gameModeRepository.getPlayersRanking(gameModeId, positionId);
+                    gameModeRepository.getPlayersRanking(gameModeId, positionId, pageable.getOffset(), pageable.getPageSize());
             var playersIds =
                     playersRanking.stream().map(PlayerDataScoreProjection::getPlayerId).toList();
 
