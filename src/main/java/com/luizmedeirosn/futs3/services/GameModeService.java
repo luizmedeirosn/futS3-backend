@@ -103,8 +103,8 @@ public class GameModeService {
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public List<PlayerFullDataResponseDTO> getPlayersRanking(Long gameModeId, Long positionId, Pageable pageable) {
         try {
-            if (pageable.getPageSize() > 30) {
-                throw new PageableException("The maximum allowed size for the page: 30");
+            if (pageable.getPageSize() > 10) {
+                throw new PageableException("The maximum allowed size for the page: 10");
             }
 
             var playersRanking =
@@ -134,7 +134,7 @@ public class GameModeService {
                     .toList();
 
         } catch (Exception e) {
-            throw new DatabaseException("Error getting the ranking");
+            throw new PageableException(e.getMessage());
         }
     }
 
