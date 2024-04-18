@@ -32,8 +32,8 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
                         LEFT JOIN tb_player_picture AS PLAYPIC
                             ON PLAY.id = PLAYPIC.player_id
                     ORDER BY PLAY.name ASC
-                    OFFSET :offset
-                    LIMIT :pageSize
+                    OFFSET :offset ROWS
+                    FETCH FIRST :pageSize ROWS ONLY;
             """)
     List<PlayerProjection> customFindAll(
             @Param(value = "offset") Long offset,

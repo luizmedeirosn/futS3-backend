@@ -82,7 +82,7 @@ public interface GameModeRepository extends JpaRepository<GameMode, Long> {
                     GROUP BY player_id, player_name, player_picture, player_age, player_height, player_team
                     ORDER BY totalScore DESC
                     OFFSET :offset
-                    LIMIT :pageSize ;
+                    FETCH FIRST :pageSize ROWS ONLY;
             """)
     List<PlayerDataScoreProjection> getPlayersRanking(
             @Param(value = "gameModeId") Long gameModeId,

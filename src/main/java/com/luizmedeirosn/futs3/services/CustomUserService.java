@@ -1,9 +1,10 @@
 package com.luizmedeirosn.futs3.services;
 
-import com.luizmedeirosn.futs3.entities.CustomUser;
 import com.luizmedeirosn.futs3.repositories.CustomUserRepository;
+import com.luizmedeirosn.futs3.shared.dto.response.CustomUserDTO;
 import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
-import org.springframework.data.domain.Sort;
+import com.luizmedeirosn.futs3.shared.exceptions.PageableException;
+import org.springframework.data.domain.Pageable;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -22,13 +23,22 @@ public class CustomUserService {
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public List<CustomUser> findAll() {
-        return customUserRepository.findAll(Sort.by("username"));
+    public List<CustomUserDTO> findAll(Pageable pageable) {
+        if (pageable.getPageSize() > 30) {
+            throw new PageableException("The maximum allowed size for the page: 30");
+        }
+
+        return customUserRepository
+                .findAll(pageable)
+                .stream()
+                .map(CustomUserDTO::new)
+                .toList();
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public CustomUser findById(@NonNull Long id) {
-        return customUserRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("User not found. ID: " + id));
+    public CustomUserDTO findById(@NonNull Long id) {
+        var user = customUserRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User ID not found: " + id));
+        return new CustomUserDTO(user);
     }
 }
