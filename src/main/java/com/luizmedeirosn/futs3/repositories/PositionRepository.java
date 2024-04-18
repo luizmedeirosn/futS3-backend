@@ -35,7 +35,7 @@ public interface PositionRepository extends JpaRepository<Position, Long> {
                     pos.id = :id
                 ORDER BY parameterName;
             """)
-    List<PositionParametersProjection> customFindById(@Param("id") Long id);
+    List<PositionParametersProjection> customFindById(@Param(value = "id") Long id);
 
     @Modifying
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
@@ -43,5 +43,5 @@ public interface PositionRepository extends JpaRepository<Position, Long> {
                 DELETE FROM tb_position_parameter WHERE position_id = :id ;
                 DELETE FROM tb_position WHERE id = :id ;
             """)
-    void customDeleteById(Long id);
+    void customDeleteById(@Param(value = "id") Long id);
 }

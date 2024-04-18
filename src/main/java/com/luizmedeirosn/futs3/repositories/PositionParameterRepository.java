@@ -21,7 +21,7 @@ public interface PositionParameterRepository extends JpaRepository<PositionParam
     @Modifying
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     @Query("DELETE FROM PositionParameter pp WHERE pp.id.position.id = :id")
-    void deleteByPositionId(@Param("id") Long id);
+    void deleteByPositionId(@Param(value = "id") Long id);
 
     @Modifying
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)

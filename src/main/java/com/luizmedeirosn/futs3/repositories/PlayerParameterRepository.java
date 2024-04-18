@@ -22,21 +22,23 @@ public interface PlayerParameterRepository extends JpaRepository<PlayerParameter
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     @Query(nativeQuery = true, value = """
                 SELECT
-                    play.id AS playerId,
-                    param.id AS parameterId,
-                    param.name AS parameterName,
-                    playparam.score AS playerScore
+                    PLAY.id AS playerId,
+                    PARAM.id AS parameterId,
+                    PARAM.name AS parameterName,
+                    PLAYPARAM.score AS playerScore
                 FROM
-                    tb_player_parameter AS playparam
-                        INNER JOIN tb_player AS play
-                            ON playparam.player_id = play.id
-                        INNER JOIN tb_parameter AS param
-                            ON playparam.parameter_id = param.id
+                    tb_player_parameter AS PLAYPARAM
+                        INNER JOIN tb_player AS PLAY
+                            ON PLAYPARAM.player_id = PLAY.id
+                        INNER JOIN tb_parameter AS PARAM
+                            ON PLAYPARAM.parameter_id = PARAM.id
+                        INNER JOIN tb_position_parameter AS POSPARAM
+                            ON PARAM.id = POSPARAM.parameter_id
                 WHERE
-                    play.id IN :ids
+                    PLAY.id IN :ids AND POSPARAM.position_id = PLAY.position_id
                 ORDER BY param.name;
             """)
-    List<PlayerIdParameterProjection> findParametersByPlayerIds(List<Long> ids);
+    List<PlayerIdParameterProjection> findParametersByPlayerIds(@Param(value = "ids") List<Long> ids);
 
     @Modifying
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)

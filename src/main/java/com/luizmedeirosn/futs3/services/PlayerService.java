@@ -17,8 +17,10 @@ import com.luizmedeirosn.futs3.shared.dto.response.aux.PlayerParameterDataDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.min.PlayerMinResponseDTO;
 import com.luizmedeirosn.futs3.shared.exceptions.DatabaseException;
 import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
+import com.luizmedeirosn.futs3.shared.exceptions.PageableException;
 import jakarta.persistence.EntityManager;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Pageable;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -55,8 +57,16 @@ public class PlayerService {
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public List<PlayerMinResponseDTO> findAll() {
-        return playerRepository.customFindAll().stream().map(PlayerMinResponseDTO::new).toList();
+    public List<PlayerMinResponseDTO> findAll(Pageable pageable) {
+        if (pageable.getPageSize() > 30) {
+            throw new PageableException("The maximum allowed size for the page: 30");
+        }
+
+        return playerRepository
+                .customFindAll(pageable.getOffset(), pageable.getPageSize())
+                .stream()
+                .map(PlayerMinResponseDTO::new)
+                .toList();
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
