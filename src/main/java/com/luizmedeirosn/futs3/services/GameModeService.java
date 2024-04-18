@@ -19,7 +19,6 @@ import com.luizmedeirosn.futs3.shared.exceptions.PageableException;
 import jakarta.persistence.EntityManager;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -45,9 +44,13 @@ public class GameModeService {
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public List<GameModeMinResponseDTO> findAll() {
+    public List<GameModeMinResponseDTO> findAll(Pageable pageable) {
+        if (pageable.getPageSize() > 30) {
+            throw new PageableException("The maximum allowed size for the page: 30");
+        }
+
         return gameModeRepository
-                .findAll(Sort.by("formationName"))
+                .findAll(pageable)
                 .stream()
                 .map(GameModeMinResponseDTO::new)
                 .toList();
