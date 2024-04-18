@@ -30,5 +30,4 @@ public class CustomUserController {
     public ResponseEntity<CustomUser> findById(@PathVariable @NonNull Long id) {
         return ResponseEntity.ok().body(customUserService.findById(id));
     }
-
 }
