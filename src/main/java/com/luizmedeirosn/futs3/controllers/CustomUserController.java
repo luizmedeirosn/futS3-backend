@@ -1,15 +1,13 @@
 package com.luizmedeirosn.futs3.controllers;
 
-import com.luizmedeirosn.futs3.entities.CustomUser;
 import com.luizmedeirosn.futs3.services.CustomUserService;
 import com.luizmedeirosn.futs3.shared.dto.response.CustomUserDTO;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,8 +23,12 @@ public class CustomUserController {
 
     @GetMapping
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<List<CustomUserDTO>> findAll() {
-        return ResponseEntity.ok().body(customUserService.findAll());
+    public ResponseEntity<List<CustomUserDTO>> findAll(
+            @RequestParam(value = "pageNumber", defaultValue = "0") Integer pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize
+    ) {
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by("username"));
+        return ResponseEntity.ok().body(customUserService.findAll(pageRequest));
     }
 
     @GetMapping("/{id}")
