@@ -2,6 +2,7 @@ package com.luizmedeirosn.futs3.controllers;
 
 import com.luizmedeirosn.futs3.services.CustomUserService;
 import com.luizmedeirosn.futs3.shared.dto.response.CustomUserDTO;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class CustomUserController {
 
     @GetMapping
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<List<CustomUserDTO>> findAll(
+    public ResponseEntity<Page<CustomUserDTO>> findAll(
             @RequestParam(value = "pageNumber", defaultValue = "0") Integer pageNumber,
             @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize
     ) {

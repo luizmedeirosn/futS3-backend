@@ -4,13 +4,12 @@ import com.luizmedeirosn.futs3.repositories.CustomUserRepository;
 import com.luizmedeirosn.futs3.shared.dto.response.CustomUserDTO;
 import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
 import com.luizmedeirosn.futs3.shared.exceptions.PageableException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 
 @Service
@@ -23,16 +22,12 @@ public class CustomUserService {
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public List<CustomUserDTO> findAll(Pageable pageable) {
+    public Page<CustomUserDTO> findAll(Pageable pageable) {
         if (pageable.getPageSize() > 30) {
             throw new PageableException("The maximum allowed size for the page: 30");
         }
 
-        return customUserRepository
-                .findAll(pageable)
-                .stream()
-                .map(CustomUserDTO::new)
-                .toList();
+        return customUserRepository.findAll(pageable).map(CustomUserDTO::new);
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
