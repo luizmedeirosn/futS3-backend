@@ -77,7 +77,7 @@ public class ExceptionHandlerController {
 
     @ExceptionHandler(PageableException.class)
     public ResponseEntity<StandardError> pageableError(PageableException e, HttpServletRequest request) {
-        final String error = "Invalid page size";
+        final String error = "Invalid pagination";
         final HttpStatus status = HttpStatus.BAD_REQUEST;
         final StandardError exception = new StandardError(status.value(), error, e.getMessage(), request.getRequestURI(), Instant.now());
         return ResponseEntity.status(status).body(exception);

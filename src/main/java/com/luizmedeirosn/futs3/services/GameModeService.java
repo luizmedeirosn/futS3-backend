@@ -18,6 +18,8 @@ import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
 import com.luizmedeirosn.futs3.shared.exceptions.PageableException;
 import jakarta.persistence.EntityManager;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -29,31 +31,27 @@ import java.util.*;
 @Service
 public class GameModeService {
 
+    private final EntityManager entityManager;
     private final GameModeRepository gameModeRepository;
     private final PlayerParameterRepository playerParameterRepository;
-    private final EntityManager entityManager;
 
     public GameModeService(
+            EntityManager entityManager,
             GameModeRepository gameModeRepository,
-            PlayerParameterRepository playerParameterRepository,
-            EntityManager entityManager
+            PlayerParameterRepository playerParameterRepository
     ) {
+        this.entityManager = entityManager;
         this.gameModeRepository = gameModeRepository;
         this.playerParameterRepository = playerParameterRepository;
-        this.entityManager = entityManager;
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public List<GameModeMinResponseDTO> findAll(Pageable pageable) {
-        if (pageable.getPageSize() > 30) {
+    public Page<GameModeMinResponseDTO> findAll(Pageable pageable) {
+        if (pageable.getPageSize() > 10) {
             throw new PageableException("The maximum allowed size for the page: 30");
         }
 
-        return gameModeRepository
-                .findAll(pageable)
-                .stream()
-                .map(GameModeMinResponseDTO::new)
-                .toList();
+        return gameModeRepository.findAll(pageable).map(GameModeMinResponseDTO::new);
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
@@ -104,7 +102,7 @@ public class GameModeService {
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public List<PlayerFullDataResponseDTO> getPlayersRanking(Long gameModeId, Long positionId, Pageable pageable) {
+    public Page<PlayerFullDataResponseDTO> getPlayersRanking(Long gameModeId, Long positionId, Pageable pageable) {
         try {
             if (pageable.getPageSize() > 10) {
                 throw new PageableException("The maximum allowed size for the page: 10");
@@ -112,13 +110,18 @@ public class GameModeService {
 
             var playersRanking =
                     gameModeRepository.getPlayersRanking(gameModeId, positionId, pageable.getOffset(), pageable.getPageSize());
+            Long totalElements = gameModeRepository.countGetPlayersRanking(gameModeId, positionId);
+
+            if (totalElements == null || totalElements <= 0) {
+                return new PageImpl<>(new ArrayList<>(), pageable, 0L);
+            }
+
             var playersIds =
                     playersRanking.stream().map(PlayerDataScoreProjection::getPlayerId).toList();
-
             var filteredParameters =
                     playerParameterRepository.findParametersByPlayerIds(playersIds);
 
-            return playersRanking
+            var content = playersRanking
                     .stream()
                     .map(playerProjection -> {
                         var parameters = new ArrayList<PlayerParameterDataDTO>();
@@ -135,6 +138,8 @@ public class GameModeService {
                         return new PlayerFullDataResponseDTO(playerProjection, parameters);
                     })
                     .toList();
+
+            return new PageImpl<>(content, pageable, totalElements);
 
         } catch (Exception e) {
             throw new PageableException(e.getMessage());

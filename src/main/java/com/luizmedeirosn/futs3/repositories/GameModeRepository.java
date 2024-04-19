@@ -43,43 +43,30 @@ public interface GameModeRepository extends JpaRepository<GameMode, Long> {
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     @Query(nativeQuery = true, value = """
                     SELECT
-                        player_id AS playerId,
-                        player_name AS playerName,
-                        player_picture AS playerProfilePicture,
-                        player_age AS playerAge,
-                        player_height AS playerHeight,
-                        player_team AS playerTeam,
-                        SUM(player_score * param_weight) AS totalScore
-                    FROM (
-                        SELECT
-                            PLAY.id AS player_id,
-                            PLAY.name AS player_name,
-                            PLAYPIC.content AS player_picture,
-                            PLAY.age AS player_age,
-                            PLAY.height AS player_height,
-                            PLAY.team AS player_team,
-                            PARAM.id AS parameter_id,
-                            PARAM.name AS parameter_name,
-                            PLAYPARAM.score AS player_score,
-                            POSPARAM.weight AS param_weight
-                        FROM
-                            tb_position_parameter AS POSPARAM
-                                INNER JOIN tb_game_mode_position AS GAMEPOS
-                                    ON POSPARAM.position_id = GAMEPOS.position_id
-                                INNER JOIN tb_player AS PLAY
-                                    ON POSPARAM.position_id = PLAY.position_id
-                                INNER JOIN tb_parameter AS PARAM
-                                    ON POSPARAM.parameter_id = PARAM.id
-                                INNER JOIN tb_player_parameter AS PLAYPARAM
-                                    ON PLAY.id = PLAYPARAM.player_id
-                                LEFT JOIN tb_player_picture AS PLAYPIC
-                                    ON play.id = playpic.player_id
-                        WHERE
-                            GAMEPOS.game_mode_id = :gameModeId AND
-                            POSPARAM.position_id = :positionId AND
-                            PLAYPARAM.parameter_id = POSPARAM.parameter_id
-                    ) subquery
-                    GROUP BY player_id, player_name, player_picture, player_age, player_height, player_team
+                        PLAY.id AS playerId,
+                        PLAY.name AS playerName,
+                        PLAYPIC.content AS playerProfilePicture,
+                        PLAY.age AS playerAge,
+                        PLAY.height AS playerHeight,
+                        PLAY.team AS playerTeam,
+                        SUM(PLAYPARAM.score * POSPARAM.weight) AS totalScore
+                    FROM
+                        tb_position_parameter AS POSPARAM
+                        INNER JOIN tb_game_mode_position AS GAMEPOS
+                            ON POSPARAM.position_id = GAMEPOS.position_id
+                        INNER JOIN tb_player AS PLAY
+                            ON POSPARAM.position_id = PLAY.position_id
+                        INNER JOIN tb_parameter AS PARAM
+                            ON POSPARAM.parameter_id = PARAM.id
+                        INNER JOIN tb_player_parameter AS PLAYPARAM
+                            ON PLAY.id = PLAYPARAM.player_id
+                        LEFT JOIN tb_player_picture AS PLAYPIC
+                            ON PLAY.id = PLAYPIC.player_id
+                    WHERE
+                        GAMEPOS.game_mode_id = :gameModeId AND
+                        POSPARAM.position_id = :positionId
+                    GROUP BY
+                        PLAY.id, PLAY.name, PLAYPIC.content, PLAY.age, PLAY.height, PLAY.team
                     ORDER BY totalScore DESC
                     OFFSET :offset
                     FETCH FIRST :pageSize ROWS ONLY;
@@ -89,6 +76,30 @@ public interface GameModeRepository extends JpaRepository<GameMode, Long> {
             @Param(value = "positionId") Long positionId,
             @Param(value = "offset") Long offset,
             @Param(value = "pageSize") Integer pageSize
+    );
+
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+    @Query(nativeQuery = true, value = """
+                    SELECT
+                        COUNT(DISTINCT PLAY.id)
+                    FROM
+                    	tb_position_parameter AS POSPARAM
+                    		INNER JOIN tb_game_mode_position AS GAMEPOS
+                    		    ON POSPARAM.position_id = GAMEPOS.position_id
+                    		INNER JOIN tb_player AS PLAY
+                    		    ON POSPARAM.position_id = PLAY.position_id
+                    		INNER JOIN tb_parameter AS PARAM
+                    		    ON POSPARAM.parameter_id = PARAM.id
+                    		INNER JOIN tb_player_parameter AS PLAYPARAM
+                    		    ON PLAY.id = PLAYPARAM.player_id
+                    WHERE
+                        GAMEPOS.game_mode_id = :gameModeId AND
+                        POSPARAM.position_id = :positionId AND
+                        PLAYPARAM.parameter_id = POSPARAM.parameter_id;
+            """)
+    Long countGetPlayersRanking(
+            @Param(value = "gameModeId") Long gameModeId,
+            @Param(value = "positionId") Long positionId
     );
 
     @Modifying

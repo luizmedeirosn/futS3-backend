@@ -58,17 +58,28 @@ public class PlayerService {
         this.entityManager = entityManager;
     }
 
+    public static String createPictureUrl(Long id) {
+        return ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .replacePath("/players/picture/" + id)
+                .replaceQuery(null)
+                .toUriString();
+    }
+
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public List<PlayerMinResponseDTO> findAll(Pageable pageable) {
+    public Page<PlayerMinResponseDTO> findAll(Pageable pageable) {
         if (pageable.getPageSize() > 30) {
             throw new PageableException("The maximum allowed size for the page: 30");
         }
 
-        return playerRepository
+        var players = playerRepository
                 .customFindAll(pageable.getOffset(), pageable.getPageSize())
                 .stream()
                 .map(PlayerMinResponseDTO::new)
                 .toList();
+        long totalElements = playerRepository.count();
+
+        return new PageImpl<>(players, pageable, totalElements);
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
@@ -102,27 +113,19 @@ public class PlayerService {
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public Page<PlayerMinResponseDTO> findByKeyWord(String keyWord, Pageable pageable) {
+    public Page<PlayerMinResponseDTO> findByKeyword(String keyword, Pageable pageable) {
         if (pageable.getPageSize() > 30) {
             throw new PageableException("The maximum allowed size for the page: 30");
         }
 
-        var projections = playerRepository.findByKeyWord(keyWord, pageable.getOffset(), pageable.getPageSize());
-        long totalElements = playerRepository.countByKeyWord(keyWord);
+        var players = playerRepository
+                .findByKeyword(keyword, pageable.getOffset(), pageable.getPageSize())
+                .stream()
+                .map(PlayerMinResponseDTO::new)
+                .toList();
+        long totalElements = playerRepository.countByKeyword(keyword);
 
-        return new PageImpl<>(
-                projections.stream().map(PlayerMinResponseDTO::new).toList(),
-                pageable,
-                totalElements
-        );
-    }
-
-    public static String createPictureUrl(Long id) {
-        return ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .replacePath("/players/picture/" + id)
-                .replaceQuery(null)
-                .toUriString();
+        return new PageImpl<>(players, pageable, totalElements);
     }
 
     public PlayerPicture findPictureById(Long id) {

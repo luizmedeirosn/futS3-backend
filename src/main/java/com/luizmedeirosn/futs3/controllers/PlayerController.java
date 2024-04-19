@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/players")
@@ -32,11 +31,11 @@ public class PlayerController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PlayerMinResponseDTO>> findAll(
+    public ResponseEntity<Page<PlayerMinResponseDTO>> findAll(
             @RequestParam(value = "pageNumber", defaultValue = "0") Integer pageNumber,
             @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize
     ) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("name"));
         return ResponseEntity.ok().body(playerService.findAll(pageable));
     }
 
@@ -45,14 +44,14 @@ public class PlayerController {
         return ResponseEntity.ok().body(playerService.findById(id));
     }
 
-    @GetMapping("/findByKeyWord")
-    public ResponseEntity<Page<PlayerMinResponseDTO>> findByKeyWord(
-            @RequestParam(value = "keyWord", defaultValue = "") String keyWord,
+    @GetMapping("/findByKeyword")
+    public ResponseEntity<Page<PlayerMinResponseDTO>> findByKeyword(
+            @RequestParam(value = "keyword", defaultValue = "") String keyword,
             @RequestParam(value = "pageNumber", defaultValue = "0") Integer pageNumber,
             @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize
     ) {
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by("name"));
-        return ResponseEntity.ok().body(playerService.findByKeyWord(keyWord, pageRequest));
+        return ResponseEntity.ok().body(playerService.findByKeyword(keyword, pageRequest));
     }
 
     @GetMapping(value = "/picture/{id}")
