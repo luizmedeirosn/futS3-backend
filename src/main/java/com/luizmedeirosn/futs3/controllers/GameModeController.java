@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/gamemodes")
@@ -42,13 +41,13 @@ public class GameModeController {
     }
 
     @GetMapping("/ranking")
-    public ResponseEntity<List<PlayerFullDataResponseDTO>> getPlayersRanking(
+    public ResponseEntity<Page<PlayerFullDataResponseDTO>> getPlayersRanking(
             @RequestParam("gameModeId") @NonNull Long gameModeId,
             @RequestParam("positionId") @NonNull Long positionId,
             @RequestParam(value = "pageNumber", defaultValue = "0") Integer pageNumber,
             @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize
     ) {
-        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by("totalScore"));
         return ResponseEntity.ok().body(gameModeService.getPlayersRanking(gameModeId, positionId, pageRequest));
     }
 

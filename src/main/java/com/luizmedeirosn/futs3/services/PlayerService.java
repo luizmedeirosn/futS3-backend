@@ -113,17 +113,17 @@ public class PlayerService {
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public Page<PlayerMinResponseDTO> findByKeyWord(String keyWord, Pageable pageable) {
+    public Page<PlayerMinResponseDTO> findByKeyword(String keyword, Pageable pageable) {
         if (pageable.getPageSize() > 30) {
             throw new PageableException("The maximum allowed size for the page: 30");
         }
 
         var players = playerRepository
-                .findByKeyWord(keyWord, pageable.getOffset(), pageable.getPageSize())
+                .findByKeyword(keyword, pageable.getOffset(), pageable.getPageSize())
                 .stream()
                 .map(PlayerMinResponseDTO::new)
                 .toList();
-        long totalElements = playerRepository.countByKeyWord(keyWord);
+        long totalElements = playerRepository.countByKeyword(keyword);
 
         return new PageImpl<>(players, pageable, totalElements);
     }

@@ -89,15 +89,15 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
                         LEFT JOIN tb_player_picture AS PLAYPIC
                             ON PLAY.id = PLAYPIC.player_id
                 WHERE
-                    LOWER(PLAY.name) LIKE LOWER(CONCAT('%', :keyWord ,'%')) OR
-                    LOWER(PLAY.team) LIKE LOWER(CONCAT('%', :keyWord ,'%')) OR
-                    LOWER(POS.name) LIKE LOWER(CONCAT('%', :keyWord ,'%'))
+                    LOWER(PLAY.name) LIKE LOWER(CONCAT('%', :keyword ,'%')) OR
+                    LOWER(PLAY.team) LIKE LOWER(CONCAT('%', :keyword ,'%')) OR
+                    LOWER(POS.name) LIKE LOWER(CONCAT('%', :keyword ,'%'))
                 ORDER BY PLAY.name
                 OFFSET :offset ROWS
                 FETCH FIRST :pageSize ROWS ONLY;
             """)
-    List<PlayerProjection> findByKeyWord(
-            @Param(value = "keyWord") String keyWord,
+    List<PlayerProjection> findByKeyword(
+            @Param(value = "keyword") String keyword,
             @Param(value = "offset") Long offset,
             @Param(value = "pageSize") Integer pageSize
     );
@@ -105,7 +105,7 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     @Query(nativeQuery = true, value = """
                 SELECT
-                    COUNT(PLAY.id)
+                    COUNT(DISTINCT PLAY.id)
                 FROM
                     tb_player AS PLAY
                         INNER JOIN tb_position AS POS
@@ -113,11 +113,11 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
                         LEFT JOIN tb_player_picture AS PLAYPIC
                             ON PLAY.id = PLAYPIC.player_id
                 WHERE
-                    LOWER(PLAY.name) LIKE LOWER(CONCAT('%', :keyWord ,'%')) OR
-                    LOWER(PLAY.team) LIKE LOWER(CONCAT('%', :keyWord ,'%')) OR
-                    LOWER(POS.name) LIKE LOWER(CONCAT('%', :keyWord ,'%'));
+                    LOWER(PLAY.name) LIKE LOWER(CONCAT('%', :keyword ,'%')) OR
+                    LOWER(PLAY.team) LIKE LOWER(CONCAT('%', :keyword ,'%')) OR
+                    LOWER(POS.name) LIKE LOWER(CONCAT('%', :keyword ,'%'));
             """)
-    Long countByKeyWord(@Param(value = "keyWord") String keyWord);
+    Long countByKeyword(@Param(value = "keyword") String keyword);
 
     @Modifying
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)

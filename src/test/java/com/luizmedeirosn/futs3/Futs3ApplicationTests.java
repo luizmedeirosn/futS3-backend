@@ -12,5 +12,4 @@ class Futs3ApplicationTests {
 	void contextLoads() {
 		assertTrue(true);
 	}
-
 }
