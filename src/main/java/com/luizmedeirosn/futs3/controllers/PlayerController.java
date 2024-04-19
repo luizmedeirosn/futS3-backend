@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/players")
@@ -32,7 +31,7 @@ public class PlayerController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PlayerMinResponseDTO>> findAll(
+    public ResponseEntity<Page<PlayerMinResponseDTO>> findAll(
             @RequestParam(value = "pageNumber", defaultValue = "0") Integer pageNumber,
             @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize
     ) {
