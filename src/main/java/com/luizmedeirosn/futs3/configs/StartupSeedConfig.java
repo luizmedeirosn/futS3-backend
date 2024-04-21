@@ -30,16 +30,19 @@ public class StartupSeedConfig implements CommandLineRunner {
         picturesList.sort(Comparator.comparingInt(f -> Integer.parseInt(f.getName().split("-")[0])));
 
         for (int i = 1; i <= 38; i++) {
-            Player player = playerRepository.findById((long)i).orElseThrow();
-            File pictureFile = picturesList.get(i-1);
-            byte[] pictureData = Files.readAllBytes(Paths.get(pictureFile.getAbsolutePath()));
+            var playerOptional = playerRepository.findById((long) i);
+            if (playerOptional.isPresent()) {
+                Player player = playerOptional.get();
+                File pictureFile = picturesList.get(i - 1);
+                byte[] pictureData = Files.readAllBytes(Paths.get(pictureFile.getAbsolutePath()));
 
-            PlayerPicture picture = new PlayerPicture(
-                    pictureFile.getName(), "image/webp", pictureData, player);
+                PlayerPicture picture = new PlayerPicture(
+                        pictureFile.getName(), "image/webp", pictureData, player);
 
-            if (player.getPlayerPicture() == null) {
-                player.setPlayerPicture(picture);
-                playerRepository.save(player);
+                if (player.getPlayerPicture() == null) {
+                    player.setPlayerPicture(picture);
+                    playerRepository.save(player);
+                }
             }
         }
     }
