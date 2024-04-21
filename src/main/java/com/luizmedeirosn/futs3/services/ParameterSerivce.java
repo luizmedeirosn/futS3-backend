@@ -35,6 +35,10 @@ public class ParameterSerivce {
         return parameterRepository.findAll(pageable).map(ParameterResponseDTO::new);
     }
 
+    public Long getTotalRecords() {
+        return parameterRepository.count();
+    }
+
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public ParameterResponseDTO findById(Long id) {
         var parameter = parameterRepository.findById(id)

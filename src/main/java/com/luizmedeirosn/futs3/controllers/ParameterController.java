@@ -27,8 +27,10 @@ public class ParameterController {
     @GetMapping
     public ResponseEntity<Page<ParameterResponseDTO>> findAll(
             @RequestParam(value = "pageNumber", defaultValue = "0") Integer pageNumber,
-            @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize
+            @RequestParam(value = "pageSize", required = false) Integer pageSize
     ) {
+        pageSize = pageSize != null ?
+                pageSize : parameterSerivce.getTotalRecords().intValue();
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by("name"));
         return ResponseEntity.ok().body(parameterSerivce.findAll(pageRequest));
     }
