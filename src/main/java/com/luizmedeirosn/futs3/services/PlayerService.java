@@ -69,7 +69,7 @@ public class PlayerService {
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public Page<PlayerMinResponseDTO> findAll(Pageable pageable) {
+    public Page<PlayerMinResponseDTO> findAll(String keyword, Pageable pageable) {
         if (pageable.getPageSize() > 30) {
             throw new PageableException("The maximum allowed size for the page: 30");
         }
@@ -78,11 +78,12 @@ public class PlayerService {
         int size = pageable.getPageSize();
 
         var players = playerRepository
-                .customFindAll(offset, size)
+                .customFindAll(keyword, offset, size)
                 .stream()
                 .map(PlayerMinResponseDTO::new)
                 .collect(Collectors.toList());
-        long totalElements = playerRepository.count();
+
+        long totalElements = playerRepository.countCustomFindAll(keyword);
 
         String[] sortFieldAndDirection = pageable.getSort().toString().split(": ");
         String field = sortFieldAndDirection[0];
@@ -126,22 +127,6 @@ public class PlayerService {
         }
 
         return new ArrayList<>();
-    }
-
-    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public Page<PlayerMinResponseDTO> findByKeyword(String keyword, Pageable pageable) {
-        if (pageable.getPageSize() > 30) {
-            throw new PageableException("The maximum allowed size for the page: 30");
-        }
-
-        var players = playerRepository
-                .findByKeyword(keyword, pageable.getOffset(), pageable.getPageSize())
-                .stream()
-                .map(PlayerMinResponseDTO::new)
-                .toList();
-        long totalElements = playerRepository.countByKeyword(keyword);
-
-        return new PageImpl<>(players, pageable, totalElements);
     }
 
     public PlayerPicture findPictureById(Long id) {

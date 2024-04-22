@@ -18,28 +18,52 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     @Query(nativeQuery = true, value = """
-                    SELECT
-                        PLAY.id AS playerId,
-                        PLAY.name AS playerName,
-                        PLAY.team AS playerTeam,
-                        POS.id AS positionId,
-                        POS.name AS positionName,
-                        POS.description AS positionDescription,
-                        PLAYPIC.content AS playerPicture
-                    FROM
-                        tb_player AS PLAY
+                SELECT
+                    PLAY.id AS playerId,
+                    PLAY.name AS playerName,
+                    PLAY.age AS playerAge,
+                    PLAY.height AS playerHeight,
+                    PLAY.team AS playerTeam,
+                    PLAYPIC.content AS playerPicture,
+                    POS.id AS positionId,
+                    POS.name AS positionName,
+                    POS.description AS positionDescription
+                FROM
+                    tb_player AS PLAY
                         INNER JOIN tb_position AS POS
                             ON PLAY.position_id = POS.id
                         LEFT JOIN tb_player_picture AS PLAYPIC
                             ON PLAY.id = PLAYPIC.player_id
-                    ORDER BY PLAY.name ASC
-                    OFFSET :offset ROWS
-                    FETCH FIRST :pageSize ROWS ONLY;
+                WHERE
+                    LOWER(PLAY.name) LIKE LOWER(CONCAT('%', :keyword ,'%')) OR
+                    LOWER(PLAY.team) LIKE LOWER(CONCAT('%', :keyword ,'%')) OR
+                    LOWER(POS.name) LIKE LOWER(CONCAT('%', :keyword ,'%'))
+                ORDER BY PLAY.name
+                OFFSET :offset ROWS
+                FETCH FIRST :pageSize ROWS ONLY;
             """)
     List<PlayerProjection> customFindAll(
+            @Param(value = "keyword") String keyword,
             @Param(value = "offset") Long offset,
             @Param(value = "pageSize") Integer pageSize
     );
+
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+    @Query(nativeQuery = true, value = """
+                SELECT
+                    COUNT(DISTINCT PLAY.id)
+                FROM
+                    tb_player AS PLAY
+                        INNER JOIN tb_position AS POS
+                            ON PLAY.position_id = POS.id
+                        LEFT JOIN tb_player_picture AS PLAYPIC
+                            ON PLAY.id = PLAYPIC.player_id
+                WHERE
+                    LOWER(PLAY.name) LIKE LOWER(CONCAT('%', :keyword ,'%')) OR
+                    LOWER(PLAY.team) LIKE LOWER(CONCAT('%', :keyword ,'%')) OR
+                    LOWER(POS.name) LIKE LOWER(CONCAT('%', :keyword ,'%'));
+            """)
+    Long countCustomFindAll(@Param(value = "keyword") String keyword);
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     @Query(nativeQuery = true, value = """
@@ -70,55 +94,6 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
                 ORDER BY PARAM.name;
             """)
     List<PlayerProjection> customFindById(@Param(value = "id") Long id);
-
-    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    @Query(nativeQuery = true, value = """
-                SELECT
-                    PLAY.id AS playerId,
-                    PLAY.name AS playerName,
-                    PLAY.age AS playerAge,
-                    PLAY.height AS playerHeight,
-                    PLAY.team AS playerTeam,
-                    PLAYPIC.content AS playerPicture,
-                    POS.id AS positionId,
-                    POS.name AS positionName,
-                    POS.description AS positionDescription
-                FROM
-                    tb_player AS PLAY
-                        INNER JOIN tb_position AS POS
-                            ON PLAY.position_id = POS.id
-                        LEFT JOIN tb_player_picture AS PLAYPIC
-                            ON PLAY.id = PLAYPIC.player_id
-                WHERE
-                    LOWER(PLAY.name) LIKE LOWER(CONCAT('%', :keyword ,'%')) OR
-                    LOWER(PLAY.team) LIKE LOWER(CONCAT('%', :keyword ,'%')) OR
-                    LOWER(POS.name) LIKE LOWER(CONCAT('%', :keyword ,'%'))
-                ORDER BY PLAY.name
-                OFFSET :offset ROWS
-                FETCH FIRST :pageSize ROWS ONLY;
-            """)
-    List<PlayerProjection> findByKeyword(
-            @Param(value = "keyword") String keyword,
-            @Param(value = "offset") Long offset,
-            @Param(value = "pageSize") Integer pageSize
-    );
-
-    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    @Query(nativeQuery = true, value = """
-                SELECT
-                    COUNT(DISTINCT PLAY.id)
-                FROM
-                    tb_player AS PLAY
-                        INNER JOIN tb_position AS POS
-                            ON PLAY.position_id = POS.id
-                        LEFT JOIN tb_player_picture AS PLAYPIC
-                            ON PLAY.id = PLAYPIC.player_id
-                WHERE
-                    LOWER(PLAY.name) LIKE LOWER(CONCAT('%', :keyword ,'%')) OR
-                    LOWER(PLAY.team) LIKE LOWER(CONCAT('%', :keyword ,'%')) OR
-                    LOWER(POS.name) LIKE LOWER(CONCAT('%', :keyword ,'%'));
-            """)
-    Long countByKeyword(@Param(value = "keyword") String keyword);
 
     @Modifying
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
