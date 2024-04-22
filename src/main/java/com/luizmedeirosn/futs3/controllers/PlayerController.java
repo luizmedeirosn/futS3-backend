@@ -32,10 +32,10 @@ public class PlayerController {
 
     @GetMapping
     public ResponseEntity<Page<PlayerMinResponseDTO>> findAll(
-            @RequestParam(value = "pageNumber", defaultValue = "0") Integer pageNumber,
-            @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
-            @RequestParam(value = "sortField", defaultValue = "name") String sortField,
-            @RequestParam(value = "sortDirection", defaultValue = "ASC") String sortDirection
+            @RequestParam(value = "_pageNumber", defaultValue = "0") Integer pageNumber,
+            @RequestParam(value = "_pageSize", defaultValue = "10") Integer pageSize,
+            @RequestParam(value = "_sortField", defaultValue = "name") String sortField,
+            @RequestParam(value = "_sortDirection", defaultValue = "ASC") String sortDirection
     ) {
         String field = sortField.toLowerCase();
         Sort.Direction direction = sortDirection.equalsIgnoreCase("DESC") ? Sort.Direction.DESC : Sort.Direction.ASC;
