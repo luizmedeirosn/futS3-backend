@@ -33,9 +33,13 @@ public class PlayerController {
     @GetMapping
     public ResponseEntity<Page<PlayerMinResponseDTO>> findAll(
             @RequestParam(value = "pageNumber", defaultValue = "0") Integer pageNumber,
-            @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize
+            @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
+            @RequestParam(value = "sortField", defaultValue = "name") String sortField,
+            @RequestParam(value = "sortDirection", defaultValue = "ASC") String sortDirection
     ) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("name"));
+        String field = sortField.toLowerCase();
+        Sort.Direction direction = sortDirection.equalsIgnoreCase("DESC") ? Sort.Direction.DESC : Sort.Direction.ASC;
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(direction, field));
         return ResponseEntity.ok().body(playerService.findAll(pageable));
     }
 

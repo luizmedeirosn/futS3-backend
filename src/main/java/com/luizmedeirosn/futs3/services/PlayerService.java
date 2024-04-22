@@ -31,7 +31,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PlayerService {
@@ -72,13 +74,27 @@ public class PlayerService {
             throw new PageableException("The maximum allowed size for the page: 30");
         }
 
+        long offset = pageable.getOffset();
+        int size = pageable.getPageSize();
+
         var players = playerRepository
-                .customFindAll(pageable.getOffset(), pageable.getPageSize())
+                .customFindAll(offset, size)
                 .stream()
                 .map(PlayerMinResponseDTO::new)
-                .toList();
+                .collect(Collectors.toList());
         long totalElements = playerRepository.count();
 
+        String[] sortFieldAndDirection = pageable.getSort().toString().split(": ");
+        String field = sortFieldAndDirection[0];
+        String direction = sortFieldAndDirection[1];
+
+        Comparator<PlayerMinResponseDTO> comparator = switch (field) {
+            case "team" -> Comparator.comparing(PlayerMinResponseDTO::team);
+            case "position" -> Comparator.comparing(player -> player.positionDTO().name());
+            default -> Comparator.comparing(PlayerMinResponseDTO::name);
+        };
+
+        players.sort(direction.equalsIgnoreCase("ASC") ? comparator : comparator.reversed());
         return new PageImpl<>(players, pageable, totalElements);
     }
 
