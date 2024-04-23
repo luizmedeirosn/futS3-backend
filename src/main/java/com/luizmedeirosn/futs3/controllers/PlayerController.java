@@ -38,9 +38,10 @@ public class PlayerController {
             @RequestParam(value = "_sortField", defaultValue = "name") String sortField,
             @RequestParam(value = "_sortDirection", defaultValue = "ASC") String sortDirection
     ) {
-        String field = sortField.toLowerCase();
+        keyword = keyword.trim();
+        sortField = sortField.toLowerCase();
         Sort.Direction direction = sortDirection.equalsIgnoreCase("DESC") ? Sort.Direction.DESC : Sort.Direction.ASC;
-        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(direction, field));
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(direction, sortField));
         return ResponseEntity.ok().body(playerService.findAll(keyword, pageable));
     }
 
