@@ -47,11 +47,11 @@ public class GameModeService {
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public Page<GameModeMinResponseDTO> findAll(Pageable pageable) {
-        if (pageable.getPageSize() > 10) {
-            throw new PageableException("The maximum allowed size for the page: 30");
-        }
-
         return gameModeRepository.findAll(pageable).map(GameModeMinResponseDTO::new);
+    }
+
+    public Long getTotalRecords() {
+        return gameModeRepository.count();
     }
 
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)

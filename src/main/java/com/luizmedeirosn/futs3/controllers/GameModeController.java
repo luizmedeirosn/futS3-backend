@@ -29,8 +29,10 @@ public class GameModeController {
     @GetMapping
     public ResponseEntity<Page<GameModeMinResponseDTO>> findAll(
             @RequestParam(value = "pageNumber", defaultValue = "0") Integer pageNumber,
-            @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize
+            @RequestParam(value = "pageSize", required = false) Integer pageSize
     ) {
+        pageSize = pageSize != null ?
+                pageSize : gameModeService.getTotalRecords().intValue();
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by("formationName"));
         return ResponseEntity.ok().body(gameModeService.findAll(pageRequest));
     }
