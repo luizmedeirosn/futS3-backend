@@ -5,6 +5,5 @@ CREATE TABLE IF NOT EXISTS tb_game_mode
     description    TEXT                                     DEFAULT NULL,
 
     PRIMARY KEY (id),
-    UNIQUE (formation_name),
     CHECK (LENGTH(description) <= 2000)
 );

@@ -5,6 +5,5 @@ CREATE TABLE IF NOT EXISTS tb_parameter
     description TEXT                                    DEFAULT NULL,
 
     PRIMARY KEY (id),
-    UNIQUE (name),
     CHECK (LENGTH(description) <= 2000)
 );

@@ -5,6 +5,5 @@ CREATE TABLE IF NOT EXISTS tb_position
     description TEXT                                    DEFAULT NULL,
 
     PRIMARY KEY (id),
-    UNIQUE (name),
     CHECK (LENGTH(description) <= 2000)
 );
