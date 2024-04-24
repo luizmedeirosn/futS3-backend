@@ -84,6 +84,9 @@ public class PositionService {
         try {
             if (sumWeights(positionRequestDTO.parameters()) > 100) {
                 throw new DataIntegrityViolationException("The sum of weights cannot exceed 100");
+
+            } else if (positionRequestDTO.parameters().size() > 10) {
+                throw new DataIntegrityViolationException("The maximum allowed number of parameters for a position is 10");
             }
 
             Position newPosition = new Position(positionRequestDTO);
@@ -107,6 +110,9 @@ public class PositionService {
         try {
             if (sumWeights(positionRequestDTO.parameters()) > 100) {
                 throw new DataIntegrityViolationException("The sum of weights cannot exceed 100");
+
+            } else if (positionRequestDTO.parameters().size() > 10) {
+                throw new DataIntegrityViolationException("The maximum allowed number of parameters for a position is 10");
             }
 
             Position position = positionRepository.getReferenceById(id);

@@ -28,8 +28,8 @@ public class GameModeController {
 
     @GetMapping
     public ResponseEntity<Page<GameModeMinResponseDTO>> findAll(
-            @RequestParam(value = "pageNumber", defaultValue = "0") Integer pageNumber,
-            @RequestParam(value = "pageSize", required = false) Integer pageSize
+            @RequestParam(value = "_pageNumber", defaultValue = "0") Integer pageNumber,
+            @RequestParam(value = "_pageSize", required = false) Integer pageSize
     ) {
         pageSize = pageSize != null ?
                 pageSize : gameModeService.getTotalRecords().intValue();
@@ -47,8 +47,12 @@ public class GameModeController {
             @RequestParam("gameModeId") @NonNull Long gameModeId,
             @RequestParam("positionId") @NonNull Long positionId,
             @RequestParam(value = "pageNumber", defaultValue = "0") Integer pageNumber,
-            @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize
+            @RequestParam(value = "pageSize", required = false) Integer pageSize
     ) {
+        pageSize = pageSize != null ?
+                pageSize : gameModeService.countTotalRecordsOfPlayersRanking(gameModeId, positionId).intValue();
+        pageSize = pageSize == 0 ? 10 : pageSize;
+
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by("totalScore"));
         return ResponseEntity.ok().body(gameModeService.getPlayersRanking(gameModeId, positionId, pageRequest));
     }

@@ -104,10 +104,6 @@ public class GameModeService {
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public Page<PlayerFullDataResponseDTO> getPlayersRanking(Long gameModeId, Long positionId, Pageable pageable) {
         try {
-            if (pageable.getPageSize() > 10) {
-                throw new PageableException("The maximum allowed size for the page: 10");
-            }
-
             var playersRanking =
                     gameModeRepository.getPlayersRanking(gameModeId, positionId, pageable.getOffset(), pageable.getPageSize());
             Long totalElements = gameModeRepository.countGetPlayersRanking(gameModeId, positionId);
@@ -144,6 +140,10 @@ public class GameModeService {
         } catch (Exception e) {
             throw new PageableException(e.getMessage());
         }
+    }
+
+    public Long countTotalRecordsOfPlayersRanking(Long gameModeId, Long positionId) {
+        return gameModeRepository.countGetPlayersRanking(gameModeId, positionId);
     }
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
