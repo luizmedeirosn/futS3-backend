@@ -27,8 +27,8 @@ public class PositionController {
 
     @GetMapping
     public ResponseEntity<Page<PositionMinDTO>> findAll(
-            @RequestParam(value = "pageNumber", defaultValue = "0") Integer pageNumber,
-            @RequestParam(value = "pageSize", required = false) Integer pageSize
+            @RequestParam(value = "_pageNumber", defaultValue = "0") Integer pageNumber,
+            @RequestParam(value = "_pageSize", required = false) Integer pageSize
     ) {
         pageSize = pageSize != null ?
                 pageSize : positionService.getTotalRecords().intValue();

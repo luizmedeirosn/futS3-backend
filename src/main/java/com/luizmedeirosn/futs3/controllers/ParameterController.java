@@ -26,8 +26,8 @@ public class ParameterController {
 
     @GetMapping
     public ResponseEntity<Page<ParameterResponseDTO>> findAll(
-            @RequestParam(value = "pageNumber", defaultValue = "0") Integer pageNumber,
-            @RequestParam(value = "pageSize", required = false) Integer pageSize
+            @RequestParam(value = "_pageNumber", defaultValue = "0") Integer pageNumber,
+            @RequestParam(value = "_pageSize", required = false) Integer pageSize
     ) {
         pageSize = pageSize != null ?
                 pageSize : parameterSerivce.getTotalRecords().intValue();

@@ -44,10 +44,10 @@ public class GameModeController {
 
     @GetMapping("/ranking")
     public ResponseEntity<Page<PlayerFullDataResponseDTO>> getPlayersRanking(
-            @RequestParam("gameModeId") @NonNull Long gameModeId,
-            @RequestParam("positionId") @NonNull Long positionId,
-            @RequestParam(value = "pageNumber", defaultValue = "0") Integer pageNumber,
-            @RequestParam(value = "pageSize", required = false) Integer pageSize
+            @RequestParam("_gameModeId") @NonNull Long gameModeId,
+            @RequestParam("_positionId") @NonNull Long positionId,
+            @RequestParam(value = "_pageNumber", defaultValue = "0") Integer pageNumber,
+            @RequestParam(value = "_pageSize", required = false) Integer pageSize
     ) {
         pageSize = pageSize != null ?
                 pageSize : gameModeService.countTotalRecordsOfPlayersRanking(gameModeId, positionId).intValue();
