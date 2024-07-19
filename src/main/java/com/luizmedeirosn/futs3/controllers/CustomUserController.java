@@ -25,8 +25,8 @@ public class CustomUserController {
   public ResponseEntity<Page<CustomUserDTO>> findAll(
       @RequestParam(value = "pageNumber", defaultValue = "0") Integer pageNumber,
       @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize) {
-    PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by("username"));
-    return ResponseEntity.ok().body(customUserService.findAll(pageRequest));
+    return ResponseEntity.ok()
+        .body(customUserService.findAll(PageRequest.of(pageNumber, pageSize, Sort.by("username"))));
   }
 
   @GetMapping("/{id}")

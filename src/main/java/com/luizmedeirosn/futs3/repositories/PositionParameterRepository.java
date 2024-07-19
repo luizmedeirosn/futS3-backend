@@ -26,10 +26,9 @@ public interface PositionParameterRepository extends JpaRepository<PositionParam
   @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
   default void saveAllPositionParameters(
       Long positionId, List<PositionParameterIdWeightDTO> parameters, EntityManager entityManager) {
-    StringBuilder queryStr = new StringBuilder();
+    var queryStr = new StringBuilder();
 
-    int end = parameters.size();
-    for (int i = 0; i < end; i++) {
+    for (int i = 0; i < parameters.size(); i++) {
       var parameter = parameters.get(i);
       if (i == 0) {
         queryStr.append("INSERT INTO tb_position_parameter (position_id, parameter_id, weight) VALUES");

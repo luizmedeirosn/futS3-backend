@@ -44,10 +44,10 @@ public class ParameterSerivce {
   @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
   public ParameterResponseDTO save(ParameterRequestDTO parameterRequestDTO) {
     try {
-      Parameter parameter = new Parameter(parameterRequestDTO.name(), parameterRequestDTO.description());
+      var parameter = new Parameter(parameterRequestDTO.name(), parameterRequestDTO.description());
       parameter = parameterRepository.save(parameter);
-      return new ParameterResponseDTO(parameter);
 
+      return new ParameterResponseDTO(parameter);
     } catch (DataIntegrityViolationException e) {
       throw new DatabaseException(e.getMessage());
     }
@@ -56,16 +56,13 @@ public class ParameterSerivce {
   @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
   public ParameterResponseDTO update(Long id, ParameterRequestDTO parameterRequestDTO) {
     try {
-      Parameter parameter = parameterRepository.getReferenceById(id);
+      var parameter = parameterRepository.getReferenceById(id);
       parameter.updateData(parameterRequestDTO);
-
       parameter = parameterRepository.save(parameter);
 
       return new ParameterResponseDTO(parameter);
-
     } catch (jakarta.persistence.EntityNotFoundException e) {
       throw new EntityNotFoundException("Parameter ID not found: " + id);
-
     } catch (DataIntegrityViolationException e) {
       throw new DatabaseException(e.getMessage());
     }
@@ -74,12 +71,8 @@ public class ParameterSerivce {
   @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
   public void deleteById(Long id) {
     try {
-      if (!parameterRepository.existsById(id)) {
-        throw new EntityNotFoundException("Parameter ID not found: " + id);
-      }
-
+      if (!parameterRepository.existsById(id)) throw new EntityNotFoundException("Parameter ID not found: " + id);
       parameterRepository.customDeleteById(id);
-
     } catch (DataIntegrityViolationException e) {
       throw new DatabaseException(e.getMessage());
     }

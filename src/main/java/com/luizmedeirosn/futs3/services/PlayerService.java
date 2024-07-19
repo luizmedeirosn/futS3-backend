@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.luizmedeirosn.futs3.entities.Player;
 import com.luizmedeirosn.futs3.entities.PlayerPicture;
-import com.luizmedeirosn.futs3.entities.Position;
 import com.luizmedeirosn.futs3.projections.player.PlayerProjection;
 import com.luizmedeirosn.futs3.repositories.PlayerParameterRepository;
 import com.luizmedeirosn.futs3.repositories.PlayerPictureRepository;
@@ -68,23 +67,16 @@ public class PlayerService {
 
   @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
   public Page<PlayerMinResponseDTO> findAll(String keyword, Pageable pageable) {
-    if (pageable.getPageSize() > 30) {
-      throw new PageableException("The maximum allowed size for the page: 30");
-    }
-
-    long offset = pageable.getOffset();
-    int size = pageable.getPageSize();
+    if (pageable.getPageSize() > 30) throw new PageableException("The maximum allowed size for the page: 30");
 
     var players =
-        playerRepository.customFindAll(keyword, offset, size).stream()
+        playerRepository.customFindAll(keyword, pageable.getOffset(), pageable.getPageSize()).stream()
             .map(PlayerMinResponseDTO::new)
             .collect(Collectors.toList());
 
-    long totalElements = playerRepository.countCustomFindAll(keyword);
-
-    String[] sortFieldAndDirection = pageable.getSort().toString().split(": ");
-    String field = sortFieldAndDirection[0];
-    String direction = sortFieldAndDirection[1];
+    var sortFieldAndDirection = pageable.getSort().toString().split(": ");
+    var field = sortFieldAndDirection[0];
+    var direction = sortFieldAndDirection[1];
 
     Comparator<PlayerMinResponseDTO> comparator =
         switch (field) {
@@ -94,18 +86,14 @@ public class PlayerService {
         };
 
     players.sort(direction.equalsIgnoreCase("ASC") ? comparator : comparator.reversed());
-    return new PageImpl<>(players, pageable, totalElements);
+    return new PageImpl<>(players, pageable, playerRepository.countCustomFindAll(keyword));
   }
 
   @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
   public PlayerResponseDTO findById(Long id) {
     try {
       var projections = playerRepository.customFindById(id);
-      var oneProjection = projections.get(0);
-      var parameters = extractPlayerParameters(projections);
-
-      return new PlayerResponseDTO(oneProjection, parameters);
-
+      return new PlayerResponseDTO(projections.get(0), extractPlayerParameters(projections));
     } catch (Exception e) {
       throw new EntityNotFoundException("Player ID not found: " + id);
     }
@@ -123,7 +111,6 @@ public class PlayerService {
               })
           .toList();
     }
-
     return new ArrayList<>();
   }
 
@@ -136,9 +123,8 @@ public class PlayerService {
   @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
   public PlayerResponseDTO save(PlayerRequestDTO playerRequestDTO) {
     try {
-      Player newPlayer = new Player(playerRequestDTO);
-      PlayerPicture playerPicture = new PlayerPicture(newPlayer, playerRequestDTO.playerPicture());
-      Position position =
+      var newPlayer = new Player(playerRequestDTO);
+      var position =
           positionRepository
               .findById(playerRequestDTO.positionId())
               .orElseThrow(
@@ -146,7 +132,7 @@ public class PlayerService {
       List<PlayerParameterIdScoreDTO> parameters = parseParameters(playerRequestDTO.parameters());
 
       newPlayer.setPosition(position);
-      newPlayer.setPlayerPicture(playerPicture);
+      newPlayer.setPlayerPicture(new PlayerPicture(newPlayer, playerRequestDTO.playerPicture()));
 
       playerRepository.save(newPlayer);
       playerParameterRepository.saveAllPlayerParameters(newPlayer.getId(), parameters, entityManager);
@@ -161,24 +147,22 @@ public class PlayerService {
   @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
   public PlayerResponseDTO update(Long id, PlayerRequestDTO playerRequestDTO) {
     try {
-      Player player = playerRepository.getReferenceById(id);
-      Position position =
+      var player = playerRepository.getReferenceById(id);
+      var position =
           positionRepository
               .findById(playerRequestDTO.positionId())
               .orElseThrow(
                   () -> new EntityNotFoundException("Position ID not found: " + playerRequestDTO.positionId()));
       player.updateData(playerRequestDTO, position);
 
-      List<PlayerParameterIdScoreDTO> parameters = parseParameters(playerRequestDTO.parameters());
       playerParameterRepository.deleteByPlayerId(player.getId());
-      playerParameterRepository.saveAllPlayerParameters(player.getId(), parameters, entityManager);
+      playerParameterRepository.saveAllPlayerParameters(
+          player.getId(), parseParameters(playerRequestDTO.parameters()), entityManager);
 
       player = playerRepository.save(player);
       return findById(player.getId());
-
     } catch (jakarta.persistence.EntityNotFoundException e) {
       throw new EntityNotFoundException("Player ID not found: " + id);
-
     } catch (DataIntegrityViolationException e) {
       throw new DatabaseException(e.getMessage());
     }
@@ -194,9 +178,7 @@ public class PlayerService {
 
   @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
   public void deleteById(@NonNull Long id) {
-    if (!playerRepository.existsById(id)) {
-      throw new EntityNotFoundException("Player ID not found: " + id);
-    }
+    if (!playerRepository.existsById(id)) throw new EntityNotFoundException("Player ID not found: " + id);
     playerRepository.customDeleteById(id);
   }
 }

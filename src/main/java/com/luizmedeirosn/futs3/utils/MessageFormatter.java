@@ -13,7 +13,6 @@ public final class MessageFormatter {
 
       regex = "Detail: ";
       return message.contains(regex) ? message.split(regex)[1].split("\\.")[0].replace("\"", "") : message;
-
     } catch (IndexOutOfBoundsException e) {
       throw new FormatterException("The exception message formatting failed");
     }
@@ -22,7 +21,6 @@ public final class MessageFormatter {
   public static String methodArgumentNotValidException(String message) {
     try {
       return message.split(": \\[")[1].split(";")[0].replace("\"", "");
-
     } catch (IndexOutOfBoundsException e) {
       throw new FormatterException("The exception message formatting failed");
     }

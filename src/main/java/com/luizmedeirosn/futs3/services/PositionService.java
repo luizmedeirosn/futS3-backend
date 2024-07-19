@@ -51,11 +51,7 @@ public class PositionService {
   public PositionResponseDTO findById(Long id) {
     try {
       var projections = positionRepository.customFindById(id);
-      var oneProjection = projections.get(0);
-      var parameters = extractPositionParameters(projections);
-
-      return new PositionResponseDTO(oneProjection, parameters);
-
+      return new PositionResponseDTO(projections.get(0), extractPositionParameters(projections));
     } catch (Exception e) {
       throw new EntityNotFoundException("Position ID not found: " + id);
     }
@@ -73,7 +69,6 @@ public class PositionService {
               })
           .toList();
     }
-
     return new ArrayList<>();
   }
 
@@ -82,19 +77,17 @@ public class PositionService {
     try {
       if (sumWeights(positionRequestDTO.parameters()) > 100) {
         throw new DataIntegrityViolationException("The sum of weights cannot exceed 100");
-
       } else if (positionRequestDTO.parameters().size() > 10) {
         throw new DataIntegrityViolationException("The maximum allowed number of parameters for a position is 10");
       }
 
-      Position newPosition = new Position(positionRequestDTO);
+      var newPosition = new Position(positionRequestDTO);
       positionRepository.save(newPosition);
 
       positionParameterRepository.saveAllPositionParameters(
           newPosition.getId(), positionRequestDTO.parameters(), entityManager);
 
       return findById(newPosition.getId());
-
     } catch (DataIntegrityViolationException e) {
       throw new DatabaseException(e.getMessage());
     }
@@ -105,12 +98,11 @@ public class PositionService {
     try {
       if (sumWeights(positionRequestDTO.parameters()) > 100) {
         throw new DataIntegrityViolationException("The sum of weights cannot exceed 100");
-
       } else if (positionRequestDTO.parameters().size() > 10) {
         throw new DataIntegrityViolationException("The maximum allowed number of parameters for a position is 10");
       }
 
-      Position position = positionRepository.getReferenceById(id);
+      var position = positionRepository.getReferenceById(id);
       position.updateData(positionRequestDTO);
 
       positionParameterRepository.deleteByPositionId(position.getId());
@@ -119,10 +111,8 @@ public class PositionService {
 
       position = positionRepository.save(position);
       return findById(position.getId());
-
     } catch (jakarta.persistence.EntityNotFoundException e) {
       throw new EntityNotFoundException("Position ID not found: " + id);
-
     } catch (DataIntegrityViolationException e) {
       throw new DatabaseException(e.getMessage());
     }
@@ -135,11 +125,8 @@ public class PositionService {
   @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
   public void deleteById(Long id) {
     try {
-      if (!positionRepository.existsById(id)) {
-        throw new EntityNotFoundException("Position ID not found: " + id);
-      }
+      if (!positionRepository.existsById(id)) throw new EntityNotFoundException("Position ID not found: " + id);
       positionRepository.customDeleteById(id);
-
     } catch (DataIntegrityViolationException e) {
       throw new DatabaseException(e.getMessage());
     }

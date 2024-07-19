@@ -48,10 +48,9 @@ public interface PlayerParameterRepository extends JpaRepository<PlayerParameter
   @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
   default void saveAllPlayerParameters(
       Long playerId, List<PlayerParameterIdScoreDTO> parameters, EntityManager entityManager) {
-    StringBuilder queryStr = new StringBuilder();
+    var queryStr = new StringBuilder();
 
-    int end = parameters.size();
-    for (int i = 0; i < end; i++) {
+    for (int i = 0; i < parameters.size(); i++) {
       var parameter = parameters.get(i);
       if (i == 0) {
         queryStr.append("INSERT INTO tb_player_parameter (player_id, parameter_id, score) VALUES");

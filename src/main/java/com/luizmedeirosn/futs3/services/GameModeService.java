@@ -101,9 +101,7 @@ public class GameModeService {
           gameModeRepository.getPlayersRanking(gameModeId, positionId, pageable.getOffset(), pageable.getPageSize());
       Long totalElements = gameModeRepository.countGetPlayersRanking(gameModeId, positionId);
 
-      if (totalElements == null || totalElements <= 0) {
-        return new PageImpl<>(new ArrayList<>(), pageable, 0L);
-      }
+      if (totalElements == null || totalElements <= 0) return new PageImpl<>(new ArrayList<>(), pageable, 0L);
 
       var playersIds = playersRanking.stream().map(PlayerDataScoreProjection::getPlayerId).toList();
       var filteredParameters = playerParameterRepository.findParametersByPlayerIds(playersIds);
@@ -128,7 +126,6 @@ public class GameModeService {
               .toList();
 
       return new PageImpl<>(content, pageable, totalElements);
-
     } catch (Exception e) {
       throw new PageableException(e.getMessage());
     }
@@ -141,13 +138,12 @@ public class GameModeService {
   @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
   public GameModeResponseDTO save(GameModeRequestDTO gameModeRequestDTO) {
     try {
-      GameMode newGameMode = new GameMode(gameModeRequestDTO.formationName(), gameModeRequestDTO.description());
+      var newGameMode = new GameMode(gameModeRequestDTO.formationName(), gameModeRequestDTO.description());
 
       newGameMode = gameModeRepository.save(newGameMode);
       gameModeRepository.saveAllPositions(newGameMode.getId(), gameModeRequestDTO.positions(), entityManager);
 
       return findById(newGameMode.getId());
-
     } catch (DataIntegrityViolationException e) {
       throw new DatabaseException(e.getMessage());
     }
@@ -156,7 +152,7 @@ public class GameModeService {
   @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
   public GameModeResponseDTO update(Long id, GameModeRequestDTO gameModeRequestDTO) {
     try {
-      GameMode gameMode = gameModeRepository.getReferenceById(id);
+      var gameMode = gameModeRepository.getReferenceById(id);
       gameMode.updateData(gameModeRequestDTO);
 
       gameModeRepository.deletePositionsFromGameModeById(gameMode.getId());
@@ -164,10 +160,8 @@ public class GameModeService {
 
       gameMode = gameModeRepository.save(gameMode);
       return findById(gameMode.getId());
-
     } catch (jakarta.persistence.EntityNotFoundException e) {
       throw new EntityNotFoundException("GameMode ID not found: " + id);
-
     } catch (DataIntegrityViolationException e) {
       throw new DatabaseException(e.getMessage());
     }
@@ -175,9 +169,7 @@ public class GameModeService {
 
   @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
   public void deleteById(Long id) {
-    if (!gameModeRepository.existsById(id)) {
-      throw new EntityNotFoundException("GameMode ID not found: " + id);
-    }
+    if (!gameModeRepository.existsById(id)) throw new EntityNotFoundException("GameMode ID not found: " + id);
     gameModeRepository.customDeleteById(id);
   }
 }

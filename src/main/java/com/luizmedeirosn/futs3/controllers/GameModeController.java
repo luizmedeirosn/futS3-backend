@@ -6,7 +6,6 @@ import com.luizmedeirosn.futs3.shared.dto.response.GameModeResponseDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.PlayerFullDataResponseDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.min.GameModeMinResponseDTO;
 import jakarta.validation.Valid;
-import java.net.URI;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -51,14 +50,14 @@ public class GameModeController {
             : gameModeService.countTotalRecordsOfPlayersRanking(gameModeId, positionId).intValue();
     pageSize = pageSize == 0 ? 10 : pageSize;
 
-    PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by("totalScore"));
+    var pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by("totalScore"));
     return ResponseEntity.ok().body(gameModeService.getPlayersRanking(gameModeId, positionId, pageRequest));
   }
 
   @PostMapping
   public ResponseEntity<GameModeResponseDTO> save(@RequestBody @Valid GameModeRequestDTO gameModeRequestDTO) {
-    GameModeResponseDTO gameModeResponseDTO = gameModeService.save(gameModeRequestDTO);
-    URI uri =
+    var gameModeResponseDTO = gameModeService.save(gameModeRequestDTO);
+    var uri =
         ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(gameModeResponseDTO.id()).toUri();
     return ResponseEntity.created(uri).body(gameModeResponseDTO);
   }

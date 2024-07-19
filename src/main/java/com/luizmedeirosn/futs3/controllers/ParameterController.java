@@ -30,7 +30,7 @@ public class ParameterController {
     pageSize = pageSize != null ? pageSize : parameterSerivce.getTotalRecords().intValue();
     pageSize = pageSize == 0 ? 10 : pageSize;
 
-    PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by("name"));
+    var pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by("name"));
     return ResponseEntity.ok().body(parameterSerivce.findAll(pageRequest));
   }
 

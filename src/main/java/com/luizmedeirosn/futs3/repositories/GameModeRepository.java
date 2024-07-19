@@ -114,11 +114,10 @@ public interface GameModeRepository extends JpaRepository<GameMode, Long> {
   @Modifying
   @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
   default void saveAllPositions(Long gameModeId, List<Long> positions, EntityManager entityManager) {
-    StringBuilder queryStr = new StringBuilder();
+    var queryStr = new StringBuilder();
 
-    int end = positions.size();
     int parameterIndex = 1;
-    for (int i = 0; i < end; i++) {
+    for (int i = 0; i < positions.size(); i++) {
       if (i == 0) {
         queryStr.append("INSERT INTO tb_game_mode_position (game_mode_id, position_id) VALUES");
         queryStr.append(String.format(" (%d, %d)", gameModeId, positions.get(i)));

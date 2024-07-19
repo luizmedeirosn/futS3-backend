@@ -5,7 +5,6 @@ import com.luizmedeirosn.futs3.shared.dto.request.PositionRequestDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.PositionResponseDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.min.PositionMinDTO;
 import jakarta.validation.Valid;
-import java.net.URI;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -31,7 +30,7 @@ public class PositionController {
     pageSize = pageSize != null ? pageSize : positionService.getTotalRecords().intValue();
     pageSize = pageSize == 0 ? 10 : pageSize;
 
-    PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by("name"));
+    var pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by("name"));
     return ResponseEntity.ok().body(positionService.findAll(pageRequest));
   }
 
@@ -42,8 +41,8 @@ public class PositionController {
 
   @PostMapping
   public ResponseEntity<PositionResponseDTO> save(@RequestBody @Valid PositionRequestDTO postPositionDTO) {
-    PositionResponseDTO positionDTO = positionService.save(postPositionDTO);
-    URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(positionDTO.id()).toUri();
+    var positionDTO = positionService.save(postPositionDTO);
+    var uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(positionDTO.id()).toUri();
     return ResponseEntity.created(uri).body(positionDTO);
   }
 

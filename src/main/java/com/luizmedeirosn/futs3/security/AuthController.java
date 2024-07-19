@@ -26,7 +26,7 @@ public class AuthController {
   @PostMapping("/signup")
   @PreAuthorize("hasAuthority('ROLE_ADMIN')")
   public ResponseEntity<SignupResponseDTO> signup(@RequestBody @Valid SignupRequestDTO signup) {
-    SignupResponseDTO response = authService.signup(signup);
+    var response = authService.signup(signup);
     URI uri =
         ServletUriComponentsBuilder.fromCurrentRequest()
             .replacePath("/users/" + response.user().getId())

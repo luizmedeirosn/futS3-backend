@@ -1,6 +1,5 @@
 package com.luizmedeirosn.futs3.configs;
 
-import com.luizmedeirosn.futs3.entities.Player;
 import com.luizmedeirosn.futs3.entities.PlayerPicture;
 import com.luizmedeirosn.futs3.repositories.PlayerRepository;
 import java.io.File;
@@ -21,21 +20,23 @@ public class StartupSeedConfig implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
-    final String PICTURES_FOLDER_PATH = "./src/main/java/com/luizmedeirosn/futs3/configs/data/sport-pictures";
-    File picturesFolder = new File(PICTURES_FOLDER_PATH);
-    File[] picturesArray = picturesFolder.listFiles(File::isFile);
+    var picturesArray =
+        new File("./src/main/java/com/luizmedeirosn/futs3/configs/data/sport-pictures").listFiles(File::isFile);
 
-    List<File> picturesList = new ArrayList<>(Arrays.asList(Objects.requireNonNull(picturesArray)));
+    var picturesList = new ArrayList<>(Arrays.asList(Objects.requireNonNull(picturesArray)));
     picturesList.sort(Comparator.comparingInt(f -> Integer.parseInt(f.getName().split("-")[0])));
 
     for (int i = 1; i <= 38; i++) {
       var playerOptional = playerRepository.findById((long) i);
       if (playerOptional.isPresent()) {
-        Player player = playerOptional.get();
-        File pictureFile = picturesList.get(i - 1);
-        byte[] pictureData = Files.readAllBytes(Paths.get(pictureFile.getAbsolutePath()));
-
-        PlayerPicture picture = new PlayerPicture(pictureFile.getName(), "image/webp", pictureData, player);
+        var player = playerOptional.get();
+        var pictureFile = picturesList.get(i - 1);
+        var picture =
+            new PlayerPicture(
+                pictureFile.getName(),
+                "image/webp",
+                Files.readAllBytes(Paths.get(pictureFile.getAbsolutePath())),
+                player);
 
         if (player.getPlayerPicture() == null) {
           player.setPlayerPicture(picture);

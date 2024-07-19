@@ -1,17 +1,14 @@
 package com.luizmedeirosn.futs3.controllers;
 
-import com.luizmedeirosn.futs3.entities.PlayerPicture;
 import com.luizmedeirosn.futs3.services.PlayerService;
 import com.luizmedeirosn.futs3.shared.dto.request.PlayerRequestDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.PlayerResponseDTO;
 import com.luizmedeirosn.futs3.shared.dto.response.min.PlayerMinResponseDTO;
 import com.luizmedeirosn.futs3.shared.exceptions.EntityNotFoundException;
 import jakarta.validation.Valid;
-import java.net.URI;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -38,8 +35,10 @@ public class PlayerController {
       @RequestParam(value = "_sortDirection", defaultValue = "ASC") String sortDirection) {
     keyword = keyword.trim();
     sortField = sortField.toLowerCase();
-    Sort.Direction direction = sortDirection.equalsIgnoreCase("DESC") ? Sort.Direction.DESC : Sort.Direction.ASC;
-    Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(direction, sortField));
+
+    var direction = sortDirection.equalsIgnoreCase("DESC") ? Sort.Direction.DESC : Sort.Direction.ASC;
+    var pageable = PageRequest.of(pageNumber, pageSize, Sort.by(direction, sortField));
+
     return ResponseEntity.ok().body(playerService.findAll(keyword, pageable));
   }
 
@@ -50,23 +49,19 @@ public class PlayerController {
 
   @GetMapping(value = "/picture/{id}")
   public ResponseEntity<ByteArrayResource> findPictureById(@PathVariable @NonNull Long id) {
-    PlayerPicture playerPicture = playerService.findPictureById(id);
-    byte[] content = playerPicture.getContent();
-    ByteArrayResource body;
+    var playerPicture = playerService.findPictureById(id);
+    var content = playerPicture.getContent();
+    if (content == null) throw new EntityNotFoundException("Player without a picture");
 
-    if (content != null) {
-      body = new ByteArrayResource(content);
-    } else {
-      throw new EntityNotFoundException("Player without a picture");
-    }
-
-    return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, playerPicture.getContentType()).body(body);
+    return ResponseEntity.ok()
+        .header(HttpHeaders.CONTENT_TYPE, playerPicture.getContentType())
+        .body(new ByteArrayResource(content));
   }
 
   @PostMapping
   public ResponseEntity<PlayerResponseDTO> save(@ModelAttribute @Valid PlayerRequestDTO playerRequestDTO) {
-    PlayerResponseDTO playerResponseDTO = playerService.save(playerRequestDTO);
-    URI uri =
+    var playerResponseDTO = playerService.save(playerRequestDTO);
+    var uri =
         ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(playerResponseDTO.id()).toUri();
     return ResponseEntity.created(uri).body(playerResponseDTO);
   }

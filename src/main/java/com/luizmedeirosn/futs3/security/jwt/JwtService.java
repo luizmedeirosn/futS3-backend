@@ -65,7 +65,6 @@ public class JwtService {
         return new TokenResponseDTO(accessToken, refreshToken);
       }
     }
-
     throw new MalformedJwtException("Invalid JWT Signature");
   }
 
