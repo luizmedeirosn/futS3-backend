@@ -2,7 +2,7 @@ package com.luizmedeirosn.futs3.entities;
 
 import com.luizmedeirosn.futs3.shared.dto.request.PositionRequestDTO;
 import jakarta.persistence.*;
-
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
@@ -11,97 +11,95 @@ import java.util.Set;
 @Entity
 @Table(name = "tb_position")
 public class Position implements Serializable {
+  @Serial private static final long serialVersionUID = 1L;
 
-    private static final long serialVersionUID = 1L;
+  @OneToMany(mappedBy = "position", fetch = FetchType.LAZY)
+  private final Set<Player> players = new HashSet<>();
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @ManyToMany(mappedBy = "positions", fetch = FetchType.LAZY)
+  private final Set<GameMode> gameModes = new HashSet<>();
 
-    @Column(length = 50, nullable = false, unique = true)
-    private String name;
+  @OneToMany(mappedBy = "id.position", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  private final Set<PositionParameter> positionParameters = new HashSet<>();
 
-    @Column(columnDefinition = "TEXT", length = 2000)
-    private String description;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @OneToMany(mappedBy = "position", fetch = FetchType.LAZY)
-    private final Set<Player> players = new HashSet<>();
+  @Column(length = 50, nullable = false, unique = true)
+  private String name;
 
-    @ManyToMany(mappedBy = "positions", fetch = FetchType.LAZY)
-    private final Set<GameMode> gameModes = new HashSet<>();
+  @Column(columnDefinition = "TEXT", length = 2000)
+  private String description;
 
-    @OneToMany(mappedBy = "id.position", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private final Set<PositionParameter> positionParameters = new HashSet<>();
+  public Position() {}
 
-    public Position() {
-    }
+  public Position(Long id, String name, String description) {
+    this.id = id;
+    this.name = name;
+    this.description = description;
+  }
 
-    public Position(Long id, String name, String description) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-    }
+  public Position(String name, String description) {
+    this.name = name;
+    this.description = description;
+  }
 
-    public Position(String name, String description) {
-        this.name = name;
-        this.description = description;
-    }
+  public Position(PositionRequestDTO positionRequestDTO) {
+    name = positionRequestDTO.name();
+    description = positionRequestDTO.description();
+  }
 
-    public Position(PositionRequestDTO positionRequestDTO) {
-        name = positionRequestDTO.name();
-        description = positionRequestDTO.description();
-    }
+  public void updateData(PositionRequestDTO positionRequestDTO) {
+    name = positionRequestDTO.name();
+    description = positionRequestDTO.description();
+  }
 
-    public void updateData(PositionRequestDTO positionRequestDTO) {
-        name = positionRequestDTO.name();
-        description = positionRequestDTO.description();
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public Long getId() {
-        return id;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public String getDescription() {
+    return description;
+  }
 
-    public String getDescription() {
-        return description;
-    }
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+  public Set<Player> getPlayers() {
+    return players;
+  }
 
-    public Set<Player> getPlayers() {
-        return players;
-    }
+  public Set<GameMode> getGameModes() {
+    return gameModes;
+  }
 
-    public Set<GameMode> getGameModes() {
-        return gameModes;
-    }
+  public Set<PositionParameter> getPositionParameters() {
+    return positionParameters;
+  }
 
-    public Set<PositionParameter> getPositionParameters() {
-        return positionParameters;
-    }
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof Position position)) return false;
+    return Objects.equals(id, position.id);
+  }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Position position)) return false;
-        return Objects.equals(id, position.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
+  @Override
+  public int hashCode() {
+    return Objects.hash(id);
+  }
 }

@@ -14,25 +14,24 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/users")
 public class CustomUserController {
 
-    private final CustomUserService customUserService;
+  private final CustomUserService customUserService;
 
-    public CustomUserController(CustomUserService customUserService) {
-        this.customUserService = customUserService;
-    }
+  public CustomUserController(CustomUserService customUserService) {
+    this.customUserService = customUserService;
+  }
 
-    @GetMapping
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<Page<CustomUserDTO>> findAll(
-            @RequestParam(value = "pageNumber", defaultValue = "0") Integer pageNumber,
-            @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize
-    ) {
-        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by("username"));
-        return ResponseEntity.ok().body(customUserService.findAll(pageRequest));
-    }
+  @GetMapping
+  @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+  public ResponseEntity<Page<CustomUserDTO>> findAll(
+      @RequestParam(value = "pageNumber", defaultValue = "0") Integer pageNumber,
+      @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize) {
+    PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by("username"));
+    return ResponseEntity.ok().body(customUserService.findAll(pageRequest));
+  }
 
-    @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<CustomUserDTO> findById(@PathVariable @NonNull Long id) {
-        return ResponseEntity.ok().body(customUserService.findById(id));
-    }
+  @GetMapping("/{id}")
+  @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+  public ResponseEntity<CustomUserDTO> findById(@PathVariable @NonNull Long id) {
+    return ResponseEntity.ok().body(customUserService.findById(id));
+  }
 }

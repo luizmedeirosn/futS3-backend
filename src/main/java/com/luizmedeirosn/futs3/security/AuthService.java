@@ -18,40 +18,38 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class AuthService {
 
-    private final CustomUserRepository customUserRepository;
-    private final JwtService jwtService;
-    private final AuthenticationManager authenticationManager;
+  private final CustomUserRepository customUserRepository;
+  private final JwtService jwtService;
+  private final AuthenticationManager authenticationManager;
 
-    public AuthService(
-            CustomUserRepository customUserRepository,
-            JwtService jwtService,
-            AuthenticationManager authenticationManager) {
-        this.customUserRepository = customUserRepository;
-        this.jwtService = jwtService;
-        this.authenticationManager = authenticationManager;
+  public AuthService(
+      CustomUserRepository customUserRepository, JwtService jwtService, AuthenticationManager authenticationManager) {
+    this.customUserRepository = customUserRepository;
+    this.jwtService = jwtService;
+    this.authenticationManager = authenticationManager;
+  }
+
+  @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
+  public SignupResponseDTO signup(SignupRequestDTO signup) {
+    var user = customUserRepository.save(new CustomUser(signup));
+    return new SignupResponseDTO(user, jwtService.generateToken(user.getUsername()));
+  }
+
+  @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+  public TokenResponseDTO signin(SigninRequestDTO signinRequestDTO) {
+    var authentication =
+        authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(signinRequestDTO.username(), signinRequestDTO.password()));
+
+    if (authentication.isAuthenticated()) {
+      return jwtService.generateToken(signinRequestDTO.username());
+    } else {
+      throw new BadCredentialsException("Authentication Failure");
     }
+  }
 
-    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-    public SignupResponseDTO signup(SignupRequestDTO signup) {
-        var user = customUserRepository.save(new CustomUser(signup));
-        return new SignupResponseDTO(user, jwtService.generateToken(user.getUsername()));
-    }
-
-    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public TokenResponseDTO signin(SigninRequestDTO signinRequestDTO) {
-        var authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(signinRequestDTO.username(), signinRequestDTO.password()));
-
-        if (authentication.isAuthenticated()) {
-            return jwtService.generateToken(signinRequestDTO.username());
-        } else {
-            throw new BadCredentialsException("Authentication Failure");
-        }
-    }
-
-    @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-    public TokenResponseDTO refreshToken(String refreshToken) {
-        return jwtService.refreshToken(refreshToken);
-    }
-
+  @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
+  public TokenResponseDTO refreshToken(String refreshToken) {
+    return jwtService.refreshToken(refreshToken);
+  }
 }

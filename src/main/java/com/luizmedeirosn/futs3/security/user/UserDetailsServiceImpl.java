@@ -9,16 +9,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final CustomUserRepository customUserRepository;
+  private final CustomUserRepository customUserRepository;
 
-    public UserDetailsServiceImpl(CustomUserRepository customUserRepository) {
-        this.customUserRepository = customUserRepository;
-    }
+  public UserDetailsServiceImpl(CustomUserRepository customUserRepository) {
+    this.customUserRepository = customUserRepository;
+  }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        var user = customUserRepository.findByUsername(username);
-        return user.map(UserDetailsImpl::new)
-                .orElseThrow(() -> new UsernameNotFoundException("Username not found: " + username));
-    }
+  @Override
+  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    var user = customUserRepository.findByUsername(username);
+    return user.map(UserDetailsImpl::new)
+        .orElseThrow(() -> new UsernameNotFoundException("Username not found: " + username));
+  }
 }

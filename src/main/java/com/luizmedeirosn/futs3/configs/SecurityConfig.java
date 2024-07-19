@@ -27,59 +27,58 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    private final JwtService jwtService;
-    private final UserDetailsServiceImpl userDetailsServiceImpl;
-    private final HandlerExceptionResolver handlerExceptionResolver;
+  private final JwtService jwtService;
+  private final UserDetailsServiceImpl userDetailsServiceImpl;
+  private final HandlerExceptionResolver handlerExceptionResolver;
 
-    public SecurityConfig(
-            JwtService jwtService,
-            UserDetailsServiceImpl userDetailsServiceImpl,
-            HandlerExceptionResolver handlerExceptionResolver
-    ) {
-        this.jwtService = jwtService;
-        this.userDetailsServiceImpl = userDetailsServiceImpl;
-        this.handlerExceptionResolver = handlerExceptionResolver;
-    }
+  public SecurityConfig(
+      JwtService jwtService,
+      UserDetailsServiceImpl userDetailsServiceImpl,
+      HandlerExceptionResolver handlerExceptionResolver) {
+    this.jwtService = jwtService;
+    this.userDetailsServiceImpl = userDetailsServiceImpl;
+    this.handlerExceptionResolver = handlerExceptionResolver;
+  }
 
-    @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity.authorizeHttpRequests(
-                        auth -> auth
-                                .requestMatchers("/auth/signin", "/players/picture/**").permitAll()
-                                .anyRequest().authenticated())
-                .csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .cors(Customizer.withDefaults())
-                .addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class)
-                .build();
-    }
+  @Bean
+  SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+    return httpSecurity
+        .authorizeHttpRequests(
+            auth ->
+                auth.requestMatchers("/auth/signin", "/players/picture/**").permitAll().anyRequest().authenticated())
+        .csrf(AbstractHttpConfigurer::disable)
+        .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .cors(Customizer.withDefaults())
+        .addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class)
+        .build();
+  }
 
-    @Bean
-    JwtAuthFilter jwtAuthFilter() {
-        return new JwtAuthFilter(jwtService, userDetailsServiceImpl, handlerExceptionResolver);
-    }
+  @Bean
+  JwtAuthFilter jwtAuthFilter() {
+    return new JwtAuthFilter(jwtService, userDetailsServiceImpl, handlerExceptionResolver);
+  }
 
-    @Bean
-    AuthenticationProvider authenticationProvider() {
-        var authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setUserDetailsService(userDetailsService());
-        authenticationProvider.setPasswordEncoder(passwordEncoder());
+  @Bean
+  AuthenticationProvider authenticationProvider() {
+    var authenticationProvider = new DaoAuthenticationProvider();
+    authenticationProvider.setUserDetailsService(userDetailsService());
+    authenticationProvider.setPasswordEncoder(passwordEncoder());
 
-        return authenticationProvider;
-    }
+    return authenticationProvider;
+  }
 
-    @Bean
-    AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
-        return configuration.getAuthenticationManager();
-    }
+  @Bean
+  AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+    return configuration.getAuthenticationManager();
+  }
 
-    @Bean
-    UserDetailsService userDetailsService() {
-        return userDetailsServiceImpl;
-    }
+  @Bean
+  UserDetailsService userDetailsService() {
+    return userDetailsServiceImpl;
+  }
 
-    @Bean
-    PasswordEncoder passwordEncoder() {
-        return Argon2PasswordEncoder.defaultsForSpringSecurity_v5_8();
-    }
+  @Bean
+  PasswordEncoder passwordEncoder() {
+    return Argon2PasswordEncoder.defaultsForSpringSecurity_v5_8();
+  }
 }
